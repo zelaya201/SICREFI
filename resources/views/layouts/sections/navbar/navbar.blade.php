@@ -143,3 +143,4 @@ $navbarDetached = ($navbarDetached ?? '');
     @endif
   </nav>
   <!-- / Navbar -->
+</nav>
