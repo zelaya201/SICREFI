@@ -17,7 +17,10 @@ $controller_path = 'App\Http\Controllers';
 
 // Cliente Route
 Route::get('/clientes/cliente', $controller_path . '\Cliente@index')->name('clientes');
-Route::get('/clientes/cliente-nuevo', $controller_path . '\Cliente@create')->name('cliente-nuevo');
+Route::get('/clientes/cliente-nuevo', $controller_path . '\Cliente@create')->name('clientes');
+
+// Negocio Route
+Route::get('/negocios/negocio', $controller_path . '\Negocio@index')->name('negocios');
 
 
 // Main Page Route

@@ -1,7 +1,7 @@
 <?php
   // Variables
   return [
-    "creatorName" => "Sistema Informático para la Administración y Gestión de Créditos Financieros",
+    "creatorName" => "SICREFI",
     "creatorUrl" => "https://themeselection.com",
     "templateName" => "SICREFI",
     "templateDescription" => "Most Powerful & Comprehensive Bootstrap 5 HTML Admin Dashboard Template built for developers!",
