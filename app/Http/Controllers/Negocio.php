@@ -13,7 +13,7 @@ class Negocio extends Controller
      */
     public function index()
     {
-        return view('content.negocios.negocio');
+        return view('content.clientes.negocios.negocio');
     }
 
     /**

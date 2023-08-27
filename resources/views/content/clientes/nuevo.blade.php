@@ -23,12 +23,12 @@
             </button>
           </li>
           <li class="list-inline-item fw-semibold">
-            <button class="nav-link btn btn-primary" type="button" href="{{url('clientes/cliente-create')}}"><span
+            <button class="nav-link btn btn-primary" type="button" href="#"><span
                 class="tf-icons bx bx-save"></span> Guardar
             </button>
           </li>
           <li class="list-inline-item fw-semibold">
-            <a class="nav-link btn btn-outline-danger" type="button" href="{{url('clientes/cliente')}}"><span
+            <a class="nav-link btn btn-outline-danger" type="button" href="{{ route('clientes') }}"><span
                 class="tf-icons bx bx-arrow-back"></span> Cancelar</a>
           </li>
         </ul>
@@ -217,6 +217,7 @@
     </div>
   </div>
 
+  <!-- Modal agregar telefono -->
   <div class="modal fade" id="telefonoModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
