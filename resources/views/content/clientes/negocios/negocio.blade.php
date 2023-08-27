@@ -31,9 +31,9 @@
             </button>
           </li>
           <li class="list-inline-item fw-semibold">
-            <a class="nav-link btn btn-outline-danger" type="button"
+            <a class="nav-link btn btn-secondary" type="button"
                href="{{ route('clientes') }}"><span
-                class="tf-icons bx bx-arrow-back"></span> <span class="d-none d-sm-inline-block">Atrás</span></a>
+                class="tf-icons bx bx-arrow-back"></span> <span class="d-none d-sm-inline-block"> Atrás</span></a>
           </li>
         </ul>
       </div>
@@ -238,7 +238,9 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary me-sm-3 me-1 mt-3">Guardar</button>
+          <button type="submit" class="btn btn-primary me-sm-3 me-1 mt-3"><span
+              class="tf-icons bx bx-save"></span> Guardar
+          </button>
           <button type="reset" class="btn btn-label-secondary btn-reset mt-3" data-bs-dismiss="modal"
                   aria-label="Close">Cerrar
           </button>
@@ -255,7 +257,7 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
 
-      <div class="offcanvas-body my-auto mx-0 flex-grow-0">
+      <div class="offcanvas-body mx-0 flex-grow-0">
         <h5>¿Cómo registrar un nuevo negocio?</h5>
         <iframe src="https://www.youtube.com/embed/xcJtL7QggTI?si=ox0HflKK3Jy9A4qJ"
                 title="YouTube video player" frameborder="0"

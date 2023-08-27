@@ -16,7 +16,8 @@
         <ul
           class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
           <li class="list-inline-item fw-semibold">
-            <button type="button" class="btn rounded-pill btn-icon btn-warning" data-bs-toggle="tooltip"
+            <button type="button" class="btn rounded-pill btn-icon btn-warning"
+                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd"
                     data-bs-offset="0,4"
                     data-bs-placement="top" data-bs-html="true" title="Ayuda">
               <span class="tf-icons bx bx-question-mark"></span>
@@ -28,8 +29,8 @@
             </button>
           </li>
           <li class="list-inline-item fw-semibold">
-            <a class="nav-link btn btn-outline-danger" type="button" href="{{ route('clientes') }}"><span
-                class="tf-icons bx bx-arrow-back"></span> Cancelar</a>
+            <a class="nav-link btn btn-secondary" type="button" href="{{ route('clientes') }}"><span
+                class="tf-icons bx bx-arrow-back"></span> <span class="d-none d-sm-inline-block"> Cancelar</span> </a>
           </li>
         </ul>
       </div>
@@ -42,7 +43,8 @@
       <div class="card p-4">
 
         <div class="d-none alert alert-primary d-flex" role="alert">
-          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i class="bx bx-command fs-6"></i></span>
+          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
+              class="bx bx-command fs-6"></i></span>
           <div class="d-flex flex-column ps-1">
             <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">For a watch</h6>
             <span>This is a primary solid alert — check it out!</span>
@@ -235,12 +237,30 @@
           </div>
 
           <div class="col-12 text-center">
-            <button type="submit" class="btn btn-primary me-sm-3 me-1 mt-3">Agregar</button>
+            <button type="submit" class="btn btn-primary me-sm-3 me-1 mt-3"><span class="tf-icons bx bx-plus"></span> Agregar</button>
             <button type="reset" class="btn btn-label-secondary btn-reset mt-3" data-bs-dismiss="modal"
                     aria-label="Close">Cerrar
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- Off canvas de Ayuda --}}
+  <div class="mt-3">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel">
+      <div class="offcanvas-header">
+        <h5 id="offcanvasEndLabel" class="offcanvas-title">Sección de Ayuda</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+
+      <div class="offcanvas-body mx-0 flex-grow-0">
+        <h5>¿Cómo registrar un nuevo cliente?</h5>
+        <iframe src="https://www.youtube.com/embed/xcJtL7QggTI?si=ox0HflKK3Jy9A4qJ"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
       </div>
     </div>
   </div>
