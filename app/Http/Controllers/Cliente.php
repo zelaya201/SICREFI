@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Cliente extends Controller
 {
@@ -35,8 +36,10 @@ class Cliente extends Controller
     public function store(Request $request)
     {
         $datos_cliente = request()->except('_token');
-//        Cliente::insert($datos_cliente);
-        return response()->json($datos_cliente);
+        $datos_cliente['estado_cliente'] = 'Activo';
+        DB::table('cliente')->insert($datos_cliente);
+
+        return redirect('/clientes')->with('mensaje','Cliente agregado con éxito');
     }
 
     /**
