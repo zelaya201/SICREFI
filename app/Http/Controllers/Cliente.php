@@ -13,7 +13,7 @@ class Cliente extends Controller
      */
     public function index()
     {
-        return view('content.clientes.cliente');
+        return view('content.clientes.index');
     }
 
     /**
@@ -23,7 +23,7 @@ class Cliente extends Controller
      */
     public function create()
     {
-        return view('content.clientes.nuevo');
+        return view('content.clientes.create');
     }
 
     /**
@@ -34,7 +34,9 @@ class Cliente extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos_cliente = request()->except('_token');
+//        Cliente::insert($datos_cliente);
+        return response()->json($datos_cliente);
     }
 
     /**

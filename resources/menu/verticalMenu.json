@@ -1,10 +1,10 @@
 {
   "menu": [
     {
-      "url": "/clientes/cliente",
+      "url": "/clientes",
       "name": "Clientes",
       "icon": "menu-icon tf-icons bx bx-group",
-      "slug": "clientes"
+      "slug": "clientes.index"
     },
     {
       "url": "/clientes/negocios/negocio",
