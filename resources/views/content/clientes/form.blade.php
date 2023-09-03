@@ -208,36 +208,96 @@
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Alimentación (*)</label>
-          <input type="text" class="form-control" name="gasto_aliment_cliente" id="" placeholder="0.00">
+          <input type="text"
+                 class="form-control @error('gasto_aliment_cliente') is-invalid @enderror"
+                 name="gasto_aliment_cliente"
+                 value="{{ old('gasto_aliment_cliente') }}"
+                 placeholder="0.00">
+
+          @error('gasto_aliment_cliente')
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+            </div>
+          @enderror
         </div>
 
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Vivienda (*)</label>
-          <input type="text" class="form-control" name="gasto_vivienda_cliente" id="" placeholder="0.00">
+          <input type="text"
+                 class="form-control @error('gasto_vivienda_cliente') is-invalid @enderror"
+                 name="gasto_vivienda_cliente"
+                 value="{{ old('gasto_vivienda_cliente') }}"
+                 placeholder="0.00">
+
+          @error('gasto_vivienda_cliente')
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+            </div>
+          @enderror
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Luz (*)</label>
-          <input type="text" class="form-control" name="gasto_luz_cliente" id="" placeholder="0.00">
+          <input type="text"
+                 class="form-control @error('gasto_luz_cliente') is-invalid @enderror"
+                 name="gasto_luz_cliente"
+                 value="{{ old('gasto_luz_cliente') }}"
+                 placeholder="0.00">
+
+          @error('gasto_luz_cliente')
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+            </div>
+          @enderror
         </div>
 
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Agua (*)</label>
-          <input type="text" class="form-control" name="gasto_agua_cliente" id="" placeholder="0.00">
+          <input type="text"
+                 class="form-control @error('gasto_agua_cliente') is-invalid @enderror"
+                 name="gasto_agua_cliente"
+                 value="{{ old('gasto_agua_cliente') }}"
+                 placeholder="0.00">
+
+          @error('gasto_agua_cliente')
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+            </div>
+          @enderror
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Cable (*)</label>
-          <input type="text" class="form-control" name="gasto_cable_cliente" id="" placeholder="0.00">
+          <input type="text"
+                 class="form-control @error('gasto_cable_cliente') is-invalid @enderror"
+                 name="gasto_cable_cliente"
+                 value="{{ old('gasto_cable_cliente') }}"
+                 placeholder="0.00">
+
+          @error('gasto_cable_cliente')
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+            </div>
+          @enderror
         </div>
 
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Otros gastos (*)</label>
-          <input type="text" class="form-control" name="gasto_otro_cliente" id="" placeholder="0.00">
+          <input type="text"
+                 class="form-control @error('gasto_otro_cliente') is-invalid @enderror"
+                 name="gasto_otro_cliente"
+                 placeholder="0.00"
+                 value="{{ old('gasto_otro_cliente') }}">
+
+          @error('gasto_otro_cliente')
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+            </div>
+          @enderror
         </div>
       </div>
     </div>
@@ -252,7 +312,16 @@
       <div class="row">
         <div class="col-md-12 mb-3">
           <label class="form-label" for="">Correo electrónico (*)</label>
-          <input type="email" class="form-control" name="email_cliente" id="" placeholder="juan@juan.com">
+          <input type="email"
+                 class="form-control @error('email_cliente') is-invalid @enderror"
+                 name="email_cliente"
+                 value="{{ old('email_cliente') }}"/>
+
+          @error('email_cliente')
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+            </div>
+          @enderror
         </div>
       </div>
 

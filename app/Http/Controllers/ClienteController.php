@@ -43,6 +43,13 @@ class ClienteController extends Controller
       'ocupacion_cliente' => 'required',
       'tipo_vivienda_cliente' => 'required',
       'dir_cliente' => 'required',
+      'gasto_aliment_cliente' => 'required|decimal:2',
+      'gasto_agua_cliente' => 'required|decimal:2',
+      'gasto_luz_cliente' => 'required|decimal:2',
+      'gasto_cable_cliente' => 'required|decimal:2',
+      'gasto_vivienda_cliente' => 'required|decimal:2',
+      'gasto_otro_cliente' => 'required|decimal:2',
+      'email_cliente' => 'required|unique:clientes|email',
     ]);
 
     //decimal:2,4

@@ -2,7 +2,7 @@
 
 return [
   'required' => 'El campo es requerido.',
-  'unique' => 'El campo ya existe.',
+  'unique' => 'El campo :attribute ya existe.',
   'min' => [
     'string' => 'El campo :attribute debe tener al menos :min caracteres.',
   ],
