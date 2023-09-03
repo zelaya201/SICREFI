@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Cliente;
+use App\Http\Controllers\ClienteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 $controller_path = 'App\Http\Controllers';
 
 // Cliente Route
-Route::resource('clientes',Cliente::class);
+Route::resource('clientes',ClienteController::class);
 
 // Negocio Route
 Route::get('/clientes/negocios/negocio', $controller_path . '\Negocio@index')->name('negocios');

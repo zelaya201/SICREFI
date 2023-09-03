@@ -22,7 +22,8 @@
         </li>
         <li class="list-inline-item fw-semibold">
           <a class="nav-link btn btn-secondary" type="button" href="{{ route('clientes.index') }}"><span
-              class="tf-icons bx bx-arrow-back"></span> <span class="d-none d-sm-inline-block"> Cancelar</span> </a>
+              class="tf-icons bx bx-arrow-back"></span> <span class="d-none d-sm-inline-block"> Cancelar</span>
+          </a>
         </li>
       </ul>
     </div>
@@ -34,14 +35,17 @@
   <div class="col-md-6 mb-4">
     <div class="card p-4">
 
-      <div class="d-none alert alert-primary d-flex" role="alert">
-          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
-              class="bx bx-command fs-6"></i></span>
-        <div class="d-flex flex-column ps-1">
-          <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">For a watch</h6>
-          <span>This is a primary solid alert — check it out!</span>
+      @if(Session::has('mensaje'))
+        <div class="alert alert-primary d-flex" role="alert">
+                    <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2">
+                      <i class="bx bx-command fs-6"></i>
+                    </span>
+          <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">¡Bien hecho!</h6>
+            <span>{{ Session::get('mensaje') }}</span>
+          </div>
         </div>
-      </div>
+      @endif
 
       <div>
         <h5 class="fw-bold">Datos del Cliente</h5>
@@ -51,68 +55,136 @@
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label" for="dui_cliente">DUI (*)</label>
-          <input type="text" class="form-control" name="dui_cliente" id="dui_cliente" placeholder="00000000-0">
+
+          <input type="text"
+                 class="form-control @error('dui_cliente') is-invalid @enderror"
+                 name="dui_cliente"
+                 id="dui_cliente"
+                 placeholder="00000000-0" value="{{ old('dui_cliente') }}">
+          @error('dui_cliente')
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+          </div>
+          @enderror
         </div>
 
         <div class="col-md-6 mb-3">
           <label class="form-label" for="primer_nom_cliente">Primer nombre (*)</label>
-          <input type="text" class="form-control" name="primer_nom_cliente" id="primer_nom_cliente" placeholder="">
+          <input type="text"
+                 class="form-control @error('primer_nom_cliente') is-invalid @enderror"
+                 name="primer_nom_cliente"
+                 id="primer_nom_cliente"
+                 placeholder=""
+                 value="{{ old('primer_nom_cliente') }}">
+          @error('primer_nom_cliente')
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+          </div>
+          @enderror
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Segundo nombre</label>
-          <input type="text" class="form-control" name="segundo_nom_cliente" id="" placeholder="">
+          <input type="text" class="form-control" name="segundo_nom_cliente" value="{{ old('segundo_nom_cliente') }}">
         </div>
 
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Tercer nombre</label>
-          <input type="text" class="form-control" name="tercer_nom_cliente" id="" placeholder="">
+          <input type="text" class="form-control" name="tercer_nom_cliente" value="{{ old('tercer_nom_cliente') }}">
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Primer apellido (*)</label>
-          <input type="text" class="form-control" name="primer_ape_cliente" id="" placeholder="">
+          <input type="text"
+                 class="form-control @error('primer_ape_cliente') is-invalid @enderror"
+                 name="primer_ape_cliente"
+                 id="primer_ape_cliente"
+                 value="{{ old('primer_ape_cliente') }}">
+          @error('primer_ape_cliente')
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+          </div>
+          @enderror
         </div>
 
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Segundo apellido</label>
-          <input type="text" class="form-control" name="segundo_ape_cliente" id="" placeholder="">
+          <input type="text"
+                 class="form-control"
+                 name="segundo_ape_cliente"
+                 value="{{ old('segundo_ape_cliente') }}">
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Fecha de nacimiento (*)</label>
-          <input type="date" class="form-control" name="fech_nac_cliente" id="" placeholder="">
+          <input type="date"
+                 class="form-control @error('fech_nac_cliente') is-invalid @enderror"
+                 name="fech_nac_cliente"
+                 value="{{ old('fech_nac_cliente') }}">
+          @error('fech_nac_cliente')
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+          </div>
+          @enderror
         </div>
 
         <div class="col-md-6 mb-3">
           <label class="form-label" for="">Ocupación (*)</label>
-          <input type="text" class="form-control" name="ocupacion_cliente" id="" placeholder="">
+
+          <input type="text"
+                 class="form-control @error('ocupacion_cliente') is-invalid @enderror"
+                 name="ocupacion_cliente"
+                 id="ocupacion_cliente"
+                 placeholder=""
+                 value="{{ old('ocupacion_cliente') }}">
+          @error('ocupacion_cliente')
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+          </div>
+          @enderror
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-12 mb-3">
           <label class="form-label" for="">Tipo de vivienda (*)</label>
-          <select class="form-select" name="tipo_vivienda_cliente" aria-label="Default select example">
-            <option selected="">Seleccione</option>
-            <option value="Propia">Propia</option>
-            <option value="Alquilada">Alquilada</option>
-            <option value="Familiar">Familiar</option>
-            <option value="Otros">Otros</option>
+
+          <select class="form-select @error('tipo_vivienda_cliente') is-invalid @enderror"
+                  name="tipo_vivienda_cliente"
+                  id="tipo_vivienda_cliente">
+            <option value="">Seleccione</option>
+            <option value="Propia" @selected(old('tipo_vivienda_cliente') == 'Propia')>Propia</option>
+            <option value="Alquilada" @selected(old('tipo_vivienda_cliente') == 'Alquilada')>Alquilada</option>
+            <option value="Familiar" @selected(old('tipo_vivienda_cliente') == 'Familia')>Familiar</option>
+            <option value="Otros" @selected(old('tipo_vivienda_cliente') == 'Otros')>Otros</option>
           </select>
+
+          @error('tipo_vivienda_cliente')
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+            </div>
+          @enderror
+
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-12 mb-3">
           <label class="form-label" for="">Dirección (*)</label>
-          <textarea class="form-control" name="dir_cliente" id="" rows="3"></textarea>
+          <textarea class="form-control @error('dir_cliente') is-invalid @enderror"
+                    name="dir_cliente"
+                    rows="3">{{ old('dir_cliente') }}</textarea>
+          @error('dir_cliente')
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            <div data-field="name" data-validator="notEmpty">{{ $message }}</div>
+          </div>
+          @enderror
         </div>
       </div>
 
@@ -241,6 +313,7 @@
   </div>
 </div>
 </form>
+
 {{-- Off canvas de Ayuda --}}
 <div class="mt-3">
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel">
