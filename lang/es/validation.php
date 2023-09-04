@@ -9,5 +9,6 @@ return [
   'max' => [
     'string' => 'El campo :attribute debe tener como máximo :max caracteres.',
   ],
-  'date' => 'El campo :attribute debe ser una fecha válida.'
+  'date' => 'El campo :attribute debe ser una fecha válida.',
+  'decimal' => 'El campo :attribute debe ser un número decimal.',
 ];

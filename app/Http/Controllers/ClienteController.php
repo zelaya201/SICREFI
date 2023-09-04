@@ -43,7 +43,7 @@ class ClienteController extends Controller
       'ocupacion_cliente' => 'required',
       'tipo_vivienda_cliente' => 'required',
       'dir_cliente' => 'required',
-      'gasto_aliment_cliente' => 'required|decimal:2',
+      'gasto_aliment_cliente' => 'required|numeric',
       'gasto_agua_cliente' => 'required|decimal:2',
       'gasto_luz_cliente' => 'required|decimal:2',
       'gasto_cable_cliente' => 'required|decimal:2',
@@ -51,8 +51,6 @@ class ClienteController extends Controller
       'gasto_otro_cliente' => 'required|decimal:2',
       'email_cliente' => 'required|unique:clientes|email',
     ]);
-
-    //decimal:2,4
 
     $cliente = new Cliente;
     $cliente->dui_cliente = $request->input('dui_cliente');
@@ -74,9 +72,10 @@ class ClienteController extends Controller
     $cliente->gasto_otro_cliente = $request->input('gasto_otro_cliente');
     $cliente->estado_cliente = 'Activo';
 
-    $cliente->save();
+    $cliente->save(); // INSERT INTO - SQL
 
     return to_route('clientes.index')->with('mensaje', 'Cliente agregado con éxito');
+    //return $request->all();
   }
 
   /**

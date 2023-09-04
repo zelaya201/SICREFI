@@ -161,7 +161,7 @@
             <option value="">Seleccione</option>
             <option value="Propia" @selected(old('tipo_vivienda_cliente') == 'Propia')>Propia</option>
             <option value="Alquilada" @selected(old('tipo_vivienda_cliente') == 'Alquilada')>Alquilada</option>
-            <option value="Familiar" @selected(old('tipo_vivienda_cliente') == 'Familia')>Familiar</option>
+            <option value="Familiar" @selected(old('tipo_vivienda_cliente') == 'Familiar')>Familiar</option>
             <option value="Otros" @selected(old('tipo_vivienda_cliente') == 'Otros')>Otros</option>
           </select>
 
@@ -315,6 +315,7 @@
           <input type="email"
                  class="form-control @error('email_cliente') is-invalid @enderror"
                  name="email_cliente"
+                 placeholder="admin@admin.com"
                  value="{{ old('email_cliente') }}"/>
 
           @error('email_cliente')
@@ -328,22 +329,20 @@
       <div class="col-md-12">
         <label class="form-label d-flex align-items-center justify-content-between" for="input-nom-socio">Teléfonos:
           (*)
-          <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#telefonoModal">
+          <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#telefono-modal">
             <span class="tf-icons bx bx-plus"></span> Agregar
           </button>
         </label>
         <table class="table table-bordered">
           <thead>
           <tr>
-            <td scope="col">#</td>
             <td scope="col">Teléfono</td>
-            <td></td>
             <td></td>
           </tr>
           </thead>
-          <tbody>
+          <tbody id="lista-telefonos">
           <tr>
-            <td colspan="4">No hay resultados</td>
+            <td colspan="2">No hay resultados</td>
           </tr>
           </tbody>
         </table>
@@ -353,7 +352,7 @@
 </div>
 
 <!-- Modal agregar telefono -->
-<div class="modal fade" id="telefonoModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="telefono-modal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -364,13 +363,16 @@
       <div class="modal-body">
         <div class="row">
           <div class="col mb-3">
-            <label for="nameBasic" class="form-label">Teléfono</label>
-            <input type="text" id="nameBasic" class="form-control" placeholder="0000-0000">
+            <label for="nameBasic" class="form-label">Teléfono (*)</label>
+            <input type="text" id="input-telefono" class="form-control" placeholder="0000-0000">
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty" id="mensaje-telefono"></div>
+            </div>
           </div>
         </div>
 
         <div class="col-12 text-center">
-          <button type="submit" class="btn btn-primary me-sm-3 me-1 mt-3"><span class="tf-icons bx bx-plus"></span>
+          <button type="button" class="btn btn-primary me-sm-3 me-1 mt-3" id="btn-agregar-telefono"><span class="tf-icons bx bx-plus"></span>
             Agregar
           </button>
           <button type="reset" class="btn btn-label-secondary btn-reset mt-3" data-bs-dismiss="modal"
@@ -381,7 +383,8 @@
     </div>
   </div>
 </div>
-</form>
+
+
 
 {{-- Off canvas de Ayuda --}}
 <div class="mt-3">
@@ -400,3 +403,5 @@
     </div>
   </div>
 </div>
+
+
