@@ -66,7 +66,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="segundo_nom_cliente">Segundo nombre</label>
-                <input type="text" class="form-control" name="segundo_nom_cliente">
+                <input type="text" class="form-control" id="segundo_nom_cliente" name="segundo_nom_cliente"/>
               </div>
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="segundo_nom_cliente_error"></div>
@@ -74,7 +74,7 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="tercer_nom_cliente">Tercer nombre</label>
-                <input type="text" class="form-control" name="tercer_nom_cliente">
+                <input type="text" class="form-control" id="tercer_nom_cliente" name="tercer_nom_cliente" />
               </div>
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="tercer_nom_cliente_error"></div>
@@ -92,7 +92,7 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="segundo_ape_cliente">Segundo apellido</label>
-                <input type="text" class="form-control" name="segundo_ape_cliente">
+                <input type="text" class="form-control" id="segundo_ape_cliente" name="segundo_ape_cliente"/>
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="segundo_ape_cliente_error"></div>
                 </div>
@@ -159,7 +159,7 @@
   <div class="col-md-6">
     <div class="accordion" id="accordionExample">
       <!-- Gastos personales -->
-      <div class="card p-2 accordion-item active">
+      <div class="card p-2 mb-4 accordion-item active">
         <h2 class="accordion-header fw-bold" id="headingOne">
           <button type="button" class="accordion-button show" data-bs-toggle="collapse" data-bs-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne">
             Gastos personales
@@ -179,8 +179,8 @@
               </div>
 
               <div class="col-md-6 mb-3">
-                <label class="form-label" for="">Vivienda (*)</label>
-                <input type="text" class="form-control" name="gasto_vivienda_cliente" id="gasto_vivienda_cliente" placeholder="0.00">
+                <label class="form-label" for="gasto_vivienda_cliente">Vivienda (*)</label>
+                <input type="text" class="form-control" name="gasto_vivienda_cliente" id="gasto_vivienda_cliente" placeholder="0.00" />
 
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="gasto_vivienda_cliente_error"></div>
@@ -232,7 +232,7 @@
       </div>
 
       <!-- Datos de contacto -->
-      <div class="card p-2 accordion-item">
+      <div class="card p-2 mb-4 accordion-item">
         <h2 class="accordion-header fw-bold" id="headingTwo">
           <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
             Datos de contacto
@@ -242,7 +242,7 @@
           <div class="accordion-body">
             <div class="row">
               <div class="col-md-12 mb-3">
-                <label class="form-label" for="">Correo electrónico (*)</label>
+                <label class="form-label" for="email_cliente">Correo electrónico (*)</label>
                 <input type="email"
                        class="form-control"
                        name="email_cliente"
@@ -281,7 +281,7 @@
       </div>
 
       <!-- Datos del conyugue -->
-      <div class="card p-2 accordion-item">
+      <div class="card p-2 mb-4 accordion-item">
         <h2 class="accordion-header fw-bold" id="headingThree">
           <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionThree" aria-expanded="false" aria-controls="accordionThree">
             Datos del conyugue
