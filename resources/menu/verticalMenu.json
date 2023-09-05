@@ -1,13 +1,13 @@
 {
   "menu": [
     {
-      "url": "/clientes/cliente",
+      "url": "/clientes",
       "name": "Clientes",
       "icon": "menu-icon tf-icons bx bx-group",
-      "slug": "clientes"
+      "slug": "clientes.index"
     },
     {
-      "url": "/negocios/negocio",
+      "url": "/clientes/negocios/negocio",
       "name": "Negocios",
       "icon": "menu-icon tf-icons bx bx-briefcase",
       "slug": "negocios"
