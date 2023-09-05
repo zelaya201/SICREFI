@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
 
+  sessionStorage.clear();
+
   /* EVENTO DE BOTONES */
   $('#btn-agregar-telefono').click(function () {
     var id = 0;
@@ -25,6 +27,7 @@ $(document).ready(function () {
       $('#mensaje-telefono').html('El campo es requerido.');
     }
   });
+
 });
 
 /* FUNCIONES GLOBALES */
