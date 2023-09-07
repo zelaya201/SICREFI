@@ -7,7 +7,7 @@
       "slug": "clientes.index"
     },
     {
-      "url": "/clientes/negocios/negocio",
+      "url": "/negocios",
       "name": "Negocios",
       "icon": "menu-icon tf-icons bx bx-briefcase",
       "slug": "negocios"

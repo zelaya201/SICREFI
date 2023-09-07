@@ -32,7 +32,7 @@
           </li>
           <li class="list-inline-item fw-semibold">
             <a class="nav-link btn btn-secondary" type="button"
-               href="{{ route('clientes.listado') }}"><span
+               href="{{ route('clientes.index') }}"><span
                 class="tf-icons bx bx-arrow-back"></span> <span class="d-none d-sm-inline-block"> Atrás</span></a>
           </li>
         </ul>
