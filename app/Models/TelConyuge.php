@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class TelConyuge extends Model
 {
     use HasFactory;
+
+    public function conyuge() {
+      return $this->belongsTo(Conyuge::class, 'id_conyuge');
+    }
 }
