@@ -36,7 +36,8 @@
     <div class="accordion" id="accordionCliente">
       <div class="card p-2 accordion-item active">
         <h2 class="accordion-header fw-bold" id="clienteHeading">
-          <button type="button" class="accordion-button show" data-bs-toggle="collapse" data-bs-target="#clienteOne" aria-expanded="true" aria-controls="clienteOne">
+          <button type="button" class="accordion-button show" data-bs-toggle="collapse" data-bs-target="#clienteOne"
+                  aria-expanded="true" aria-controls="clienteOne">
             Datos del cliente
           </button>
         </h2>
@@ -74,7 +75,7 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="tercer_nom_cliente">Tercer nombre</label>
-                <input type="text" class="form-control" id="tercer_nom_cliente" name="tercer_nom_cliente" />
+                <input type="text" class="form-control" id="tercer_nom_cliente" name="tercer_nom_cliente"/>
               </div>
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="tercer_nom_cliente_error"></div>
@@ -161,7 +162,8 @@
       <!-- Gastos personales -->
       <div class="card p-2 mb-4 accordion-item active">
         <h2 class="accordion-header fw-bold" id="headingOne">
-          <button type="button" class="accordion-button show" data-bs-toggle="collapse" data-bs-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne">
+          <button type="button" class="accordion-button show" data-bs-toggle="collapse" data-bs-target="#accordionOne"
+                  aria-expanded="true" aria-controls="accordionOne">
             Gastos personales
           </button>
         </h2>
@@ -171,7 +173,8 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="gasto_aliment_cliente">Alimentación (*)</label>
-                <input type="text" class="form-control" name="gasto_aliment_cliente" id="gasto_aliment_cliente" placeholder="0.00">
+                <input type="text" class="form-control" name="gasto_aliment_cliente" id="gasto_aliment_cliente"
+                       placeholder="0.00">
 
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="gasto_aliment_cliente_error"></div>
@@ -180,7 +183,8 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="gasto_vivienda_cliente">Vivienda (*)</label>
-                <input type="text" class="form-control" name="gasto_vivienda_cliente" id="gasto_vivienda_cliente" placeholder="0.00" />
+                <input type="text" class="form-control" name="gasto_vivienda_cliente" id="gasto_vivienda_cliente"
+                       placeholder="0.00"/>
 
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="gasto_vivienda_cliente_error"></div>
@@ -191,7 +195,8 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="gasto_luz_cliente">Luz (*)</label>
-                <input type="text" class="form-control" name="gasto_luz_cliente" id="gasto_luz_cliente" placeholder="0.00">
+                <input type="text" class="form-control" name="gasto_luz_cliente" id="gasto_luz_cliente"
+                       placeholder="0.00">
 
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="gasto_luz_cliente_error"></div>
@@ -200,7 +205,8 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="gasto_agua_cliente">Agua (*)</label>
-                <input type="text" class="form-control" name="gasto_agua_cliente" id="gasto_agua_cliente" placeholder="0.00">
+                <input type="text" class="form-control" name="gasto_agua_cliente" id="gasto_agua_cliente"
+                       placeholder="0.00">
 
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="gasto_agua_cliente_error"></div>
@@ -211,7 +217,8 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="gasto_cable_cliente">Cable (*)</label>
-                <input type="text" class="form-control" name="gasto_cable_cliente" id="gasto_cable_cliente" placeholder="0.00">
+                <input type="text" class="form-control" name="gasto_cable_cliente" id="gasto_cable_cliente"
+                       placeholder="0.00">
 
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="gasto_cable_cliente_error"></div>
@@ -220,7 +227,8 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="gasto_otro_cliente">Otros gastos (*)</label>
-                <input type="text" class="form-control" name="gasto_otro_cliente" id="gasto_otro_cliente" placeholder="0.00">
+                <input type="text" class="form-control" name="gasto_otro_cliente" id="gasto_otro_cliente"
+                       placeholder="0.00">
 
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="gasto_otro_cliente_error"></div>
@@ -234,11 +242,13 @@
       <!-- Datos de contacto -->
       <div class="card p-2 mb-4 accordion-item">
         <h2 class="accordion-header fw-bold" id="headingTwo">
-          <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
+          <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                  data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
             Datos de contacto
           </button>
         </h2>
-        <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample" style="">
+        <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+             data-bs-parent="#accordionExample" style="">
           <div class="accordion-body">
             <div class="row">
               <div class="col-md-12 mb-3">
@@ -258,7 +268,8 @@
             <div class="col-md-12">
               <label class="form-label d-flex align-items-center justify-content-between" for="input-nom-socio">Teléfonos:
                 (*)
-                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#telefono-modal">
+                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
+                        data-bs-target="#telefono-modal">
                   <span class="tf-icons bx bx-plus"></span> Agregar
                 </button>
               </label>
@@ -283,13 +294,35 @@
       <!-- Datos del conyugue -->
       <div class="card p-2 mb-4 accordion-item">
         <h2 class="accordion-header fw-bold" id="headingThree">
-          <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionThree" aria-expanded="false" aria-controls="accordionThree">
+          <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                  data-bs-target="#accordionThree" aria-expanded="false" aria-controls="accordionThree">
             Datos del conyugue
           </button>
         </h2>
-        <div id="accordionThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample" style="">
+        <div id="accordionThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+             data-bs-parent="#accordionExample" style="">
           <div class="accordion-body">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="gasto_cable_cliente">Cable (*)</label>
+                <input type="text" class="form-control" name="gasto_cable_cliente" id="gasto_cable_cliente"
+                       placeholder="0.00">
 
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                  <div data-field="name" data-validator="notEmpty" id="gasto_cable_cliente_error"></div>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="gasto_otro_cliente">Otros gastos (*)</label>
+                <input type="text" class="form-control" name="gasto_otro_cliente" id="gasto_otro_cliente"
+                       placeholder="0.00">
+
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                  <div data-field="name" data-validator="notEmpty" id="gasto_otro_cliente_error"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -322,7 +355,7 @@
               class="tf-icons bx bx-plus"></span>
             Agregar
           </button>
-          <button type="reset" class="btn btn-label-secondary btn-reset mt-3" data-bs-dismiss="modal"
+          <button type="button" class="btn btn-label-secondary mt-3" data-bs-dismiss="modal"
                   aria-label="Close">Cerrar
           </button>
         </div>
@@ -348,5 +381,4 @@
 {{--    </div>--}}
 {{--  </div>--}}
 {{--</div>--}}
-
 
