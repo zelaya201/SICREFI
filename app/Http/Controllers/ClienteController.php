@@ -36,19 +36,19 @@ class ClienteController extends Controller
   public function store(Request $request)
   {
     $request->validate([
-      'dui_cliente' => 'required|unique:clientes|min:10|max:10',
-      'primer_nom_cliente' => 'required|max:50',
-      'primer_ape_cliente' => 'required|max:50',
+      'dui_cliente' => 'required|unique:clientes|min:9|max:9|numeric',
+      'primer_nom_cliente' => 'required|min:2|max:50',
+      'primer_ape_cliente' => 'required|min:2|max:50',
       'fech_nac_cliente' => 'required|date',
-      'ocupacion_cliente' => 'required',
+      'ocupacion_cliente' => 'required|min:3',
       'tipo_vivienda_cliente' => 'required',
       'dir_cliente' => 'required',
       'gasto_aliment_cliente' => 'required|numeric',
-      'gasto_agua_cliente' => 'required|decimal:2',
-      'gasto_luz_cliente' => 'required|decimal:2',
-      'gasto_cable_cliente' => 'required|decimal:2',
-      'gasto_vivienda_cliente' => 'required|decimal:2',
-      'gasto_otro_cliente' => 'required|decimal:2',
+      'gasto_agua_cliente' => 'required|numeric',
+      'gasto_luz_cliente' => 'required|numeric',
+      'gasto_cable_cliente' => 'required|numeric',
+      'gasto_vivienda_cliente' => 'required|numeric',
+      'gasto_otro_cliente' => 'required|numeric',
       'email_cliente' => 'required|unique:clientes|email',
     ]);
 
