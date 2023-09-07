@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Cooperativa extends Model
 {
     use HasFactory;
+
+    public function creditos() {
+      return $this->hasMany(Credito::class, 'id_coop');
+    }
 }

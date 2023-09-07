@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Bien extends Model
 {
     use HasFactory;
+
+    public function cliente() {
+      return $this->belongsTo(Cliente::class, 'id_cliente');
+    }
 }

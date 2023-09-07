@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class TelReferencia extends Model
 {
     use HasFactory;
+
+    public function referencia() {
+      return $this->belongsTo(Referencia::class, 'id_ref');
+    }
 }
