@@ -17,7 +17,7 @@
         </li>
         <li class="list-inline-item fw-semibold">
           <button class="nav-link btn btn-primary" type="button" id="btn-guardar-cliente"><span
-              class="tf-icons bx bx-save"></span> Guardar
+              class="tf-icons bx bx-save"></span> Guardar y continuar
           </button>
         </li>
         <li class="list-inline-item fw-semibold">
@@ -30,7 +30,69 @@
   </div>
 </div>
 
-<div class="row">
+{{-- Secciones de Formulario nuevo --}}
+<div class="d-flex align-items-center">
+  <div class="flex-grow-1">
+    <div
+      class="d-flex align-items-center flex-md-row flex-column align-items-baseline">
+      <button type="button" class="btn" aria-selected="true">
+        <span class="btn badge bg-primary"><i class="bx bx-user"></i></span>
+        <span class="bs-stepper-title text-primary">Información</span>
+      </button>
+
+      <div class="line d-none d-md-inline-block">
+        <i class="bx bx-chevron-right"></i>
+      </div>
+
+      <button type="button" class="btn" aria-selected="true">
+        <span class="btn badge bg-label-secondary"><i class="bx bx-user-check"></i></span>
+
+        <span class="bs-stepper-label mt-1">
+              <span class="bs-stepper-title">Conyuge</span>
+        </span>
+      </button>
+
+      <div class="line d-none d-md-inline-block">
+        <i class="bx bx-chevron-right"></i>
+      </div>
+
+      <button type="button" class="btn" aria-selected="true">
+        <span class="btn badge bg-label-secondary"><i class="bx bx-store-alt"></i></span>
+
+        <span class="bs-stepper-label mt-1">
+              <span class="bs-stepper-title">Negocios</span>
+        </span>
+      </button>
+
+      <div class="line d-none d-md-inline-block">
+        <i class="bx bx-chevron-right"></i>
+      </div>
+
+      <button type="button" class="btn" aria-selected="true">
+        <span class="btn badge bg-label-secondary"><i class="bx bx-user-plus"></i></span>
+
+        <span class="bs-stepper-label mt-1">
+              <span class="bs-stepper-title">Referencias</span>
+        </span>
+      </button>
+
+      <div class="line d-none d-md-inline-block">
+        <i class="bx bx-chevron-right"></i>
+      </div>
+
+      <button type="button" class="btn" aria-selected="true">
+        <span class="btn badge bg-label-secondary"><i class="bx bx-buildings"></i></span>
+
+        <span class="bs-stepper-label mt-1">
+              <span class="bs-stepper-title">Bienes</span>
+        </span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="row pt-3">
   <!-- Datos del Cliente -->
   <div class="col-md-6 mb-4">
     <div class="accordion" id="accordionCliente">
@@ -38,7 +100,7 @@
         <h2 class="accordion-header fw-bold" id="clienteHeading">
           <button type="button" class="accordion-button show" data-bs-toggle="collapse" data-bs-target="#clienteOne"
                   aria-expanded="true" aria-controls="clienteOne">
-            Datos del cliente
+            Datos personales
           </button>
         </h2>
 
@@ -134,12 +196,14 @@
                   <div data-field="name" data-validator="notEmpty" id="tipo_vivienda_cliente_error"></div>
                 </div>
               </div>
+
+
             </div>
 
             <div class="row">
               <div class="col-md-12 mb-3">
                 <label class="form-label" for="dir_cliente">Dirección (*)</label>
-                <textarea class="form-control" name="dir_cliente" id="dir_cliente" rows="3"></textarea>
+                <textarea class="form-control" name="dir_cliente" id="dir_cliente" rows="1"></textarea>
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="dir_cliente_error"></div>
                 </div>
@@ -291,41 +355,6 @@
         </div>
       </div>
 
-      <!-- Datos del conyugue -->
-      <div class="card p-2 mb-4 accordion-item">
-        <h2 class="accordion-header fw-bold" id="headingThree">
-          <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                  data-bs-target="#accordionThree" aria-expanded="false" aria-controls="accordionThree">
-            Datos del conyugue
-          </button>
-        </h2>
-        <div id="accordionThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-             data-bs-parent="#accordionExample" style="">
-          <div class="accordion-body">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label" for="gasto_cable_cliente">Cable (*)</label>
-                <input type="text" class="form-control" name="gasto_cable_cliente" id="gasto_cable_cliente"
-                       placeholder="0.00">
-
-                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                  <div data-field="name" data-validator="notEmpty" id="gasto_cable_cliente_error"></div>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label" for="gasto_otro_cliente">Otros gastos (*)</label>
-                <input type="text" class="form-control" name="gasto_otro_cliente" id="gasto_otro_cliente"
-                       placeholder="0.00">
-
-                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                  <div data-field="name" data-validator="notEmpty" id="gasto_otro_cliente_error"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -364,7 +393,7 @@
   </div>
 </div>
 
-{{-- Off canvas de Ayuda --}}
+{{-- Off canvas de Ayuda--}}
 {{--<div class="mt-3">--}}
 {{--  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel">--}}
 {{--    <div class="offcanvas-header">--}}

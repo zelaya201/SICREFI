@@ -28,6 +28,7 @@
           dataType: 'json',
           data: $('#form-cliente').serialize(),
           success: function (data){
+            /* Mensaje de exito */
 
           },
           error: function (xhr) {
@@ -36,7 +37,7 @@
             var inputs = $('#form-cliente').find('input, select, textarea');
 
             inputs.change(function () {
-              $(this).removeClass('is-invalid');
+              $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
             });
 
             var data = xhr.responseJSON;
@@ -44,7 +45,7 @@
               $.each(data.errors, function (key, value) {
                 // Mostrar errores en los inputs
                 $('#' + key).addClass('is-invalid');
-                $('#' + key + '_error').html(value);
+                $('#' + key + '_error').html(value); // Agregar el mensaje de error
               });
             }
           }
