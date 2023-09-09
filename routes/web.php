@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 $controller_path = 'App\Http\Controllers';
 
+Route::get('/', function () {
+    return view('content.index');
+})->name('inicio');
+
 // Negocio Route
 Route::resource('negocios', NegocioController::class);
 
