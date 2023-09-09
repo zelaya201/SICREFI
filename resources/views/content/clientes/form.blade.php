@@ -17,7 +17,7 @@
         </li>
         <li class="list-inline-item fw-semibold">
           <button class="nav-link btn btn-primary" type="button" id="btn-guardar-cliente"><span
-              class="tf-icons bx bx-save"></span> Guardar y continuar
+              class="tf-icons bx bx"></span> Siguiente
           </button>
         </li>
         <li class="list-inline-item fw-semibold">
@@ -30,82 +30,91 @@
   </div>
 </div>
 
+
 {{-- Secciones de Formulario nuevo --}}
-<div class="d-flex align-items-center">
-  <div class="flex-grow-1">
-    <div
-      class="d-flex align-items-center flex-md-row flex-column align-items-baseline">
-      <button type="button" class="btn" aria-selected="true">
-        <span class="btn badge bg-primary"><i class="bx bx-user"></i></span>
-        <span class="bs-stepper-title text-primary">Información</span>
-      </button>
-
-      <div class="line d-none d-md-inline-block">
-        <i class="bx bx-chevron-right"></i>
-      </div>
-
-      <button type="button" class="btn" aria-selected="true">
-        <span class="btn badge bg-label-secondary"><i class="bx bx-user-check"></i></span>
-
-        <span class="bs-stepper-label mt-1">
-              <span class="bs-stepper-title">Conyuge</span>
-        </span>
-      </button>
-
-      <div class="line d-none d-md-inline-block">
-        <i class="bx bx-chevron-right"></i>
-      </div>
-
-      <button type="button" class="btn" aria-selected="true">
-        <span class="btn badge bg-label-secondary"><i class="bx bx-store-alt"></i></span>
-
-        <span class="bs-stepper-label mt-1">
-              <span class="bs-stepper-title">Negocios</span>
-        </span>
-      </button>
-
-      <div class="line d-none d-md-inline-block">
-        <i class="bx bx-chevron-right"></i>
-      </div>
-
-      <button type="button" class="btn" aria-selected="true">
-        <span class="btn badge bg-label-secondary"><i class="bx bx-user-plus"></i></span>
-
-        <span class="bs-stepper-label mt-1">
-              <span class="bs-stepper-title">Referencias</span>
-        </span>
-      </button>
-
-      <div class="line d-none d-md-inline-block">
-        <i class="bx bx-chevron-right"></i>
-      </div>
-
-      <button type="button" class="btn" aria-selected="true">
-        <span class="btn badge bg-label-secondary"><i class="bx bx-buildings"></i></span>
-
-        <span class="bs-stepper-label mt-1">
-              <span class="bs-stepper-title">Bienes</span>
-        </span>
-      </button>
+<ul class="nav nav-pills nav-align-left nav-card-header-pills align-items-center" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button type="button" class="btn" role="tab" data-bs-toggle="tab"
+            data-bs-target="#card-datos-cliente" aria-controls="#card-datos-cliente" aria-selected="true">
+      <span class="btn badge bg-primary"><i class="bx bx-user"></i></span>
+      <span class="bs-stepper-title text-primary">Información</span>
+    </button>
+  </li>
+  <li>
+    <div class="line d-none d-md-inline-block align-items-baseline">
+      <i class="bx bx-chevron-right"></i>
     </div>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button type="button" class="btn" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-os"
+            aria-controls="navs-pills-os" aria-selected="false" tabindex="-1">
+      <span class="btn badge bg-label-secondary"><i class="bx bx-user-check"></i></span>
 
-  </div>
-</div>
+      <span class="bs-stepper-label mt-1">
+        <span class="bs-stepper-title">Conyuge</span>
+      </span>
+    </button>
+  </li>
+  <li>
+    <div class="line d-none d-md-inline-block align-items-baseline">
+      <i class="bx bx-chevron-right"></i>
+    </div>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button type="button" class="btn" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-country"
+            aria-controls="navs-pills-country" aria-selected="false" tabindex="-1">
+      <span class="btn badge bg-label-secondary"><i class="bx bx-store-alt"></i></span>
 
-<div class="row pt-3">
-  <!-- Datos del Cliente -->
-  <div class="col-md-6 mb-4">
-    <div class="accordion" id="accordionCliente">
-      <div class="card p-2 accordion-item active">
-        <h2 class="accordion-header fw-bold" id="clienteHeading">
-          <button type="button" class="accordion-button show" data-bs-toggle="collapse" data-bs-target="#clienteOne"
-                  aria-expanded="true" aria-controls="clienteOne">
-            Datos personales
-          </button>
-        </h2>
+      <span class="bs-stepper-label mt-1">
+        <span class="bs-stepper-title">Negocios</span>
+      </span>
+    </button>
+  </li>
+  <li>
+    <div class="line d-none d-md-inline-block align-items-baseline">
+      <i class="bx bx-chevron-right"></i>
+    </div>
+  </li>
 
-        <div id="clienteOne" class="accordion-collapse collapse show" data-bs-parent="#accordionCliente" style="">
-          <div class="accordion-body">
+  <li class="nav-item" role="presentation">
+    <button type="button" class="btn" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-country"
+            aria-controls="navs-pills-country" aria-selected="false" tabindex="-1">
+      <span class="btn badge bg-label-secondary"><i class="bx bx-user-plus"></i></span>
+
+      <span class="bs-stepper-label mt-1">
+        <span class="bs-stepper-title">Referencias</span>
+    </span>
+    </button>
+  </li>
+  <li>
+    <div class="line d-none d-md-inline-block align-items-baseline">
+      <i class="bx bx-chevron-right"></i>
+    </div>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button type="button" class="btn" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-country"
+            aria-controls="navs-pills-country" aria-selected="false" tabindex="-1">
+      <span class="btn badge bg-label-secondary"><i class="bx bx-buildings"></i></span>
+
+      <span class="bs-stepper-label mt-1">
+        <span class="bs-stepper-title">Bienes</span>
+      </span>
+    </button>
+  </li>
+</ul>
+
+
+<!-- Datos del Cliente -->
+<div class="tab-content p-0">
+  <div class="tab-pane fade show active pt-3" id="card-datos-cliente" role="tabpanel">
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header pb-0">
+            <span class="fw-bold">Datos del cliente</span>
+            <hr class="my-2">
+          </div>
+          <div class="card-body">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="dui_cliente">DUI (*)</label>
@@ -217,23 +226,16 @@
             </div>
           </div>
         </div>
+
       </div>
-    </div>
-  </div>
 
-  <div class="col-md-6">
-    <div class="accordion" id="accordionExample">
-      <!-- Gastos personales -->
-      <div class="card p-2 mb-4 accordion-item active">
-        <h2 class="accordion-header fw-bold" id="headingOne">
-          <button type="button" class="accordion-button show" data-bs-toggle="collapse" data-bs-target="#accordionOne"
-                  aria-expanded="true" aria-controls="accordionOne">
-            Gastos personales
-          </button>
-        </h2>
-
-        <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample" style="">
-          <div class="accordion-body">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-header pb-0">
+            <span class="fw-bold">Gastos personales</span>
+            <hr class="my-2">
+          </div>
+          <div class="card-body">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label" for="gasto_aliment_cliente">Alimentación (*)</label>
@@ -301,19 +303,15 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Datos de contacto -->
-      <div class="card p-2 mb-4 accordion-item">
-        <h2 class="accordion-header fw-bold" id="headingTwo">
-          <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                  data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
-            Datos de contacto
-          </button>
-        </h2>
-        <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-             data-bs-parent="#accordionExample" style="">
-          <div class="accordion-body">
+
+        <!-- Datos de contacto -->
+        <div class="card mb-4">
+          <div class="card-header pb-0">
+            <span class="fw-bold">Datos de contacto</span>
+            <hr class="my-2">
+          </div>
+          <div class="card-body">
             <div class="row">
               <div class="col-md-12 mb-3">
                 <label class="form-label" for="email_cliente">Correo electrónico (*)</label>
@@ -337,27 +335,36 @@
                   <span class="tf-icons bx bx-plus"></span> Agregar
                 </button>
               </label>
-              <table class="table table-bordered">
+
+              <table class="table table-bordered border-top table-hover">
                 <thead>
-                <tr>
-                  <td>Teléfono</td>
-                  <td></td>
-                </tr>
+                  <tr>
+                    <th>Teléfono</th>
+                    <th></th>
+                  </tr>
                 </thead>
                 <tbody id="lista-telefonos">
-                <tr>
-                  <td colspan="2">No hay resultados</td>
-                </tr>
+                  <tr>
+                    <td colspan="2">No hay resultados</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
+
+  <div class="tab-pane fade" id="navs-pills-os" role="tabpanel">
+    Panel 2
+  </div>
+
+  <div class="tab-pane fade" id="navs-pills-country" role="tabpanel">
+    Panel 3
+  </div>
 </div>
+
 
 <!-- Modal agregar telefono -->
 <div class="modal fade" id="telefono-modal" tabindex="-1" aria-hidden="true">
