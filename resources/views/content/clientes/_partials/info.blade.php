@@ -89,10 +89,10 @@
               <label class="form-label" for="">Estado civil (*)</label>
               <select class="form-select" name="" id="">
                 <option value="">Seleccione</option>
-                <option value="Propia">Propia</option>
-                <option value="Alquilada">Alquilada</option>
-                <option value="Familiar">Familiar</option>
-                <option value="Otros">Otros</option>
+                <option value="Soltero">Soltero</option>
+                <option value="Casado">Casado</option>
+                <option value="Divorciado">Divorciado</option>
+                <option value="Viudo">Viudo</option>
               </select>
             </div>
 

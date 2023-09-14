@@ -28,6 +28,8 @@ $(document).ready(function () {
     }
   });
 
+  /* Acciones de Botones */
+
 });
 
 /* FUNCIONES GLOBALES */
