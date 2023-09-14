@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
 
 class ClienteController extends Controller
 {
@@ -15,6 +16,7 @@ class ClienteController extends Controller
    */
   public function index()
   {
+
     return view('content.clientes.index');
   }
 
@@ -25,6 +27,7 @@ class ClienteController extends Controller
    */
   public function create()
   {
+    Session::forget('negocios'); // Elimina todos los registros de la sesión de negocios
     return view('content.clientes.create');
   }
 

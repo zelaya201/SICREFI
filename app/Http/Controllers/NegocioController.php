@@ -35,20 +35,22 @@ class NegocioController extends Controller
    */
   public function store(Request $request)
   {
-    $request->session()->forget('negocios');
+    //$request->session()->forget('negocios');
 
     if($request->input('opcion') == 'agregar'){
       if($request->input('session') == 'true') {
         $size = 0;
+        $array = $request->session()->get('negocios');
 
         if ($request->session()->has('negocios')) {
-          $size = count($request->session()->get('negocios'));
+          end($array);
+          $size = key($array) + 1;
         }
 
-        $array = $request->session()->get('negocios');
         $array = Arr::add($array,
           $size,
           [
+            'id' => $size,
             'nom_negocio' => $request->input('nom_negocio'),
             'tiempo_negocio' => $request->input('tiempo_negocio'),
             'dir_negocio' => $request->input('dir_negocio'),
@@ -68,9 +70,12 @@ class NegocioController extends Controller
       }
 
     }else if($request->input('opcion') == 'eliminar'){
-      $array = $request->session()->get('negocios');
-      $array = Arr::pull($array, $request->input('id'));
-      $request->session()->put('negocios', $array);
+      if($request->input('session') == 'true') {
+        $array = $request->session()->get('negocios');
+        $array = Arr::except($array, $request->input('id'));
+        $request->session()->put('negocios', $array);
+      }
+
     }
 
     return $request->session()->get('negocios');

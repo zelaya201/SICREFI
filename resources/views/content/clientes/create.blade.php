@@ -160,7 +160,6 @@
     $(document).ready(function () {
 
       $('#btn-guardar-cliente').click(function (e) {
-
         e.preventDefault();
 
         $.ajax({
@@ -193,6 +192,7 @@
         });
       });
 
+      /* Agregar Negocio */
       $('#btn-agregar-negocio').click(function (e) {
         e.preventDefault();
 
@@ -206,30 +206,99 @@
           dataType: 'json',
           data: datos,
           success: function (data) {
-
-            var html = "";
-
-            $.each(data, function (key, value) {
-              html += '<tr id="negocio_' + key + '">';
-              html += '<td>' + key + '</td>';
-              html += '<td>' + value.nom_negocio + '</td>';
-              html += '<td>' + value.dir_negocio + '</td>';
-              html += '<td>' + value.tiempo_negocio + '</td>';
-              html += '<td>';
-              html += '<button type="button" class="btn btn-icon btn-warning" data-bs-toggle="modal" data-bs-target="#negocio-modal-editar" data-id="' + value.id + '" data-nom_negocio="' + value.nom_negocio + '" data-dir_negocio="' + value.dir_negocio + '" data-tiempo_negocio="' + value.tiempo_negocio + '"><span class="tf-icons bx bx-edit-alt"></span></button>';
-              html += '<button type="button" class="btn btn-icon btn-danger" data-bs-toggle="modal" data-bs-target="#negocio-modal-eliminar" data-id="' + value.id + '"><span class="tf-icons bx bx-trash"></span></button>';
-
-              html += '</td>';
-            });
-
-            $('#tabla-negocios').html(html);
+            /* Mensaje de exito */
+            $('#modal-negocio').modal('hide');
+            $('#form-negocio').trigger('reset');
+            mostrarNegocios(data);
           },
           error: function (xhr) {
-
+            /* Mensajes de error */
           }
         });
 
       })
     });
+
+    function eliminarNegocio(id) {
+      var datos = $('#form-negocio').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("negocios.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#modal-negocio').modal('hide');
+          $('#form-negocio').trigger('reset');
+          mostrarNegocios(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function obtenerNegocio(id){
+      var datos = '&id=' + id;
+
+      $.ajax({
+        url: '{{ route("negocios.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#modal-negocio').modal('show');
+          $('#form-negocio').trigger('reset');
+          $('#id_negocio').val(data.id);
+          $('#nom_negocio').val(data.nom_negocio);
+          $('#dir_negocio').val(data.dir_negocio);
+          $('#tiempo_negocio').val(data.tiempo_negocio);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarNegocios(data) {
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="negocio_' + key + '">';
+        html += '<td>' + value.id + '</td>';
+        html += '<td>' + value.nom_negocio + '</td>';
+        html += '<td>' + value.dir_negocio + '</td>';
+        html += '<td>' + value.tiempo_negocio + '</td>';
+        html += '<td>';
+        html += "<div class='dropdown-icon-demo'> " +
+          "<a href='javascript:void(0);' class='btn dropdown-toggle btn-sm hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>" +
+          "<i class='bx bx-dots-vertical-rounded'></i>" +
+          "</a> " +
+          "<div class='dropdown-menu'>" +
+          "<a class='dropdown-item' href='javascript:void(0);' onclick=''>" +
+          "<i class='bx bx-edit-alt me-1'></i>Editar" +
+          "</a>" +
+          "<div class='dropdown-divider'></div>" +
+          "<a class='dropdown-item text-danger' href='javascript:void(0);' onclick='eliminarNegocio(" + value.id + ")'>" +
+          "<i class='bx bx-trash me-1'></i> Borrar" +
+          "</a>" +
+          "</div>" +
+          "</div>"
+        html += '</td>';
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="5">No hay resultados</td></tr>';
+      }
+
+      $('#tabla-negocios').html(html);
+    }
+
   </script>
 @endsection
