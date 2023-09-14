@@ -123,10 +123,10 @@
       </div>
 
       <!-- Invoice List Table -->
-      <div class="card">
-        <div class="card-datatable table-responsive">
-          <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-            <div class="row my-3 mx-2">
+      <div class="card p-3">
+        <div class="card-datatable">
+          <div class="dataTables_wrapper dt-bootstrap5 no-footer">
+            <div class="row my-3">
               <div class="col-md-6">
                 <div class="col-md-6">
                   <label>
@@ -159,42 +159,36 @@
                     </select></label></div>
               </div>
             </div>
-            <table class="invoice-list-table table border-top dataTable no-footer dtr-column my-3 mx-4" id="DataTables_Table_0"
-                   aria-describedby="DataTables_Table_0_info" style="width: 1070px;">
-              <thead>
-              <tr>
-                <th class="sorting sorting_desc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                    style="width: 10px;" aria-label="#ID: activate to sort column ascending" aria-sort="descending">#
-                </th>
-                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                    style="width: 10px;" aria-label="Client: activate to sort column ascending">DUI
-                </th>
-                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                    style="width: 120px;" aria-label="Total: activate to sort column ascending">Cliente
-                </th>
-                <th class="text-truncate sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                    colspan="1" style="width: 260px;" aria-label="Issued Date: activate to sort column ascending">Dirección
-                </th>
-                <th class="cell-fit sorting_disabled" rowspan="1" colspan="1" style="width: 76px;" aria-label="Actions">
-                  Acciones
-                </th>
-              </tr>
-              </thead>
-              <tbody>
-                <tr class="odd">
-                  <td class="sorting_1">1</td>
+
+            <div class="table-responsive">
+              <table class="invoice-list-table table border-top dataTable no-footer dtr-column my-4 "
+                     aria-describedby="DataTables_Table_0_info">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Dui</th>
+                  <th>Cliente</th>
+                  <th>Dirección</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>1</td>
                   <td>01209171-6</td>
-                  <td>Victoria Alexandra Ortiz Sandoval</td>
-                  <td>Res. Altos de Montecristo, Psj 4, Block 10, Casa 34</td>
-                  <td>Acciones</td>
+                  <td>Oscar Arnulfo Sanchez Romero</td>
+                  <td>Res. Villas del Tempisque, Psj #15, Block #10, Casa #90</td>
+                  <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                  <td><div class="d-flex align-items-center"><div class="dropdown"><a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a><div class="dropdown-menu dropdown-menu-end"><a href="javascript:;" class="dropdown-item">Detalles</a><a href="" class="dropdown-item">Editar</a><a href="javascript:;" class="dropdown-item">Negocios</a><a href="javascript:;" class="dropdown-item">Referencias</a><a href="javascript:;" class="dropdown-item">Bienes</a><div class="dropdown-divider"></div><a href="javascript:;" class="dropdown-item delete-record text-danger">Borrar</a></div></div></div></td>
                 </tr>
 
-              </tbody>
-            </table>
-            <div class="row mx-2">
+                </tbody>
+              </table>
+            </div>
+            <div class="row">
               <div class="col-sm-12 col-md-6">
-                <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to
-                  10 of 50 entries
+                <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Mostrar 1 de 10 de 50 clientes
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
