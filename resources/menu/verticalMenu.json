@@ -1,16 +1,25 @@
 {
   "menu": [
     {
+      "url": "/",
+      "name": "Inicio",
+      "icon": "menu-icon tf-icons bx bx-home",
+      "slug": "inicio"
+    },
+    {
+      "menuHeader": "Administración"
+    },
+    {
       "url": "/clientes",
       "name": "Clientes",
       "icon": "menu-icon tf-icons bx bx-group",
       "slug": "clientes.index"
     },
     {
-      "url": "/clientes/negocios/negocio",
-      "name": "Negocios",
-      "icon": "menu-icon tf-icons bx bx-briefcase",
-      "slug": "negocios"
+      "url": "#",
+      "name": "Créditos",
+      "icon": "menu-icon tf-icons bx bx-dollar-circle",
+      "slug": "creditos.index"
     }
   ]
 }

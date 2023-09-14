@@ -36,7 +36,7 @@ class ClienteController extends Controller
   public function store(Request $request)
   {
     $request->validate([
-      'dui_cliente' => 'required|unique:clientes|min:9|max:9|numeric',
+      'dui_cliente' => 'required|unique:cliente|numeric',
       'primer_nom_cliente' => 'required|min:2|max:50',
       'primer_ape_cliente' => 'required|min:2|max:50',
       'fech_nac_cliente' => 'required|date',
@@ -49,10 +49,12 @@ class ClienteController extends Controller
       'gasto_cable_cliente' => 'required|numeric',
       'gasto_vivienda_cliente' => 'required|numeric',
       'gasto_otro_cliente' => 'required|numeric',
-      'email_cliente' => 'required|unique:clientes|email',
+      'email_cliente' => 'required|unique:cliente|email',
     ]);
 
-    $cliente = new Cliente;
+    $cliente = new Cliente();
+    $cliente->setTable('cliente');
+
     $cliente->dui_cliente = $request->input('dui_cliente');
     $cliente->primer_nom_cliente = $request->input('primer_nom_cliente');
     $cliente->segundo_nom_cliente = $request->input('segundo_nom_cliente');
@@ -71,6 +73,7 @@ class ClienteController extends Controller
     $cliente->gasto_vivienda_cliente = $request->input('gasto_vivienda_cliente');
     $cliente->gasto_otro_cliente = $request->input('gasto_otro_cliente');
     $cliente->estado_cliente = 'Activo';
+
 
     $cliente->save(); // INSERT INTO - SQL
 

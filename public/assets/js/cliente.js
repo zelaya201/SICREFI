@@ -4,9 +4,9 @@ $(document).ready(function () {
   sessionStorage.clear();
 
   /* EVENTO DE BOTONES */
-  $('#btn-agregar-telefono').click(function () {
+  $('#btn-agregar-telefono-cliente').click(function () {
     var id = 0;
-    var dato = $('#input-telefono').val();
+    var dato = $('#input-telefono-cliente').val();
 
     if (sessionStorage.getItem("size") !== null) {
       id = sessionStorage.getItem("size");
@@ -14,19 +14,21 @@ $(document).ready(function () {
 
     if(dato !== '') {
       if(verificarTelefono(dato)) {
-        $('#input-telefono').removeClass('is-invalid');
+        $('#input-telefono-cliente').removeClass('is-invalid');
         sessionStorage.setItem("r" + id, JSON.stringify(dato));
         sessionStorage.setItem("size", parseInt(id) + 1);
         telefonosList();
       }else{
-        $('#input-telefono').addClass('is-invalid');
-        $('#mensaje-telefono').html('El teléfono ya existe.');
+        $('#input-telefono-cliente').addClass('is-invalid');
+        $('#mensaje-telefono-cliente').html('El teléfono ya existe.');
       }
     }else{
-      $('#input-telefono').addClass('is-invalid');
-      $('#mensaje-telefono').html('El campo es requerido.');
+      $('#input-telefono-cliente').addClass('is-invalid');
+      $('#mensaje-telefono-cliente').html('El campo es requerido.');
     }
   });
+
+  /* Acciones de Botones */
 
 });
 
@@ -57,9 +59,9 @@ function telefonosList() {
       '</tr>';
   }
 
-  $('#lista-telefonos').html(html);
-  $('#telefono-modal').modal('hide');
-  $('#input-telefono').val('');
+  $('#lista-telefonos-cliente').html(html);
+  $('#telefono-modal-cliente').modal('hide');
+  $('#input-telefono-cliente').val('');
 }
 
 function borrarTelefono(id) {
