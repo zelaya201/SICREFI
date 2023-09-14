@@ -75,7 +75,33 @@ class NegocioController extends Controller
         $array = Arr::except($array, $request->input('id'));
         $request->session()->put('negocios', $array);
       }
+    }else if($request->input('opcion') == 'obtener'){
+      if($request->input('session') == 'true') {
+        $array = $request->session()->get('negocios');
+        return Arr::get($array, $request->input('id'));
+      }
+    }else if($request->input('opcion') == 'actualizar') {
+      if ($request->input('session') == 'true') {
+        $array = $request->session()->get('negocios');
+        /* Actualizar elemento del array session */
+        $array[$request->input('id')] = [
+          'id' => $request->input('id'),
+          'nom_negocio' => $request->input('nom_negocio'),
+          'tiempo_negocio' => $request->input('tiempo_negocio'),
+          'dir_negocio' => $request->input('dir_negocio'),
+          'buena_venta_negocio' => $request->input('buena_venta_negocio'),
+          'mala_venta_negocio' => $request->input('mala_venta_negocio'),
+          'ganancia_diaria_negocio' => $request->input('ganancia_diaria_negocio'),
+          'inversion_diaria_negocio' => $request->input('inversion_diaria_negocio'),
+          'gasto_emp_negocio' => $request->input('gasto_emp_negocio'),
+          'gasto_alquiler_negocio' => $request->input('gasto_alquiler_negocio'),
+          'gasto_impuesto_negocio' => $request->input('gasto_impuesto_negocio'),
+          'gasto_credito_negocio' => $request->input('gasto_credito_negocio'),
+          'gasto_otro_negocio' => $request->input('gasto_otro_negocio')
+        ];
 
+        $request->session()->put('negocios', $array);
+      }
     }
 
     return $request->session()->get('negocios');

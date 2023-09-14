@@ -34,7 +34,7 @@
             </button>
           </li>
           <li class="list-inline-item fw-semibold">
-            <a class="nav-link btn btn-secondary" type="button" href="{{ route('clientes.index') }}"> Cancelar</span>
+            <a class="nav-link btn btn-secondary" type="button" href="{{ route('clientes.index') }}"> Cancelar
             </a>
           </li>
         </ul>
@@ -159,6 +159,14 @@
   <script>
     $(document).ready(function () {
 
+      $('#btn-nuevo-negocio').click(function (e) {
+        e.preventDefault();
+        $('#titulo-modal-negocio').html('Nuevo Negocio');
+        $('#modal-negocio').modal('show');
+        $('#form-negocio').trigger('reset');
+        $('#btn-agregar-negocio').html('Agregar');
+      });
+
       $('#btn-guardar-cliente').click(function (e) {
         e.preventDefault();
 
@@ -195,27 +203,49 @@
       /* Agregar Negocio */
       $('#btn-agregar-negocio').click(function (e) {
         e.preventDefault();
+          var datos = $('#form-negocio').serialize();
+          let id_negocio = $('#id_negocio').val();
 
-        var datos = $('#form-negocio').serialize();
-        datos += '&opcion=agregar';
-        datos += '&session=true';
+          if(id_negocio !== ''){
+            datos += '&opcion=actualizar';
+            datos += '&id=' + id_negocio;
+            datos += '&session=true';
 
-        $.ajax({
-          url: '{{ route("negocios.store") }}',
-          type: 'post',
-          dataType: 'json',
-          data: datos,
-          success: function (data) {
-            /* Mensaje de exito */
-            $('#modal-negocio').modal('hide');
-            $('#form-negocio').trigger('reset');
-            mostrarNegocios(data);
-          },
-          error: function (xhr) {
-            /* Mensajes de error */
+            $.ajax({
+              url: '{{ route("negocios.store") }}',
+              type: 'post',
+              dataType: 'json',
+              data: datos,
+              success: function (data) {
+                /* Mensaje de exito */
+                $('#modal-negocio').modal('hide');
+                $('#form-negocio').trigger('reset');
+                mostrarNegocios(data);
+              },
+              error: function (xhr) {
+                /* Mensajes de error */
+              }
+            });
+          }else{
+            datos += '&opcion=agregar';
+            datos += '&session=true';
+
+            $.ajax({
+              url: '{{ route("negocios.store") }}',
+              type: 'post',
+              dataType: 'json',
+              data: datos,
+              success: function (data) {
+                /* Mensaje de exito */
+                $('#modal-negocio').modal('hide');
+                $('#form-negocio').trigger('reset');
+                mostrarNegocios(data);
+              },
+              error: function (xhr) {
+                /* Mensajes de error */
+              }
+            });
           }
-        });
-
       })
     });
 
@@ -243,7 +273,10 @@
     }
 
     function obtenerNegocio(id){
-      var datos = '&id=' + id;
+      var datos = $('#form-negocio').serialize();
+      datos += '&opcion=obtener';
+      datos += '&id=' + id;
+      datos += '&session=true';
 
       $.ajax({
         url: '{{ route("negocios.store") }}',
@@ -252,12 +285,25 @@
         data: datos,
         success: function (data) {
           /* Mensaje de exito */
+          $('#titulo-modal-negocio').html('Editar Negocio');
+
           $('#modal-negocio').modal('show');
           $('#form-negocio').trigger('reset');
+          $('#btn-agregar-negocio').html('Modificar');
+
           $('#id_negocio').val(data.id);
           $('#nom_negocio').val(data.nom_negocio);
           $('#dir_negocio').val(data.dir_negocio);
           $('#tiempo_negocio').val(data.tiempo_negocio);
+          $('#buena_venta_negocio').val(data.buena_venta_negocio);
+          $('#mala_venta_negocio').val(data.mala_venta_negocio);
+          $('#ganancia_diaria_negocio').val(data.ganancia_diaria_negocio);
+          $('#inversion_diaria_negocio').val(data.inversion_diaria_negocio);
+          $('#gasto_emp_negocio').val(data.gasto_emp_negocio);
+          $('#gasto_alquiler_negocio').val(data.gasto_alquiler_negocio);
+          $('#gasto_impuesto_negocio').val(data.gasto_impuesto_negocio);
+          $('#gasto_credito_negocio').val(data.gasto_credito_negocio);
+          $('#gasto_otro_negocio').val(data.gasto_otro_negocio);
         },
         error: function (xhr) {
           /* Mensajes de error */
@@ -270,7 +316,7 @@
 
       $.each(data, function (key, value) {
         html += '<tr id="negocio_' + key + '">';
-        html += '<td>' + value.id + '</td>';
+        html += '<td>' + key + '</td>';
         html += '<td>' + value.nom_negocio + '</td>';
         html += '<td>' + value.dir_negocio + '</td>';
         html += '<td>' + value.tiempo_negocio + '</td>';
@@ -280,7 +326,7 @@
           "<i class='bx bx-dots-vertical-rounded'></i>" +
           "</a> " +
           "<div class='dropdown-menu'>" +
-          "<a class='dropdown-item' href='javascript:void(0);' onclick=''>" +
+          "<a class='dropdown-item' href='javascript:void(0);' onclick='obtenerNegocio("+ value.id +")'>" +
           "<i class='bx bx-edit-alt me-1'></i>Editar" +
           "</a>" +
           "<div class='dropdown-divider'></div>" +

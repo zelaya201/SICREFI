@@ -24,6 +24,9 @@ Route::get('/', function () {
 // Negocio Route
 Route::resource('negocios', NegocioController::class);
 
+// Referencia Route
+Route::resource('referencias',ReferenciaController::class);
+
 // Cliente Route
 Route::resource('clientes',ClienteController::class);
 

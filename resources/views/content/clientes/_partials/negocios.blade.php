@@ -17,41 +17,37 @@
               <div
                 class="col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row ">
                 <div class="mb-3 mb-md-0">
-                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                  <button type="button" class="btn btn-outline-primary" id="btn-nuevo-negocio" data-bs-toggle="modal"
                           data-bs-target="#modal-negocio"><i class="tf-icon bx bx-plus"></i>Nuevo negocio
                   </button>
                 </div>
               </div>
             </div>
-            <table class="table border-top dtr-column my-3"
-                   id="DataTables_Table_0"
-                   aria-describedby="DataTables_Table_0_info">
-              <thead>
-              <tr>
-                <th>#
-                </th>
-                <th>Nombre
-                </th>
-                <th>Dirección
-                </th>
-                <th>Tiempo de operación
-                </th>
-                <th>
-                  Acciones
-                </th>
-              </tr>
-              </thead>
-              <tbody id="tabla-negocios">
-              <tr>
-                <td colspan="5">No hay resultados</td>
-              </tr>
+            <div class="table-responsive">
+              <table class="table border-top dtr-column my-3"
+                     id="DataTables_Table_0"
+                     aria-describedby="DataTables_Table_0_info">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Dirección</th>
+                  <th>Tiempo de operación</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-negocios">
+                <tr>
+                  <td colspan="5">No hay resultados</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
 
-              </tbody>
-            </table>
             <div class="row mx-2">
               <div class="col-sm-12 col-md-6">
                 <div class="dataTables_info" role="status" aria-live="polite">Showing 1 to
-                  10 of 50 entries
+                  10 of 1 entries
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
@@ -63,14 +59,7 @@
                     <li class="paginate_button page-item active"><a href="#" aria-controls="DataTables_Table_0"
                                                                     role="link" aria-current="page" data-dt-idx="0"
                                                                     tabindex="0" class="page-link">1</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
-                                                              data-dt-idx="1" tabindex="0" class="page-link">2</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
-                                                              data-dt-idx="2" tabindex="0" class="page-link">3</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
-                                                              data-dt-idx="3" tabindex="0" class="page-link">4</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
-                                                              data-dt-idx="4" tabindex="0" class="page-link">5</a></li>
+
                     <li class="paginate_button page-item next" id="DataTables_Table_0_next"><a href="#"
                                                                                                aria-controls="DataTables_Table_0"
                                                                                                role="link"
@@ -98,7 +87,7 @@
       <div class="modal-content">
 
         <div class="modal-header bg-primary">
-          <h5 class="modal-title text-white text-center">Nuevo negocio</h5>
+          <h5 class="modal-title text-white text-center" id="titulo-modal-negocio">Nuevo negocio</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -109,6 +98,7 @@
                 <hr class="my-2">
               </div>
               <div>
+                <input type="text" name="id_negocio" id="id_negocio" class="visually-hidden"/>
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="nom_negocio" class="form-label">Nombre (*)</label>
@@ -237,8 +227,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" id="btn-agregar-negocio"><span
-              class="tf-icons bx bx-plus"></span>
+          <button type="submit" class="btn btn-primary" id="btn-agregar-negocio">
             Agregar
           </button>
           <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal"
