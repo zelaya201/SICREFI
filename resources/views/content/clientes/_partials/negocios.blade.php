@@ -1,21 +1,21 @@
 <div class="tab-pane fade pt-3" id="card-datos-negocios" role="tabpanel">
-  <div class="accordion" id="accordionWithIcon">
-    <div class="card mb-4">
-      <h2 class="accordion-header d-flex align-items-center">
-        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                data-bs-target="#accordionWithIcon-2" aria-expanded="false">
-          Nuevo negocio
-        </button>
-      </h2>
-      <div id="accordionWithIcon-2" class="accordion-collapse collapse bg-transparent" style="">
+  <div class="card mb-4">
+    <h2 class="accordion-header d-flex align-items-center">
+      <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+              data-bs-target="#accordion1" aria-expanded="true">
+        Nuevo negocio
+      </button>
+    </h2>
+    <div id="accordion1" class="accordion-collapse collapse">
+      <div class="accordion-body p-0">
         <div class="row">
-          <div class="col-md-6 mb-4">
-            <div class="">
+          <div class="col-lg-6 mb-sm-4">
+            <div>
               <div class="card-header py-0">
                 <span class="fw-bold">Datos generales</span>
                 <hr class="my-2">
               </div>
-              <div class="card-body">
+              <div class="card-body pb-0">
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="" class="form-label">Nombre (*)</label>
@@ -45,8 +45,6 @@
                     <label for="" class="form-label">Venta en dia malo (*)</label>
                     <input type="text" id="" class="form-control" placeholder="0.00">
                   </div>
-
-
                 </div>
 
                 <div class="row">
@@ -70,8 +68,8 @@
             </div>
           </div>
 
-          <div class="col-md-6">
-            <div class="mb-4">
+          <div class="col-lg-6">
+            <div>
               <div class="card-header py-0">
                 <span class="fw-bold">Gastos</span>
                 <hr class="my-2">
@@ -109,17 +107,17 @@
             </div>
 
             <!-- Datos de contacto -->
-            <div class="">
+            <div>
               <div class="card-header pb-0">
                 <span class="fw-bold">Datos de contacto</span>
                 <hr class="my-2">
               </div>
-              <div class="card-body">
+              <div class="card-body pb-0">
                 <div class="col-md-12">
                   <label class="form-label d-flex align-items-center justify-content-between">Teléfonos:
                     (*)
                     <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#telefono-modal-cliente">
+                            data-bs-target="#telefono-modal-negocio">
                       <span class="tf-icons bx bx-plus"></span> Agregar
                     </button>
                   </label>
@@ -131,7 +129,7 @@
                       <th></th>
                     </tr>
                     </thead>
-                    <tbody id="lista-telefonos-cliente">
+                    <tbody id="lista-telefonos-negocio">
                     <tr>
                       <td colspan="2">No hay resultados</td>
                     </tr>
@@ -142,47 +140,43 @@
             </div>
           </div>
         </div>
-      </div>
-      <div>
 
-      </div>
-    </div>
-
-    <div class="card active">
-      <h2 class="accordion-header d-flex align-items-center">
-        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                data-bs-target="#accordionWithIcon-1" aria-expanded="false">
-          Listado de negocios
-        </button>
-      </h2>
-
-      <div id="accordionWithIcon-1" class="accordion-collapse collapse show" style="">
-
-        <div class="table-responsive">
-          <div class="table-responsive text-nowrap">
-            <table class="table table-hover border-top">
-              <thead>
-              <tr>
-                <th>#</th>
-                <th>Nombre</th>
-                <th>Teléfono</th>
-                <th>Dirección</th>
-                <th>Acciones</th>
-              </tr>
-              </thead>
-              <tbody class="table-border-bottom-0">
-              <tr>
-                <td colspan="5">No hay resultados</td>
-              </tr>
-              </tbody>
-            </table>
+        <div class="row">
+          <div class="col-md-6 mb-4 ms-4">
+            <button type="button" class="btn btn-outline-primary"><span
+                class="tf-icons bx bx-save"></span> Guardar negocio
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-   <!-- Modal agregar telefono cliente -->
+{{-- Listado de Negocios --}}
+  <div class="card">
+    <div class="table-responsive">
+      <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+          <tr>
+            <td colspan="5">No hay resultados</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal agregar telefono cliente -->
   <div class="modal fade" id="telefono-modal-cliente" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

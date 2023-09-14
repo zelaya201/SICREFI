@@ -40,8 +40,6 @@
     </div>
   </div>
 
-
-
   {{-- Modal de agregar y editar --}}
   <div class="modal fade" id="nuevoModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-fullscreen-lg-down modal-dialog-scrollable" role="document">

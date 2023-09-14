@@ -47,8 +47,8 @@
       <li class="nav-item" role="presentation">
         <button type="button" class="btn step active" role="tab" data-bs-toggle="tab"
                 data-bs-target="#card-datos-cliente" aria-controls="card-datos-cliente" aria-selected="true">
-          <span class="badge bg-primary"><i class="bx bx-user"></i></span>
-          <span class="bs-stepper-title text-primary">Información</span>
+          <span class="badge bg-label-secondary"><i class="bx bx-user"></i></span>
+          <span class="bs-stepper-title">Información</span>
         </button>
       </li>
       <li>
