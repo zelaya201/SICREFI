@@ -43,11 +43,7 @@
               </thead>
               <tbody id="tabla-negocios">
               <tr>
-                <td>1</td>
-                <td>Panes Mata niños Don Jose</td>
-                <td>Res. Altos de Montecristo, Psj 4, Block 10, Casa 34</td>
-                <td>12 años</td>
-                <td>Acciones</td>
+                <td colspan="5">No hay resultados</td>
               </tr>
 
               </tbody>

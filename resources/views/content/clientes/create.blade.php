@@ -197,11 +197,14 @@
       $('#btn-agregar-negocio').click(function (e) {
         e.preventDefault();
 
+        var datos =$('#form-negocio').serialize();
+        datos
+
         $.ajax({
           url: '{{ route("negocios.store") }}',
           type: 'post',
           dataType: 'json',
-          data: $('#form-negocio').serialize(),
+          data: datos,
           success: function (data) {
 
             var html = "";
@@ -215,6 +218,7 @@
               html += '<td>';
               html += '<button type="button" class="btn btn-icon btn-warning" data-bs-toggle="modal" data-bs-target="#negocio-modal-editar" data-id="' + value.id + '" data-nom_negocio="' + value.nom_negocio + '" data-dir_negocio="' + value.dir_negocio + '" data-tiempo_negocio="' + value.tiempo_negocio + '"><span class="tf-icons bx bx-edit-alt"></span></button>';
               html += '<button type="button" class="btn btn-icon btn-danger" data-bs-toggle="modal" data-bs-target="#negocio-modal-eliminar" data-id="' + value.id + '"><span class="tf-icons bx bx-trash"></span></button>';
+
               html += '</td>';
             });
 
