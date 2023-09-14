@@ -19,6 +19,8 @@ $controller_path = 'App\Http\Controllers';
 // Cliente Route
 Route::resource('clientes',ClienteController::class);
 
+Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
+
 // Negocio Route
 Route::get('/clientes/negocios/negocio', $controller_path . '\Negocio@index')->name('negocios');
 
