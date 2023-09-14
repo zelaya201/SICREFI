@@ -1,118 +1,216 @@
 <div class="tab-pane fade pt-3" id="card-datos-negocios" role="tabpanel">
-  <div class="card mb-4">
-    <h2 class="accordion-header d-flex align-items-center">
-      <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-              data-bs-target="#accordion1" aria-expanded="true">
-        Nuevo negocio
-      </button>
-    </h2>
-    <div id="accordion1" class="accordion-collapse collapse">
-      <div class="accordion-body p-0">
-        <div class="row">
-          <div class="col-lg-6 mb-sm-4">
-            <div>
-              <div class="card-header py-0">
-                <span class="fw-bold">Datos generales</span>
+  <div class="row">
+    <div class="col-md-12 mb-4">
+      <!-- Negocios -->
+      <div class="card p-3">
+        <div class="card-datatable">
+          <div class="dataTables_wrapper dt-bootstrap5 no-footer">
+            <div class="row my-3">
+              <div class="col-md-6">
+                <label>
+                  <input type="search"
+                         class="form-control"
+                         placeholder="Buscar..."
+                         aria-controls="DataTables_Table_0">
+                </label>
+              </div>
+              <div
+                class="col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row ">
+                <div class="mb-3 mb-md-0">
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                          data-bs-target="#modal-negocio"><i class="tf-icon bx bx-plus"></i>Nuevo negocio
+                  </button>
+                </div>
+              </div>
+            </div>
+            <table class="table border-top dtr-column my-3"
+                   id="DataTables_Table_0"
+                   aria-describedby="DataTables_Table_0_info">
+              <thead>
+              <tr>
+                <th>#
+                </th>
+                <th>Nombre
+                </th>
+                <th>Dirección
+                </th>
+                <th>Tiempo de operación
+                </th>
+                <th>
+                  Acciones
+                </th>
+              </tr>
+              </thead>
+              <tbody id="tabla-negocios">
+              <tr>
+                <td>1</td>
+                <td>Panes Mata niños Don Jose</td>
+                <td>Res. Altos de Montecristo, Psj 4, Block 10, Casa 34</td>
+                <td>12 años</td>
+                <td>Acciones</td>
+              </tr>
+
+              </tbody>
+            </table>
+            <div class="row mx-2">
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_info" role="status" aria-live="polite">Showing 1 to
+                  10 of 50 entries
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_paginate paging_simple_numbers">
+                  <ul class="pagination">
+                    <li class="paginate_button page-item previous disabled"><a
+                        aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous"
+                        tabindex="0" class="page-link">Anterior</a></li>
+                    <li class="paginate_button page-item active"><a href="#" aria-controls="DataTables_Table_0"
+                                                                    role="link" aria-current="page" data-dt-idx="0"
+                                                                    tabindex="0" class="page-link">1</a></li>
+                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
+                                                              data-dt-idx="1" tabindex="0" class="page-link">2</a></li>
+                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
+                                                              data-dt-idx="2" tabindex="0" class="page-link">3</a></li>
+                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
+                                                              data-dt-idx="3" tabindex="0" class="page-link">4</a></li>
+                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
+                                                              data-dt-idx="4" tabindex="0" class="page-link">5</a></li>
+                    <li class="paginate_button page-item next" id="DataTables_Table_0_next"><a href="#"
+                                                                                               aria-controls="DataTables_Table_0"
+                                                                                               role="link"
+                                                                                               data-dt-idx="next"
+                                                                                               tabindex="0"
+                                                                                               class="page-link">Siguiente</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal agregar negocio -->
+<form action="{{ route('negocios.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
+      id="form-negocio">
+  @csrf {{-- Security --}}
+  <div class="modal fade" id="modal-negocio" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title text-white text-center">Nuevo negocio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12 mb-3">
+              <div class="pb-0">
+                <span class="fw-bold">Datos del negocio</span>
                 <hr class="my-2">
               </div>
-              <div class="card-body pb-0">
+              <div>
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="" class="form-label">Nombre (*)</label>
-                    <input type="text" id="" class="form-control">
+                    <label for="nom_negocio" class="form-label">Nombre (*)</label>
+                    <input type="text" name="nom_negocio" id="nom_negocio" class="form-control">
                   </div>
 
                   <div class="col-md-6 mb-3">
-                    <label for="" class="form-label">Tiempo de tenerlo (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="Cantidad en años">
+                    <label for="tiempo_negocio" class="form-label">Tiempo de tenerlo (*)</label>
+                    <input type="text" name="tiempo_negocio" id="tiempo_negocio" class="form-control"
+                           placeholder="Cantidad en meses">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-12 mb-3">
-                    <label class="form-label" for="">Dirección (*)</label>
-                    <textarea class="form-control" id="" rows="2"></textarea>
+                    <label class="form-label" for="dir_negocio">Dirección (*)</label>
+                    <textarea class="form-control" name="dir_negocio" id="dir_negocio" rows="2"></textarea>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="" class="form-label">Venta en dia bueno (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="0.00">
+                    <label for="buena_venta_negocio" class="form-label">Venta en dia bueno (*)</label>
+                    <input type="text" name="buena_venta_negocio" id="buena_venta_negocio" class="form-control"
+                           placeholder="0.00">
                   </div>
 
                   <div class="col-md-6 mb-3">
-                    <label for="" class="form-label">Venta en dia malo (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="0.00">
+                    <label for="mala_venta_negocio" class="form-label">Venta en dia malo (*)</label>
+                    <input type="text" name="mala_venta_negocio" id="mala_venta_negocio" class="form-control"
+                           placeholder="0.00">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="" class="form-label">Ganancia diaria (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="0.00">
+                    <label for="ganancia_diaria_negocio" class="form-label">Ganancia diaria (*)</label>
+                    <input type="text" name="ganancia_diaria_negocio" id="ganancia_diaria_negocio" class="form-control"
+                           placeholder="0.00">
                   </div>
 
                   <div class="col-md-6 mb-3">
-                    <label for="" class="form-label">Inversión diaria (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="0.00">
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12 mb-3 text-end">
-                    Los campos marcados con <span class="text-danger">(*)</span> son obligatorios
+                    <label for="inversion_diaria_negocio" class="form-label">Inversión diaria (*)</label>
+                    <input type="text" name="inversion_diaria_negocio" id="inversion_diaria_negocio"
+                           class="form-control" placeholder="0.00">
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="col-lg-6">
-            <div>
-              <div class="card-header py-0">
+            <div class="col-lg-12 mb-3">
+              <div class="pb-0">
                 <span class="fw-bold">Gastos</span>
                 <hr class="my-2">
               </div>
-              <div class="card-body">
+              <div>
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="" class="form-label">Pago de empleados (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="0.00">
+                    <label for="gasto_emp_negocio" class="form-label">Pago de empleados (*)</label>
+                    <input type="text" name="gasto_emp_negocio" id="gasto_emp_negocio" class="form-control"
+                           placeholder="0.00">
                   </div>
 
                   <div class="col-md-6 mb-3">
-                    <label for="" class="form-label">Alquiler de local (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="0.00">
+                    <label for="gasto_alquiler_negocio" class="form-label">Alquiler de local (*)</label>
+                    <input type="text" name="gasto_alquiler_negocio" id="gasto_alquiler_negocio" class="form-control"
+                           placeholder="0.00">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-4 mb-3">
-                    <label for="" class="form-label">Impuestos (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="0.00">
+                    <label for="gasto_impuesto_negocio" class="form-label">Impuestos (*)</label>
+                    <input type="text" name="gasto_impuesto_negocio" id="gasto_impuesto_negocio" class="form-control"
+                           placeholder="0.00">
                   </div>
 
                   <div class="col-md-4 mb-3">
-                    <label for="" class="form-label">Cuotas de créditos (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="0.00">
+                    <label for="gasto_credito_negocio" class="form-label">Cuotas de créditos (*)</label>
+                    <input type="text" name="gasto_credito_negocio" id="gasto_credito_negocio" class="form-control"
+                           placeholder="0.00">
                   </div>
 
                   <div class="col-md-4 mb-3">
-                    <label for="" class="form-label">Otros pagos (*)</label>
-                    <input type="text" id="" class="form-control" placeholder="0.00">
+                    <label for="gasto_otro_negocio" class="form-label">Otros pagos (*)</label>
+                    <input type="text" name="gasto_otro_negocio" id="gasto_otro_negocio" class="form-control"
+                           placeholder="0.00">
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Datos de contacto -->
-            <div>
-              <div class="card-header pb-0">
+            <div class="col-lg-12">
+              <div class="pb-0">
                 <span class="fw-bold">Datos de contacto</span>
                 <hr class="my-2">
               </div>
-              <div class="card-body pb-0">
+              <div>
                 <div class="col-md-12">
                   <label class="form-label d-flex align-items-center justify-content-between">Teléfonos:
                     (*)
@@ -139,77 +237,23 @@
               </div>
             </div>
           </div>
+
         </div>
 
-        <div class="row">
-          <div class="col-md-6 mb-4 ms-4">
-            <button type="button" class="btn btn-outline-primary"><span
-                class="tf-icons bx bx-save"></span> Guardar negocio
-            </button>
-          </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" id="btn-agregar-negocio"><span
+              class="tf-icons bx bx-plus"></span>
+            Agregar
+          </button>
+          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                  aria-label="Close">Cerrar
+          </button>
         </div>
+
       </div>
     </div>
   </div>
-
-{{-- Listado de Negocios --}}
-  <div class="card">
-    <div class="table-responsive">
-      <div class="table-responsive text-nowrap">
-        <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Teléfono</th>
-            <th>Dirección</th>
-            <th>Acciones</th>
-          </tr>
-          </thead>
-          <tbody class="table-border-bottom-0">
-          <tr>
-            <td colspan="5">No hay resultados</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal agregar telefono cliente -->
-  <div class="modal fade" id="telefono-modal-cliente" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-primary">
-          <h5 class="modal-title text-white text-center">Nuevo teléfono</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-          <div class="row">
-            <div class="col mb-3">
-              <label for="input-telefono-cliente" class="form-label">Teléfono (*)</label>
-              <input type="text" id="input-telefono-cliente" class="form-control" placeholder="00000000">
-              <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                <div data-field="name" data-validator="notEmpty" id="mensaje-telefono-cliente"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12 text-center">
-            <button type="button" class="btn btn-primary me-sm-3 me-1 mt-3" id="btn-agregar-telefono-cliente"><span
-                class="tf-icons bx bx-plus"></span>
-              Agregar
-            </button>
-            <button type="button" class="btn btn-label-secondary mt-3" data-bs-dismiss="modal"
-                    aria-label="Close">Cerrar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+</form>
 
 
 
