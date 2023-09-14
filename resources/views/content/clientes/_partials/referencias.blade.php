@@ -147,14 +147,6 @@
                     <textarea class="form-control" name="dir_ref" id="dir_ref" rows="2"></textarea>
                   </div>
                 </div>
-
-                <div class="row">
-
-                </div>
-
-                <div class="row">
-
-                </div>
               </div>
             </div>
 
@@ -168,7 +160,7 @@
                   <label class="form-label d-flex align-items-center justify-content-between">Teléfonos:
                     (*)
                     <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#telefono-modal-negocio">
+                            data-bs-target="#telefono-modal-referncia">
                       <span class="tf-icons bx bx-plus"></span> Agregar
                     </button>
                   </label>
@@ -180,7 +172,7 @@
                       <th></th>
                     </tr>
                     </thead>
-                    <tbody id="lista-telefonos-negocio">
+                    <tbody id="lista-telefonos-referncia">
                     <tr>
                       <td colspan="2">No hay resultados</td>
                     </tr>
