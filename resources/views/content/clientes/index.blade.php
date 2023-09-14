@@ -180,7 +180,7 @@
                   <td>Oscar Arnulfo Sanchez Romero</td>
                   <td>Res. Villas del Tempisque, Psj #15, Block #10, Casa #90</td>
                   <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
-                  <td>Acciones</td>
+                  <td><div class="d-flex align-items-center"><div class="dropdown"><a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a><div class="dropdown-menu dropdown-menu-end"><a href="javascript:;" class="dropdown-item">Detalles</a><a href="" class="dropdown-item">Editar</a><a href="javascript:;" class="dropdown-item">Negocios</a><a href="javascript:;" class="dropdown-item">Referencias</a><a href="javascript:;" class="dropdown-item">Bienes</a><div class="dropdown-divider"></div><a href="javascript:;" class="dropdown-item delete-record text-danger">Borrar</a></div></div></div></td>
                 </tr>
 
                 </tbody>
