@@ -114,7 +114,6 @@
     </li>
   </ul>
 
-
   <!-- Datos del Cliente -->
   <div class="tab-content p-0">
     @include('content.clientes._partials.info') {{-- Información del cliente --}}
@@ -197,8 +196,9 @@
       $('#btn-agregar-negocio').click(function (e) {
         e.preventDefault();
 
-        var datos =$('#form-negocio').serialize();
-        datos
+        var datos = $('#form-negocio').serialize();
+        datos += '&opcion=agregar';
+        datos += '&session=true';
 
         $.ajax({
           url: '{{ route("negocios.store") }}',
