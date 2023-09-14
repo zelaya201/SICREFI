@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('negocios', function (Blueprint $table) {
-            $table->id();
-
+        Schema::create('opcion_acceso', function (Blueprint $table) {
+            $table->id('id_opcion_acceso');
+            $table->string('nom_opcion_acceso',75);
+            $table->bigInteger('id_rol')->unsigned();
+            $table->foreign('id_rol')
+              ->references('id_rol')
+              ->on('rol')
+              ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('negocios');
+        Schema::dropIfExists('opcion_acceso');
     }
 };

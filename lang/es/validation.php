@@ -1,7 +1,7 @@
 <?php
 
 return [
-  'required' => 'El campo es requerido.',
+  'required' => 'El campo es obligatorio.',
   'unique' => 'El campo :attribute ya existe.',
   'min' => [
     'string' => 'El campo :attribute debe tener al menos :min caracteres.',
