@@ -39,7 +39,7 @@ class NegocioController extends Controller
 
     if($request->input('opcion') == 'agregar'){
       if($request->input('session') == 'true') {
-        $size = 0;
+        $size = 1;
         $array = $request->session()->get('negocios');
 
         if ($request->session()->has('negocios')) {

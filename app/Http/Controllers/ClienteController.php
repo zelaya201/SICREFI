@@ -28,6 +28,8 @@ class ClienteController extends Controller
   public function create()
   {
     Session::forget('negocios'); // Elimina todos los registros de la sesión de negocios
+    Session::forget('referencias'); // Elimina todos los registros de la sesión de referencias
+    Session::forget('bienes'); // Elimina todos los registros de la sesión de bienes
     return view('content.clientes.create');
   }
 

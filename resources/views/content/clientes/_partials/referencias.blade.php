@@ -17,8 +17,8 @@
               <div
                 class="col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row ">
                 <div class="mb-3 mb-md-0">
-                  <button type="button" class="btn btn-outline-primary" id="btn-nueva-referencia" data-bs-toggle="modal"
-                          data-bs-target="#modal-referencia"><i class="tf-icon bx bx-plus"></i>Nueva referencia
+                  <button type="button" class="btn btn-outline-primary" id="btn-nuevo-ref" data-bs-toggle="modal"
+                          data-bs-target="#modal-ref"><i class="tf-icon bx bx-plus"></i>Nueva referencia
                   </button>
                 </div>
               </div>
@@ -32,13 +32,14 @@
                   <th>#</th>
                   <th>Nombre</th>
                   <th>Dirección</th>
-                  <th>Parentezco</th>
+                  <th>Parentesco</th>
+                  <th>Ocupación</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>
-                <tbody id="tabla-referencias">
+                <tbody id="tabla-ref">
                 <tr>
-                  <td colspan="5">No hay resultados</td>
+                  <td colspan="6">No hay resultados</td>
                 </tr>
                 </tbody>
               </table>
@@ -80,14 +81,14 @@
 
 <!-- Modal agregar negocio -->
 <form action="{{ route('referencias.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
-      id="form-negocio">
+      id="form-ref">
   @csrf {{-- Security --}}
-  <div class="modal fade" id="modal-referencia" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="modal-ref" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
       <div class="modal-content">
 
         <div class="modal-header bg-primary">
-          <h5 class="modal-title text-white text-center" id="titulo-modal-negocio">Nueva referencia</h5>
+          <h5 class="modal-title text-white text-center" id="titulo-modal-ref">Nueva referencia</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -120,14 +121,14 @@
 
                   <div class="col-md-6 mb-3">
                     <label for="tercer_nom_ref" class="form-label">Primer apellido (*)</label>
-                    <input type="text" name="tercer_nom_ref" id="tercer_nom_ref" class="form-control">
+                    <input type="text" name="primer_ape_ref" id="primer_ape_ref" class="form-control">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="primer_ape_ref" class="form-label">Segundo apellido</label>
-                    <input type="text" name="primer_ape_ref" id="primer_ape_ref" class="form-control">
+                    <input type="text" name="segundo_ape_ref" id="segundo_ape_ref" class="form-control">
                   </div>
 
                   <div class="col-md-6 mb-3">
@@ -138,8 +139,8 @@
 
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="parentezco_ref" class="form-label">Parentezco (*)</label>
-                    <input type="text" name="parentezco_ref" id="parentezco_ref" class="form-control">
+                    <label for="parentesco_ref" class="form-label">Parentesco (*)</label>
+                    <input type="text" name="parentesco_ref" id="parentesco_ref" class="form-control">
                   </div>
 
                   <div class="col-md-6 mb-3">
@@ -160,7 +161,7 @@
                   <label class="form-label d-flex align-items-center justify-content-between">Teléfonos:
                     (*)
                     <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#telefono-modal-referncia">
+                            data-bs-target="#telefono-modal-ref">
                       <span class="tf-icons bx bx-plus"></span> Agregar
                     </button>
                   </label>
@@ -172,7 +173,7 @@
                       <th></th>
                     </tr>
                     </thead>
-                    <tbody id="lista-telefonos-referncia">
+                    <tbody id="lista-telefonos-ref">
                     <tr>
                       <td colspan="2">No hay resultados</td>
                     </tr>
@@ -186,7 +187,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" id="btn-agregar-negocio">
+          <button type="submit" class="btn btn-primary" id="btn-agregar-ref">
             Agregar
           </button>
           <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal"
@@ -198,7 +199,3 @@
     </div>
   </div>
 </form>
-
-
-
-

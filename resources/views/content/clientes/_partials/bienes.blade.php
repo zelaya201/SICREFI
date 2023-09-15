@@ -32,7 +32,7 @@
                   <th>Acciones</th>
                 </tr>
                 </thead>
-                <tbody id="tabla-bienes">
+                <tbody id="tabla-bien">
                 <tr>
                   <td colspan="3">No hay resultados</td>
                 </tr>
@@ -75,15 +75,15 @@
 </div>
 
 <!-- Modal agregar bien -->
-<form action="{{ route('negocios.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
-      id="form-negocio">
+<form action="{{ route('bienes.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
+      id="form-bien">
   @csrf {{-- Security --}}
   <div class="modal fade" id="modal-bien" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-sm" role="document">
       <div class="modal-content">
 
         <div class="modal-header bg-primary">
-          <h5 class="modal-title text-white text-center" id="titulo-modal-negocio">Nuevo bien</h5>
+          <h5 class="modal-title text-white text-center" id="titulo-modal-bien">Nuevo bien</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body pb-0">
@@ -92,8 +92,8 @@
               <input type="text" name="id_bien" id="id_bien" class="visually-hidden"/>
               <div class="row">
                 <div class="col-md-12 mb-3">
-                  <label for="card-bienes" class="form-label">Nombre (*)</label>
-                  <input type="text" name="card-bienes" id="card-bienes" class="form-control">
+                  <label for="nom_bien" class="form-label">Nombre (*)</label>
+                  <input type="text" name="nom_bien" id="nom_bien" class="form-control">
                 </div>
               </div>
             </div>
@@ -102,7 +102,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" id="btn-agregar-negocio">
+          <button type="submit" class="btn btn-primary" id="btn-agregar-bien">
             Agregar
           </button>
           <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal"

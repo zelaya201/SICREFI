@@ -159,14 +159,7 @@
   <script>
     $(document).ready(function () {
 
-      $('#btn-nuevo-negocio').click(function (e) {
-        e.preventDefault();
-        $('#titulo-modal-negocio').html('Nuevo Negocio');
-        $('#modal-negocio').modal('show');
-        $('#form-negocio').trigger('reset');
-        $('#btn-agregar-negocio').html('Agregar');
-      });
-
+      /** EVENTOS DE BOTONES CLIENTE **/
       $('#btn-guardar-cliente').click(function (e) {
         e.preventDefault();
 
@@ -199,8 +192,17 @@
           }
         });
       });
+      /** FIN EVENTOS DE BOTONES CLIENTE **/
 
-      /* Agregar Negocio */
+
+      /** EVENTOS DE BOTONES NEGOCIO **/
+      $('#btn-nuevo-negocio').click(function (e) {
+        e.preventDefault();
+        $('#titulo-modal-negocio').html('Nuevo Negocio');
+        $('#form-negocio').trigger('reset');
+        $('#btn-agregar-negocio').html('Agregar');
+      });
+
       $('#btn-agregar-negocio').click(function (e) {
         e.preventDefault();
           var datos = $('#form-negocio').serialize();
@@ -247,8 +249,123 @@
             });
           }
       })
+      /** FIN EVENTO DE BOTONES NEGOCIO **/
+
+
+      /** EVENTOS DE BOTONES REFERENCIA **/
+      $('#btn-agregar-ref').click(function (e) {
+        e.preventDefault();
+        var datos = $('#form-ref').serialize();
+        let id_ref = $('#id_ref').val();
+
+        if(id_ref !== ''){
+          datos += '&opcion=actualizar';
+          datos += '&id=' + id_ref;
+          datos += '&session=true';
+
+          $.ajax({
+            url: '{{ route("referencias.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#modal-ref').modal('hide');
+              $('#form-ref').trigger('reset');
+              mostrarRef(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }else{
+          datos += '&opcion=agregar';
+          datos += '&session=true';
+
+          $.ajax({
+            url: '{{ route("referencias.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#modal-ref').modal('hide');
+              $('#form-ref').trigger('reset');
+              mostrarRef(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }
+      })
+
+      $('#btn-nuevo-ref').click(function (e) {
+        e.preventDefault();
+        $('#titulo-modal-ref').html('Nueva Referencia');
+        $('#form-ref').trigger('reset');
+        $('#btn-agregar-ref').html('Agregar');
+      });
+      /** FIN EVENTOS DE BOTONES REFERENCIA **/
+
+      /** EVENTOS DE BOTONES BIEN **/
+      $('#btn-nuevo-bien').click(function (e) {
+        e.preventDefault();
+        $('#titulo-modal-bien').html('Nuevo Bien');
+        $('#form-bien').trigger('reset');
+        $('#btn-agregar-bien').html('Agregar');
+      });
+
+      $('#btn-agregar-bien').click(function (e) {
+        e.preventDefault();
+        var datos = $('#form-bien').serialize();
+        let id_bien = $('#id_bien').val();
+
+        if(id_bien !== ''){
+          datos += '&opcion=actualizar';
+          datos += '&id=' + id_bien;
+          datos += '&session=true';
+
+          $.ajax({
+            url: '{{ route("bienes.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#modal-bien').modal('hide');
+              $('#form-bien').trigger('reset');
+              mostrarBienes(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }else{
+          datos += '&opcion=agregar';
+          datos += '&session=true';
+
+          $.ajax({
+            url: '{{ route("bienes.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#modal-bien').modal('hide');
+              $('#form-bien').trigger('reset');
+              mostrarBienes(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }
+      })
+      /** FIN EVENTOS DE BOTONES BIEN **/
     });
 
+    /** FUNCIONES DE NEGOCIO **/
     function eliminarNegocio(id) {
       var datos = $('#form-negocio').serialize();
       datos += '&opcion=eliminar';
@@ -345,6 +462,195 @@
 
       $('#tabla-negocios').html(html);
     }
+    /** FIN FUNCIONES DE NEGOCIO **/
+
+
+    /** FUNCIONES DE REFERENCIA **/
+    function eliminarRef(id) {
+      var datos = $('#form-ref').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("referencias.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#modal-ref').modal('hide');
+          $('#form-ref').trigger('reset');
+          mostrarRef(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function obtenerRef(id){
+      var datos = $('#form-ref').serialize();
+      datos += '&opcion=obtener';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("referencias.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#titulo-modal-ref').html('Editar Referencia');
+
+          $('#modal-ref').modal('show');
+          $('#form-ref').trigger('reset');
+          $('#btn-agregar-ref').html('Modificar');
+
+          $('#id_ref').val(data.id);
+          $('#primer_nom_ref').val(data.primer_nom_ref);
+          $('#segundo_nom_ref').val(data.segundo_nom_ref);
+          $('#tercer_nom_ref').val(data.tercer_nom_ref);
+          $('#primer_ape_ref').val(data.primer_ape_ref);
+          $('#segundo_ape_ref').val(data.segundo_ape_ref);
+          $('#ocupacion_ref').val(data.ocupacion_ref);
+          $('#parentesco_ref').val(data.parentesco_ref);
+          $('#dir_ref').val(data.dir_ref);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarRef(data) {
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="ref_' + key + '">';
+        html += '<td>' + key + '</td>';
+        html += '<td>' + value.primer_nom_ref + ' ' + value.primer_ape_ref + '</td>';
+        html += '<td>' + value.dir_ref + '</td>';
+        html += '<td>' + value.ocupacion_ref + '</td>';
+        html += '<td>' + value.parentesco_ref + '</td>';
+        html += '<td>';
+        html += "<div class='dropdown-icon-demo'> " +
+          "<a href='javascript:void(0);' class='btn dropdown-toggle btn-sm hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>" +
+          "<i class='bx bx-dots-vertical-rounded'></i>" +
+          "</a> " +
+          "<div class='dropdown-menu'>" +
+          "<a class='dropdown-item' href='javascript:void(0);' onclick='obtenerRef("+ value.id +")'>" +
+          "<i class='bx bx-edit-alt me-1'></i>Editar" +
+          "</a>" +
+          "<div class='dropdown-divider'></div>" +
+          "<a class='dropdown-item text-danger' href='javascript:void(0);' onclick='eliminarRef(" + value.id + ")'>" +
+          "<i class='bx bx-trash me-1'></i> Borrar" +
+          "</a>" +
+          "</div>" +
+          "</div>"
+        html += '</td>';
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="6">No hay resultados</td></tr>';
+      }
+
+      $('#tabla-ref').html(html);
+    }
+    /** FIN FUNCIONES DE REFERENCIA **/
+
+
+    /** FUNCIONES DE BIEN **/
+    function eliminarBien(id) {
+      var datos = $('#form-bien').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("bienes.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#modal-bien').modal('hide');
+          $('#form-bien').trigger('reset');
+          mostrarBienes(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function obtenerBien(id){
+      var datos = $('#form-bien').serialize();
+      datos += '&opcion=obtener';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("bienes.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#titulo-modal-bien').html('Editar Bien');
+
+          $('#modal-bien').modal('show');
+          $('#form-bien').trigger('reset');
+          $('#btn-agregar-bien').html('Modificar');
+
+          $('#id_bien').val(data.id);
+          $('#nom_bien').val(data.nom_bien);
+          $('#dir_bien').val(data.dir_bien);
+          $('#valor_bien').val(data.valor_bien);
+          $('#tipo_bien').val(data.tipo_bien);
+          $('#descripcion_bien').val(data.descripcion_bien);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarBienes(data){
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="ref_' + key + '">';
+        html += '<td>' + key + '</td>';
+        html += '<td>' + value.nom_bien + '</td>';
+        html += '<td>';
+        html += "<div class='dropdown-icon-demo'> " +
+          "<a href='javascript:void(0);' class='btn dropdown-toggle btn-sm hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>" +
+          "<i class='bx bx-dots-vertical-rounded'></i>" +
+          "</a> " +
+          "<div class='dropdown-menu'>" +
+          "<a class='dropdown-item' href='javascript:void(0);' onclick='obtenerBien("+ value.id +")'>" +
+          "<i class='bx bx-edit-alt me-1'></i>Editar" +
+          "</a>" +
+          "<div class='dropdown-divider'></div>" +
+          "<a class='dropdown-item text-danger' href='javascript:void(0);' onclick='eliminarBien(" + value.id + ")'>" +
+          "<i class='bx bx-trash me-1'></i> Borrar" +
+          "</a>" +
+          "</div>" +
+          "</div>"
+        html += '</td>';
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="3">No hay resultados</td></tr>';
+      }
+
+      $('#tabla-bien').html(html);
+    }
+    /** FIN FUNCIONES DE BIEN **/
 
   </script>
 @endsection

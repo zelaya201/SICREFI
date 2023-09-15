@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('referencia', function (Blueprint $table) {
             //
-            $table->string('parentezco_ref', 150)->after('ocupacion_ref');
+            $table->string('parentesco_ref', 150)->after('ocupacion_ref');
         });
     }
 
