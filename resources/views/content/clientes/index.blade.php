@@ -6,40 +6,10 @@
 @extends('layouts/contentNavbarLayout')
 @section('title', 'Clientes')
 @section('content')
-  <div class="d-flex align-items-center justify-content-between py-3">
-    <!--
-    <div class="flex-grow-1">
-      <div
-        class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column gap-4">
-        <div class="user-profile-info">
-          <h4 class="fw-bold py-1 m-0"><span class="text-muted fw-light">Clientes /</span> Cartera de Clientes</h4>
-        </div>
-        <ul
-          class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
-          <li class="list-inline-item fw-semibold">
-            <button type="button" class="btn rounded-pill btn-icon btn-warning"
-                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd"
-                    data-bs-offset="0,4"
-                    data-bs-placement="top" data-bs-html="true" title="Ayuda">
-              <span class="tf-icons bx bx-question-mark"></span>
-            </button>
-          </li>
-          <li class="list-inline-item fw-semibold">
-            <a class="nav-link btn btn-primary" type="button" href="{{ route('clientes.create') }}"><span
-                class="tf-icons bx bx-plus"></span> <span class="d-none d-sm-inline-block"> Nuevo cliente</span> </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    -->
-    <div class="container-xxl flex-grow-1 container-p-y">
-
-
-      <div class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column gap-4 mb-3">
-        <div class="user-profile-info">
-          <h4 class="py-1 mb-4">
-            <span class="text-muted fw-light">Clientes /</span> Cartera de clientes
-          </h4>
+    <div class=" flex-grow-1 container-p-y">
+      <div class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column mb-4">
+        <div class="user-profile-info py-1">
+          <h4 class="fw-bold m-0"><span class="text-muted fw-light">Clientes /</span> Cartera de clientes</h4>
         </div>
         <ul
           class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
@@ -130,17 +100,11 @@
               <div class="col-md-6">
                 <div class="col-md-6">
                   <label>
-                    <input type="search"
-                                class="form-control"
-                                style="width: 350px;"
-                                placeholder="Buscar..."
-                                aria-controls="DataTables_Table_0">
+                    <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." aria-controls="DataTables_Table_0" onkeyup="search()">
                   </label>
                 </div>
               </div>
-              <div
-                class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
-
+              <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
                 <div class="invoice_status mb-3 mb-md-0">
                   <select id="UserRole" class="form-select">
                     <option value="">Estado</option>
@@ -173,30 +137,111 @@
                   <th>Acciones</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>01209171-6</td>
-                  <td>Oscar Arnulfo Sanchez Romero</td>
-                  <td>Res. Villas del Tempisque, Psj #15, Block #10, Casa #90</td>
-                  <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
-                  <td>Acciones</td>
-                </tr>
+                <tbody id="clientes_tbody">
+                  <tr>
+                    <td>1</td>
+                    <td>01209171-6</td>
+                    <td>Oscar Arnulfo Sanchez Romero</td>
+                    <td>Res. Villas del Tempisque, Psj #15, Block #10, Casa #90</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
 
+                  <tr>
+                    <td>2</td>
+                    <td>06296609-2</td>
+                    <td>Elvin Besaliel Cortez Cubias</td>
+                    <td>Bo San Sebastián 8 Cl Ote Y Av Francisco Menéndez Nte</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
+
+                  <tr>
+                    <td>3</td>
+                    <td>01234567-8</td>
+                    <td>Walter Alejandro Morales Quintanilla</td>
+                    <td>7 Cl Ote Y 3 Av Sur No 14 Centro De Sta Ana</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
+
+                  <tr>
+                    <td>4</td>
+                    <td>08765432-1</td>
+                    <td>Josue Adonay Aguilar Rivas</td>
+                    <td>Col Guatemala I Cl 5 De Noviembre Y 16 Av Nte No 628</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
+
+                  <tr>
+                    <td>5</td>
+                    <td>01245687-8</td>
+                    <td>Mario Ernesto Zelaya Lainez</td>
+                    <td>Col San Ramón Pje 3 Lt 44, Quezaltepeque</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
+
+                  <tr>
+                    <td>6</td>
+                    <td>08547485-9</td>
+                    <td>Kevin Eduardo Ceron Lopez</td>
+                    <td>Urb San Antonio Las Palmeras 15 Cl Pte Y10 Av Nte Ptl Baja Plaza Salomé</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
+
+                  <tr>
+                    <td>7</td>
+                    <td>04579685-8</td>
+                    <td>Luis Fernando Vaquerano Ramos</td>
+                    <td>Bo Candelaria 1 Av Sur No 7, Usulutan</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
+
+                  <tr>
+                    <td>8</td>
+                    <td>01204578-8</td>
+                    <td>Julio Antonio Torres Rodriguez</td>
+                    <td>Col. Las Delicias Final 4° Cl. Pte. N° 23-B</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
+
+                  <tr>
+                    <td>9</td>
+                    <td>08754986-5</td>
+                    <td>Marta Candelaria Ortiz Gomez</td>
+                    <td>7 Av Sur No 219 Loc 4</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
+
+                  <tr>
+                    <td>10</td>
+                    <td>06543212-5</td>
+                    <td>Ivania Elizabeth Lainez Cruz</td>
+                    <td>Blvd Constitución Col Escalón Y 1 Cl Pte No 3538</td>
+                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td>Acciones</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
+
             <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Mostrar 1 de 10 de 50 clientes
                 </div>
               </div>
-              <div class="col-sm-12 col-md-6">
+              <div class="col-sm-12 col-md-6 d-flex justify-content-end">
                 <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                   <ul class="pagination">
                     <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous"><a
                         aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous"
-                        tabindex="0" class="page-link">Previous</a></li>
+                        tabindex="0" class="page-link">Anterior</a></li>
                     <li class="paginate_button page-item active"><a href="#" aria-controls="DataTables_Table_0"
                                                                     role="link" aria-current="page" data-dt-idx="0"
                                                                     tabindex="0" class="page-link">1</a></li>
@@ -213,7 +258,7 @@
                                                                                                role="link"
                                                                                                data-dt-idx="next"
                                                                                                tabindex="0"
-                                                                                               class="page-link">Next</a>
+                                                                                               class="page-link">Siguiente</a>
                     </li>
                   </ul>
                 </div>
@@ -226,7 +271,6 @@
 
     </div>
 
-  </div>
   @if(Session::has('mensaje'))
     <div class="alert alert-primary d-flex" role="alert">
           <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
@@ -237,4 +281,34 @@
       </div>
     </div>
   @endif
+@endsection
+
+@section('page-script')
+  <script>
+    function search(){
+      let num_cols, display, input, filter, table_body, tr, td, i, txtValue, noSearch;
+      num_cols = 4;
+      input = document.getElementById("search_bar");
+      filter = input.value.toUpperCase();
+      table_body = document.getElementById("clientes_tbody");
+      tr = table_body.getElementsByTagName("tr");
+
+      for(i=0; i< tr.length; i++){
+        display = "none";
+
+        for(j=0; j < num_cols; j++){
+          td = tr[i].getElementsByTagName("td")[j];
+
+          if(td){
+            txtValue = td.textContent || td.innerText;
+            if(txtValue.toUpperCase().indexOf(filter) > -1){
+              display = "";
+            }
+          }
+        }
+
+        tr[i].style.display = display;
+      }
+    }
+  </script>
 @endsection

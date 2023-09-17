@@ -10,6 +10,8 @@ class Cliente extends Model
 {
     use HasFactory;
 
+    protected $table = 'cliente';
+
     public function creditos(){
       return $this->hasMany(Credito::class, 'id_cliente');
     }
