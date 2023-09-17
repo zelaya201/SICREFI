@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
+use App\Models\Negocio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -35,7 +37,6 @@ class NegocioController extends Controller
    */
   public function store(Request $request)
   {
-    //$request->session()->forget('negocios');
 
     if($request->input('opcion') == 'agregar'){
       if($request->input('session') == 'true') {
@@ -69,6 +70,25 @@ class NegocioController extends Controller
 
         $request->session()->forget('telefonos_negocio_temporal');
         $request->session()->put('negocios', $array);
+      }else{
+        /* Agregar Negocio a Base de Datos */
+        $negocio = new Negocio();
+        $negocio->id_cliente = $request->input('id_cliente');
+        $negocio->nom_negocio = $request->input('nom_negocio');
+        $negocio->tiempo_negocio = $request->input('tiempo_negocio');
+        $negocio->dir_negocio = $request->input('dir_negocio');
+        $negocio->buena_venta_negocio = $request->input('buena_venta_negocio');
+        $negocio->mala_venta_negocio = $request->input('mala_venta_negocio');
+        $negocio->ganancia_diaria_negocio = $request->input('ganancia_diaria_negocio');
+        $negocio->inversion_diaria_negocio = $request->input('inversion_diaria_negocio');
+        $negocio->gasto_emp_negocio = $request->input('gasto_emp_negocio');
+        $negocio->gasto_alquiler_negocio = $request->input('gasto_alquiler_negocio');
+        $negocio->gasto_impuesto_negocio = $request->input('gasto_impuesto_negocio');
+        $negocio->gasto_credito_negocio = $request->input('gasto_credito_negocio');
+        $negocio->gasto_otro_negocio = $request->input('gasto_otro_negocio');
+        $negocio->save();
+
+        return to_route('negocios.show', $request->input('id_cliente'));
       }
 
     }else if($request->input('opcion') == 'eliminar'){
@@ -76,6 +96,9 @@ class NegocioController extends Controller
         $array = $request->session()->get('negocios');
         $array = Arr::except($array, $request->input('id'));
         $request->session()->put('negocios', $array);
+      }else{
+        /* Eliminar Negocio de Base de Datos */
+
       }
     }else if($request->input('opcion') == 'obtener'){
       if($request->input('session') == 'true') {
@@ -88,6 +111,9 @@ class NegocioController extends Controller
         );
 
         return Arr::get($array, $request->input('id'));
+      }else{
+        /* Obtener Negocio de Base de Datos */
+
       }
     }else if($request->input('opcion') == 'actualizar') {
       if ($request->input('session') == 'true') {
@@ -112,6 +138,9 @@ class NegocioController extends Controller
 
         $request->session()->forget('telefonos_negocio_temporal');
         $request->session()->put('negocios', $array);
+      }else{
+        /* Actualizar Negocio de Base de Datos */
+
       }
     }
 
@@ -126,7 +155,9 @@ class NegocioController extends Controller
    */
   public function show($id)
   {
-    //
+    $negocios = Negocio::where('id_cliente', $id)->get();
+    $cliente = Cliente::where('id_cliente', $id)->first();
+    return view('content.clientes.negocios.index', ['cliente' => $cliente], compact('negocios'));
   }
 
   /**
@@ -137,7 +168,7 @@ class NegocioController extends Controller
    */
   public function edit($id)
   {
-    //
+
   }
 
   /**
