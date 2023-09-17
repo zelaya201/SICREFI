@@ -4,6 +4,10 @@ use App\Http\Controllers\BienController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\ReferenciaController;
+use App\Http\Controllers\TelefonoClienteController;
+use App\Http\Controllers\TelefonoConyugeController;
+use App\Http\Controllers\TelefonoNegocioController;
+use App\Http\Controllers\TelefonoReferenciaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,3 +38,15 @@ Route::resource('clientes',ClienteController::class);
 
 // Bien Route
 Route::resource('bienes',BienController::class);
+
+// Telefono Cliente Route
+Route::resource('telsCliente', TelefonoClienteController::class);
+
+// Telefono Conyuge Route
+Route::resource('telsConyuge', TelefonoConyugeController::class);
+
+// Telefono Negocio Route
+Route::resource('telsNegocio', TelefonoNegocioController::class);
+
+// Telefono Referencia Route
+Route::resource('telsReferencia', TelefonoReferenciaController::class);

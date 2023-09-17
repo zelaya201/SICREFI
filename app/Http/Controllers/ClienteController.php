@@ -30,6 +30,11 @@ class ClienteController extends Controller
     Session::forget('negocios'); // Elimina todos los registros de la sesión de negocios
     Session::forget('referencias'); // Elimina todos los registros de la sesión de referencias
     Session::forget('bienes'); // Elimina todos los registros de la sesión de bienes
+    Session::forget('telefonos_clientes'); // Elimina todos los registros de la sesión de telefonos_clientes
+    Session::forget('telefonos_conyuge'); // Elimina todos los registros de la sesión de telefonos_conyuge
+    Session::forget('telefonos_negocio_temporal'); // Elimina todos los registros de la sesión de telefonos_negocio_temporal
+    Session::forget('telefonos_referencia_temporal'); // Elimina todos los registros de la sesión de telefonos_referencia_temporal
+
     return view('content.clientes.create');
   }
 
