@@ -107,11 +107,10 @@
               <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
                 <div class="invoice_status mb-3 mb-md-0">
                   <select id="UserRole" class="form-select">
-                    <option value="Activo">Estado</option>
+                    <option value="Activos">Estado</option>
                     <option value="Activos" class="text-capitalize">Activos</option>
                     <option value="Inactivos" class="text-capitalize">Inactivos</option>
                     <option value="Todos" class="text-capitalize">Todos</option>
-
                   </select>
                 </div>
                 <div class="dataTables_length" id="DataTables_Table_0_length"><label><select
@@ -138,7 +137,59 @@
                 </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  @php $contador = 1; @endphp
+                  @foreach($clientes as $cliente)
+                    <tr>
+                      <td>{{$contador}}</td>
+                      <td>{{$cliente->dui_cliente}}</td>
+                      <!--Filtro para Nombre-->
+                      @if($cliente->tercer_nom_cliente == null)
+                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
+                      @elseif($cliente->tercer_nom_cliente != null)
+                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->tercer_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
+                      @endif
+                      <td>{{$cliente->dir_cliente}}</td>
+                      <!--Filtro para Estado-->
+                      @if($cliente->estado_cliente == 'Activo')
+                        <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                      @elseif($cliente->estado_cliente == 'Inactivo')
+                        <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
+                      @endif
+                      <td>
+                        <div class="dropdown-icon-demo">
+                          <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm hide-arrow"
+                             data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </a>
+                          <div class="dropdown-menu" style="">
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-show me-1"></i>
+                              Ver</a>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-store-alt me-1"></i>
+                              Negocios</a>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-building me-1"></i>
+                              Bienes</a>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-user-plus me-1"></i>
+                              Referencias</a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i>
+                              Editar</a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item text-danger" href="javascript:void(0);"><i
+                                class="bx bx-trash me-1"></i> Borrar</a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  @php $contador = $contador +1; @endphp
+                  @endforeach
+                  <tr class='noSearch' style="display:none; text-align: center">
+                    <td colspan="6"></td>
+                  </tr>
+                  <!--<tr>
                     <td>1</td>
                     <td>01209171-6</td>
                     <td>Oscar Arnulfo Sanchez Romero</td>
@@ -231,6 +282,7 @@
                   <tr class='noSearch' style="display:none; text-align: center">
                     <td colspan="6"></td>
                   </tr>
+                  -->
 
                 </tbody>
               </table>
