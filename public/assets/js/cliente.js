@@ -83,14 +83,6 @@ function verificarTelefono(telefono){
 }
 
 
-function buscarClientes() {
-  document.addEventListener('keyup', e => {
-    if (e.target.matches('#search_bar')) {
-      document.querySelectorAll('clientes').forEach(cliente => {
-        console.log(cliente)
-      })
-    }
-  })
-}
+
 
 

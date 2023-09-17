@@ -286,7 +286,7 @@
 @section('page-script')
   <script>
     function search(){
-      let num_cols, display, input, filter, table_body, tr, td, i, txtValue, noSearch;
+      let num_cols, display, input, filter, table_body, tr, td, i, txtValue;
       num_cols = 4;
       input = document.getElementById("search_bar");
       filter = input.value.toUpperCase();
