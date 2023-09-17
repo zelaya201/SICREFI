@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\BienController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\NegocioController;
+use App\Http\Controllers\ReferenciaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,9 +26,11 @@ Route::get('/', function () {
 // Negocio Route
 Route::resource('negocios', NegocioController::class);
 
+// Referencia Route
+Route::resource('referencias',ReferenciaController::class);
+
 // Cliente Route
 Route::resource('clientes',ClienteController::class);
 
-
-
 // Bien Route
+Route::resource('bienes',BienController::class);

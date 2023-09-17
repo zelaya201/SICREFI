@@ -6,124 +6,131 @@
 @extends('layouts/contentNavbarLayout')
 @section('title', 'Nuevo Cliente')
 @section('content')
-  <form action="{{ route('clientes.store') }}" method="post" autocomplete="off" enctype="multipart/form-data" id="form-cliente">
-    @csrf {{-- Security --}}
+  {{--  <form action="{{ route('clientes.store') }}" method="post" autocomplete="off" enctype="multipart/form-data" id="form-cliente">--}}
+  {{--    @csrf --}}{{-- Security --}}
 
-    <div class="d-flex align-items-center justify-content-between py-3">
-      <div class="flex-grow-1">
-        <div
-          class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column gap-4">
-          <div class="user-profile-info">
-            <h4 class="fw-bold m-0"><span class="text-muted fw-light">Clientes /</span> Nuevo Cliente</h4>
-          </div>
-          <ul
-            class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
-            <li class="list-inline-item fw-semibold">
-              <button type="button" class="btn rounded-pill btn-icon btn-warning"
-                      data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd"
-                      data-bs-offset="0,4"
-                      data-bs-placement="top" data-bs-html="true" title="Ayuda">
-                <span class="tf-icons bx bx-question-mark"></span>
-              </button>
-            </li>
-            <li class="list-inline-item fw-semibold">
-
-              <button class="nav-link btn btn-primary" type="button" id="btn-guardar-cliente">
-                <span class="tf-icons bx bx-save"></span>
-                Guardar
-              </button>
-            </li>
-            <li class="list-inline-item fw-semibold">
-              <a class="nav-link btn btn-secondary" type="button" href="{{ route('clientes.index') }}"> Cancelar</span>
-              </a>
-            </li>
-          </ul>
+  <div class="d-flex align-items-center justify-content-between py-3">
+    <div class="flex-grow-1">
+      <div
+        class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column gap-4">
+        <div class="user-profile-info">
+          <h4 class="fw-bold m-0"><span class="text-muted fw-light">Clientes /</span> Nuevo Cliente</h4>
         </div>
+        <ul
+          class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
+          <li class="list-inline-item fw-semibold">
+            <button type="button" class="btn rounded-pill btn-icon btn-warning"
+                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd"
+                    data-bs-offset="0,4"
+                    data-bs-placement="top" data-bs-html="true" title="Ayuda">
+              <span class="tf-icons bx bx-question-mark"></span>
+            </button>
+          </li>
+          <li class="list-inline-item fw-semibold">
+
+            <button class="nav-link btn btn-primary" type="button" id="btn-guardar-cliente">
+              <span class="tf-icons bx bx-save"></span>
+              Guardar
+            </button>
+          </li>
+          <li class="list-inline-item fw-semibold">
+            <a class="nav-link btn btn-secondary" type="button" href="{{ route('clientes.index') }}"> Cancelar
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
+  </div>
 
-    {{-- Navegación de Formulario --}}
-    <ul class="nav nav-pills nav-align-left nav-card-header-pills align-items-center" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button type="button" class="btn step active" role="tab" data-bs-toggle="tab"
-                data-bs-target="#card-datos-cliente" aria-controls="card-datos-cliente" aria-selected="true">
-          <span class="badge bg-label-secondary"><i class="bx bx-user"></i></span>
-          <span class="bs-stepper-title">Información</span>
-        </button>
-      </li>
-      <li>
-        <div class="line d-none d-md-inline-block align-items-baseline">
-          <i class="bx bx-chevron-right"></i>
-        </div>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button type="button" class="btn step" role="tab" data-bs-toggle="tab" data-bs-target="#card-conyuge"
-                aria-controls="card-conyuge" aria-selected="false" tabindex="-1">
-          <span class="badge bg-label-secondary"><i class="bx bx-user-check"></i></span>
+  {{-- Navegación de Formulario --}}
+  <ul class="nav nav-pills nav-align-left nav-card-header-pills align-items-center" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button type="button" class="btn step active" role="tab" data-bs-toggle="tab"
+              data-bs-target="#card-datos-cliente" aria-controls="card-datos-cliente" aria-selected="true">
+        <span class="badge bg-label-secondary"><i class="bx bx-user"></i></span>
+        <span class="bs-stepper-title">Información</span>
+      </button>
+    </li>
+    <li>
+      <div class="line d-none d-md-inline-block align-items-baseline">
+        <i class="bx bx-chevron-right"></i>
+      </div>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button type="button" class="btn step" role="tab" data-bs-toggle="tab" data-bs-target="#card-conyuge"
+              aria-controls="card-conyuge" aria-selected="false" tabindex="-1">
+        <span class="badge bg-label-secondary"><i class="bx bx-user-check"></i></span>
 
-          <span class="bs-stepper-label mt-1">
+        <span class="bs-stepper-label mt-1">
         <span class="bs-stepper-title">Conyuge</span>
       </span>
-        </button>
-      </li>
-      <li>
-        <div class="line d-none d-md-inline-block align-items-baseline">
-          <i class="bx bx-chevron-right"></i>
-        </div>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button type="button" class="btn step" role="tab" data-bs-toggle="tab" data-bs-target="#card-datos-negocios"
-                aria-controls="card-datos-negocios" aria-selected="false" tabindex="-1">
-          <span class="badge bg-label-secondary"><i class="bx bx-store-alt"></i></span>
+      </button>
+    </li>
+    <li>
+      <div class="line d-none d-md-inline-block align-items-baseline">
+        <i class="bx bx-chevron-right"></i>
+      </div>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button type="button" class="btn step" role="tab" data-bs-toggle="tab" data-bs-target="#card-datos-negocios"
+              aria-controls="card-datos-negocios" aria-selected="false" tabindex="-1">
+        <span class="badge bg-label-secondary"><i class="bx bx-store-alt"></i></span>
 
-          <span class="bs-stepper-label mt-1">
-        <span class="bs-stepper-title">Negocios</span>
+        <span class="bs-stepper-label mt-1">
+        <span class="bs-stepper-title">Negocio</span>
       </span>
-        </button>
-      </li>
-      <li>
-        <div class="line d-none d-md-inline-block align-items-baseline">
-          <i class="bx bx-chevron-right"></i>
-        </div>
-      </li>
+      </button>
+    </li>
+    <li>
+      <div class="line d-none d-md-inline-block align-items-baseline">
+        <i class="bx bx-chevron-right"></i>
+      </div>
+    </li>
 
-      <li class="nav-item" role="presentation">
-        <button type="button" class="btn step" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-country"
-                aria-controls="navs-pills-country" aria-selected="false" tabindex="-1">
-          <span class="badge bg-label-secondary"><i class="bx bx-user-plus"></i></span>
+    <li class="nav-item" role="presentation">
+      <button type="button" class="btn step" role="tab" data-bs-toggle="tab" data-bs-target="#card-referencia"
+              aria-controls="card-referencia" aria-selected="false" tabindex="-1">
+        <span class="badge bg-label-secondary"><i class="bx bx-user-plus"></i></span>
 
-          <span class="bs-stepper-label mt-1">
+        <span class="bs-stepper-label mt-1">
         <span class="bs-stepper-title">Referencias</span>
     </span>
-        </button>
-      </li>
-      <li>
-        <div class="line d-none d-md-inline-block align-items-baseline">
-          <i class="bx bx-chevron-right"></i>
-        </div>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button type="button" class="btn step" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-country"
-                aria-controls="navs-pills-country" aria-selected="false" tabindex="-1">
-          <span class="badge bg-label-secondary"><i class="bx bx-buildings"></i></span>
+      </button>
+    </li>
+    <li>
+      <div class="line d-none d-md-inline-block align-items-baseline">
+        <i class="bx bx-chevron-right"></i>
+      </div>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button type="button" class="btn step" role="tab" data-bs-toggle="tab" data-bs-target="#card-bienes"
+              aria-controls="card-bienes" aria-selected="false" tabindex="-1">
+        <span class="badge bg-label-secondary"><i class="bx bx-buildings"></i></span>
 
-          <span class="bs-stepper-label mt-1">
+        <span class="bs-stepper-label mt-1">
         <span class="bs-stepper-title">Bienes</span>
       </span>
-        </button>
-      </li>
-    </ul>
+      </button>
+    </li>
+  </ul>
+
+  <!-- Datos del Cliente -->
+  <div class="tab-content p-0">
+    @include('content.clientes._partials.info') {{-- Información del cliente --}}
+
+    @include('content.clientes._partials.conyuge') {{-- Información del conyuge --}}
+
+    @include('content.clientes._partials.negocios') {{-- Información de los negocios --}}
+
+    @include('content.clientes._partials.referencias') {{-- Información de las referencias --}}
+
+    @include('content.clientes._partials.bienes') {{-- Información de los bienes --}}
+  </div>
+  {{--  </form>--}}
+
+  @include('content.clientes._partials.modals') {{-- Modal para agregar teléfonos --}}
 
 
-    <!-- Datos del Cliente -->
-    <div class="tab-content p-0">
-      @include('content.clientes._partials.info') {{-- Información del cliente --}}
-
-      @include('content.clientes._partials.conyuge') {{-- Información del conyuge --}}
-
-      @include('content.clientes._partials.negocios') {{-- Información de los negocios --}}
-    </div>
-  </form>
 
   {{-- Off canvas de Ayuda--}}
   {{--<div class="mt-3">--}}
@@ -143,18 +150,17 @@
   {{--  </div>--}}
   {{--</div>--}}
 
-
 @endsection
 
 @section('page-script')
   <script src="{{ asset('assets/js/cliente.js') }}"></script>
 
-{{-- Guardar Cliente y todos sus datos --}}
+  {{-- Guardar Cliente y todos sus datos --}}
   <script>
-    $(document).ready(function (){
+    $(document).ready(function () {
 
+      /** EVENTOS DE BOTONES CLIENTE **/
       $('#btn-guardar-cliente').click(function (e) {
-
         e.preventDefault();
 
         $.ajax({
@@ -162,7 +168,7 @@
           type: 'post',
           dataType: 'json',
           data: $('#form-cliente').serialize(),
-          success: function (data){
+          success: function (data) {
             /* Mensaje de exito */
 
           },
@@ -176,7 +182,7 @@
             });
 
             var data = xhr.responseJSON;
-            if($.isEmptyObject(data.errors) === false) {
+            if ($.isEmptyObject(data.errors) === false) {
               $.each(data.errors, function (key, value) {
                 // Mostrar errores en los inputs
                 $('#' + key).addClass('is-invalid');
@@ -186,6 +192,465 @@
           }
         });
       });
+      /** FIN EVENTOS DE BOTONES CLIENTE **/
+
+
+      /** EVENTOS DE BOTONES NEGOCIO **/
+      $('#btn-nuevo-negocio').click(function (e) {
+        e.preventDefault();
+        $('#titulo-modal-negocio').html('Nuevo Negocio');
+        $('#form-negocio').trigger('reset');
+        $('#btn-agregar-negocio').html('Agregar');
+      });
+
+      $('#btn-agregar-negocio').click(function (e) {
+        e.preventDefault();
+          var datos = $('#form-negocio').serialize();
+          let id_negocio = $('#id_negocio').val();
+
+          if(id_negocio !== ''){
+            datos += '&opcion=actualizar';
+            datos += '&id=' + id_negocio;
+            datos += '&session=true';
+
+            $.ajax({
+              url: '{{ route("negocios.store") }}',
+              type: 'post',
+              dataType: 'json',
+              data: datos,
+              success: function (data) {
+                /* Mensaje de exito */
+                $('#modal-negocio').modal('hide');
+                $('#form-negocio').trigger('reset');
+                mostrarNegocios(data);
+              },
+              error: function (xhr) {
+                /* Mensajes de error */
+              }
+            });
+          }else{
+            datos += '&opcion=agregar';
+            datos += '&session=true';
+
+            $.ajax({
+              url: '{{ route("negocios.store") }}',
+              type: 'post',
+              dataType: 'json',
+              data: datos,
+              success: function (data) {
+                /* Mensaje de exito */
+                $('#modal-negocio').modal('hide');
+                $('#form-negocio').trigger('reset');
+                mostrarNegocios(data);
+              },
+              error: function (xhr) {
+                /* Mensajes de error */
+              }
+            });
+          }
+      })
+      /** FIN EVENTO DE BOTONES NEGOCIO **/
+
+
+      /** EVENTOS DE BOTONES REFERENCIA **/
+      $('#btn-agregar-ref').click(function (e) {
+        e.preventDefault();
+        var datos = $('#form-ref').serialize();
+        let id_ref = $('#id_ref').val();
+
+        if(id_ref !== ''){
+          datos += '&opcion=actualizar';
+          datos += '&id=' + id_ref;
+          datos += '&session=true';
+
+          $.ajax({
+            url: '{{ route("referencias.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#modal-ref').modal('hide');
+              $('#form-ref').trigger('reset');
+              mostrarRef(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }else{
+          datos += '&opcion=agregar';
+          datos += '&session=true';
+
+          $.ajax({
+            url: '{{ route("referencias.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#modal-ref').modal('hide');
+              $('#form-ref').trigger('reset');
+              mostrarRef(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }
+      })
+
+      $('#btn-nuevo-ref').click(function (e) {
+        e.preventDefault();
+        $('#titulo-modal-ref').html('Nueva Referencia');
+        $('#form-ref').trigger('reset');
+        $('#btn-agregar-ref').html('Agregar');
+      });
+      /** FIN EVENTOS DE BOTONES REFERENCIA **/
+
+      /** EVENTOS DE BOTONES BIEN **/
+      $('#btn-nuevo-bien').click(function (e) {
+        e.preventDefault();
+        $('#titulo-modal-bien').html('Nuevo Bien');
+        $('#form-bien').trigger('reset');
+        $('#btn-agregar-bien').html('Agregar');
+      });
+
+      $('#btn-agregar-bien').click(function (e) {
+        e.preventDefault();
+        var datos = $('#form-bien').serialize();
+        let id_bien = $('#id_bien').val();
+
+        if(id_bien !== ''){
+          datos += '&opcion=actualizar';
+          datos += '&id=' + id_bien;
+          datos += '&session=true';
+
+          $.ajax({
+            url: '{{ route("bienes.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#modal-bien').modal('hide');
+              $('#form-bien').trigger('reset');
+              mostrarBienes(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }else{
+          datos += '&opcion=agregar';
+          datos += '&session=true';
+
+          $.ajax({
+            url: '{{ route("bienes.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#modal-bien').modal('hide');
+              $('#form-bien').trigger('reset');
+              mostrarBienes(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }
+      })
+      /** FIN EVENTOS DE BOTONES BIEN **/
     });
+
+    /** FUNCIONES DE NEGOCIO **/
+    function eliminarNegocio(id) {
+      var datos = $('#form-negocio').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("negocios.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#modal-negocio').modal('hide');
+          $('#form-negocio').trigger('reset');
+          mostrarNegocios(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function obtenerNegocio(id){
+      var datos = $('#form-negocio').serialize();
+      datos += '&opcion=obtener';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("negocios.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#titulo-modal-negocio').html('Editar Negocio');
+
+          $('#modal-negocio').modal('show');
+          $('#form-negocio').trigger('reset');
+          $('#btn-agregar-negocio').html('Modificar');
+
+          $('#id_negocio').val(data.id);
+          $('#nom_negocio').val(data.nom_negocio);
+          $('#dir_negocio').val(data.dir_negocio);
+          $('#tiempo_negocio').val(data.tiempo_negocio);
+          $('#buena_venta_negocio').val(data.buena_venta_negocio);
+          $('#mala_venta_negocio').val(data.mala_venta_negocio);
+          $('#ganancia_diaria_negocio').val(data.ganancia_diaria_negocio);
+          $('#inversion_diaria_negocio').val(data.inversion_diaria_negocio);
+          $('#gasto_emp_negocio').val(data.gasto_emp_negocio);
+          $('#gasto_alquiler_negocio').val(data.gasto_alquiler_negocio);
+          $('#gasto_impuesto_negocio').val(data.gasto_impuesto_negocio);
+          $('#gasto_credito_negocio').val(data.gasto_credito_negocio);
+          $('#gasto_otro_negocio').val(data.gasto_otro_negocio);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarNegocios(data) {
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="negocio_' + key + '">';
+        html += '<td>' + key + '</td>';
+        html += '<td>' + value.nom_negocio + '</td>';
+        html += '<td>' + value.dir_negocio + '</td>';
+        html += '<td>' + value.tiempo_negocio + '</td>';
+        html += '<td>';
+        html += "<div class='dropdown-icon-demo'> " +
+          "<a href='javascript:void(0);' class='btn dropdown-toggle btn-sm hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>" +
+          "<i class='bx bx-dots-vertical-rounded'></i>" +
+          "</a> " +
+          "<div class='dropdown-menu'>" +
+          "<a class='dropdown-item' href='javascript:void(0);' onclick='obtenerNegocio("+ value.id +")'>" +
+          "<i class='bx bx-edit-alt me-1'></i>Editar" +
+          "</a>" +
+          "<div class='dropdown-divider'></div>" +
+          "<a class='dropdown-item text-danger' href='javascript:void(0);' onclick='eliminarNegocio(" + value.id + ")'>" +
+          "<i class='bx bx-trash me-1'></i> Borrar" +
+          "</a>" +
+          "</div>" +
+          "</div>"
+        html += '</td>';
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="5">No hay resultados</td></tr>';
+      }
+
+      $('#tabla-negocios').html(html);
+    }
+    /** FIN FUNCIONES DE NEGOCIO **/
+
+
+    /** FUNCIONES DE REFERENCIA **/
+    function eliminarRef(id) {
+      var datos = $('#form-ref').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("referencias.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#modal-ref').modal('hide');
+          $('#form-ref').trigger('reset');
+          mostrarRef(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function obtenerRef(id){
+      var datos = $('#form-ref').serialize();
+      datos += '&opcion=obtener';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("referencias.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#titulo-modal-ref').html('Editar Referencia');
+
+          $('#modal-ref').modal('show');
+          $('#form-ref').trigger('reset');
+          $('#btn-agregar-ref').html('Modificar');
+
+          $('#id_ref').val(data.id);
+          $('#primer_nom_ref').val(data.primer_nom_ref);
+          $('#segundo_nom_ref').val(data.segundo_nom_ref);
+          $('#tercer_nom_ref').val(data.tercer_nom_ref);
+          $('#primer_ape_ref').val(data.primer_ape_ref);
+          $('#segundo_ape_ref').val(data.segundo_ape_ref);
+          $('#ocupacion_ref').val(data.ocupacion_ref);
+          $('#parentesco_ref').val(data.parentesco_ref);
+          $('#dir_ref').val(data.dir_ref);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarRef(data) {
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="ref_' + key + '">';
+        html += '<td>' + key + '</td>';
+        html += '<td>' + value.primer_nom_ref + ' ' + value.primer_ape_ref + '</td>';
+        html += '<td>' + value.dir_ref + '</td>';
+        html += '<td>' + value.ocupacion_ref + '</td>';
+        html += '<td>' + value.parentesco_ref + '</td>';
+        html += '<td>';
+        html += "<div class='dropdown-icon-demo'> " +
+          "<a href='javascript:void(0);' class='btn dropdown-toggle btn-sm hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>" +
+          "<i class='bx bx-dots-vertical-rounded'></i>" +
+          "</a> " +
+          "<div class='dropdown-menu'>" +
+          "<a class='dropdown-item' href='javascript:void(0);' onclick='obtenerRef("+ value.id +")'>" +
+          "<i class='bx bx-edit-alt me-1'></i>Editar" +
+          "</a>" +
+          "<div class='dropdown-divider'></div>" +
+          "<a class='dropdown-item text-danger' href='javascript:void(0);' onclick='eliminarRef(" + value.id + ")'>" +
+          "<i class='bx bx-trash me-1'></i> Borrar" +
+          "</a>" +
+          "</div>" +
+          "</div>"
+        html += '</td>';
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="6">No hay resultados</td></tr>';
+      }
+
+      $('#tabla-ref').html(html);
+    }
+    /** FIN FUNCIONES DE REFERENCIA **/
+
+
+    /** FUNCIONES DE BIEN **/
+    function eliminarBien(id) {
+      var datos = $('#form-bien').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("bienes.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#modal-bien').modal('hide');
+          $('#form-bien').trigger('reset');
+          mostrarBienes(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function obtenerBien(id){
+      var datos = $('#form-bien').serialize();
+      datos += '&opcion=obtener';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("bienes.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#titulo-modal-bien').html('Editar Bien');
+
+          $('#modal-bien').modal('show');
+          $('#form-bien').trigger('reset');
+          $('#btn-agregar-bien').html('Modificar');
+
+          $('#id_bien').val(data.id);
+          $('#nom_bien').val(data.nom_bien);
+          $('#dir_bien').val(data.dir_bien);
+          $('#valor_bien').val(data.valor_bien);
+          $('#tipo_bien').val(data.tipo_bien);
+          $('#descripcion_bien').val(data.descripcion_bien);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarBienes(data){
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="ref_' + key + '">';
+        html += '<td>' + key + '</td>';
+        html += '<td>' + value.nom_bien + '</td>';
+        html += '<td>';
+        html += "<div class='dropdown-icon-demo'> " +
+          "<a href='javascript:void(0);' class='btn dropdown-toggle btn-sm hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>" +
+          "<i class='bx bx-dots-vertical-rounded'></i>" +
+          "</a> " +
+          "<div class='dropdown-menu'>" +
+          "<a class='dropdown-item' href='javascript:void(0);' onclick='obtenerBien("+ value.id +")'>" +
+          "<i class='bx bx-edit-alt me-1'></i>Editar" +
+          "</a>" +
+          "<div class='dropdown-divider'></div>" +
+          "<a class='dropdown-item text-danger' href='javascript:void(0);' onclick='eliminarBien(" + value.id + ")'>" +
+          "<i class='bx bx-trash me-1'></i> Borrar" +
+          "</a>" +
+          "</div>" +
+          "</div>"
+        html += '</td>';
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="3">No hay resultados</td></tr>';
+      }
+
+      $('#tabla-bien').html(html);
+    }
+    /** FIN FUNCIONES DE BIEN **/
+
   </script>
 @endsection
