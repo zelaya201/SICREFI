@@ -107,11 +107,10 @@
               <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
                 <div class="invoice_status mb-3 mb-md-0">
                   <select id="UserRole" class="form-select">
-                    <option value="">Estado</option>
+                    <option value="Activos">Estado</option>
                     <option value="Activos" class="text-capitalize">Activos</option>
                     <option value="Inactivos" class="text-capitalize">Inactivos</option>
                     <option value="Todos" class="text-capitalize">Todos</option>
-
                   </select>
                 </div>
                 <div class="dataTables_length" id="DataTables_Table_0_length"><label><select
@@ -125,7 +124,7 @@
             </div>
 
             <div class="table-responsive">
-              <table class="invoice-list-table table border-top dataTable no-footer dtr-column my-4 "
+              <table id="clientes_tbody" class="invoice-list-table table border-top dataTable no-footer dtr-column my-4 "
                      aria-describedby="DataTables_Table_0_info">
                 <thead>
                 <tr>
@@ -137,8 +136,60 @@
                   <th>Acciones</th>
                 </tr>
                 </thead>
-                <tbody id="clientes_tbody">
-                  <tr>
+                <tbody>
+                  @php $contador = 1; @endphp
+                  @foreach($clientes as $cliente)
+                    <tr>
+                      <td>{{$contador}}</td>
+                      <td>{{$cliente->dui_cliente}}</td>
+                      <!--Filtro para Nombre-->
+                      @if($cliente->tercer_nom_cliente == null)
+                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
+                      @elseif($cliente->tercer_nom_cliente != null)
+                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->tercer_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
+                      @endif
+                      <td>{{$cliente->dir_cliente}}</td>
+                      <!--Filtro para Estado-->
+                      @if($cliente->estado_cliente == 'Activo')
+                        <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                      @elseif($cliente->estado_cliente == 'Inactivo')
+                        <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
+                      @endif
+                      <td>
+                        <div class="dropdown-icon-demo">
+                          <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm hide-arrow"
+                             data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </a>
+                          <div class="dropdown-menu" style="">
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-show me-1"></i>
+                              Ver</a>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-store-alt me-1"></i>
+                              Negocios</a>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-building me-1"></i>
+                              Bienes</a>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-user-plus me-1"></i>
+                              Referencias</a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i>
+                              Editar</a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item text-danger" href="javascript:void(0);"><i
+                                class="bx bx-trash me-1"></i> Borrar</a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  @php $contador = $contador +1; @endphp
+                  @endforeach
+                  <tr class='noSearch' style="display:none; text-align: center">
+                    <td colspan="6"></td>
+                  </tr>
+                  <!--<tr>
                     <td>1</td>
                     <td>01209171-6</td>
                     <td>Oscar Arnulfo Sanchez Romero</td>
@@ -206,7 +257,7 @@
                     <td>01204578-8</td>
                     <td>Julio Antonio Torres Rodriguez</td>
                     <td>Col. Las Delicias Final 4° Cl. Pte. N° 23-B</td>
-                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
                     <td>Acciones</td>
                   </tr>
 
@@ -215,7 +266,7 @@
                     <td>08754986-5</td>
                     <td>Marta Candelaria Ortiz Gomez</td>
                     <td>7 Av Sur No 219 Loc 4</td>
-                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
                     <td>Acciones</td>
                   </tr>
 
@@ -224,9 +275,15 @@
                     <td>06543212-5</td>
                     <td>Ivania Elizabeth Lainez Cruz</td>
                     <td>Blvd Constitución Col Escalón Y 1 Cl Pte No 3538</td>
-                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
                     <td>Acciones</td>
                   </tr>
+
+                  <tr class='noSearch' style="display:none; text-align: center">
+                    <td colspan="6"></td>
+                  </tr>
+                  -->
+
                 </tbody>
               </table>
             </div>
@@ -285,8 +342,8 @@
 
 @section('page-script')
   <script>
-    function search(){
-      let num_cols, display, input, filter, table_body, tr, td, i, txtValue;
+    /*function search(){
+      let num_cols, display, input, filter, table_body, tr, td, i, txtValue, noFind, auxText;
       num_cols = 4;
       input = document.getElementById("search_bar");
       filter = input.value.toUpperCase();
@@ -295,6 +352,7 @@
 
       for(i=0; i< tr.length; i++){
         display = "none";
+        noFind = i
 
         for(j=0; j < num_cols; j++){
           td = tr[i].getElementsByTagName("td")[j];
@@ -303,11 +361,64 @@
             txtValue = td.textContent || td.innerText;
             if(txtValue.toUpperCase().indexOf(filter) > -1){
               display = "";
+              noFind = -1
             }
           }
         }
 
         tr[i].style.display = display;
+      }
+
+      if (noFind != -1) {
+        table_body.insertRow(noFind).innerHTML = "<tr><td>No ice</td></tr>"
+
+    }*/
+    function search() {
+      const tableReg = document.getElementById('clientes_tbody');
+      const searchText = document.getElementById('search_bar').value.toLowerCase();
+      let total = 0;
+      // Recorremos todas las filas con contenido de la tabla
+
+      for (let i = 1; i < tableReg.rows.length; i++) {
+        // Si el td tiene la clase "noSearch" no se busca en su contenido
+        if (tableReg.rows[i].classList.contains("noSearch")) {
+          continue;
+        }
+
+        let found = false;
+        const cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
+
+        // Recorremos todas las celdas
+        for (let j = 0; j < cellsOfRow.length && !found; j++) {
+          const compareWith = cellsOfRow[j].innerHTML.toLowerCase();
+
+          // Buscamos el texto en el contenido de la celda
+          if (searchText.length == 0 || compareWith.indexOf(searchText) > -1) {
+            found = true;
+            total++;
+          }
+        }
+
+        if (found) {
+          tableReg.rows[i].style.display = '';
+        } else {
+          //si no ha encontrado ninguna coincidencia, esconde la fila de la tabla
+          tableReg.rows[i].style.display = 'none';
+        }
+      }
+
+      // mostramos las coincidencias
+      const lastTR = tableReg.rows[tableReg.rows.length - 1];
+      const td = lastTR.querySelector("td");
+
+      lastTR.style.display = ''
+
+      if (searchText == "") {
+        lastTR.style.display = 'none'
+      }else if (total) {
+        td.innerHTML="Se ha" + ((total>1)?"n ":" ") + "encontrado "+total+" coincidencia"+((total>1)?"s":"");
+      }else {
+        td.innerHTML="No se han encontrado coincidencias";
       }
     }
   </script>
