@@ -9,6 +9,8 @@ class Referencia extends Model
 {
     use HasFactory;
 
+    protected $table = 'referencia';
+
     public function cliente() {
       return $this->belongsTo(Cliente::class, 'id_cliente');
     }

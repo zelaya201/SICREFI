@@ -9,6 +9,8 @@ class Conyuge extends Model
 {
     use HasFactory;
 
+protected $table = 'conyuge';
+
     public function cliente() {
       return $this->belongsTo(Cliente::class, 'id_cliente');
     }

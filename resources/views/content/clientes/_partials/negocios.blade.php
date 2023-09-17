@@ -106,7 +106,7 @@
                   </div>
 
                   <div class="col-md-6 mb-3">
-                    <label for="tiempo_negocio" class="form-label">Tiempo de tenerlo (*)</label>
+                    <label for="tiempo_negocio" class="form-label">Tiempo de operación (*)</label>
                     <input type="text" name="tiempo_negocio" id="tiempo_negocio" class="form-control"
                            placeholder="Cantidad en meses">
                   </div>

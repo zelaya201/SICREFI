@@ -55,24 +55,16 @@
             </div>
 
             <div class="col-md-6 mb-3">
-              <label class="form-label" for="fech_nac_conyuge">Fecha de nacimiento (*)</label>
-              <input type="date" class="form-control" name="fech_nac_conyuge" id="fech_nac_conyuge" value="">
-              <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                <div data-field="name" data-validator="notEmpty" id="fech_nac_conyuge_error"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
               <label class="form-label" for="ocupacion_conyuge">Ocupación (*)</label>
               <input type="text" class="form-control" name="ocupacion_conyuge" id="ocupacion_conyuge">
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="ocupacion_conyuge_error"></div>
               </div>
             </div>
+          </div>
 
-            <div class="col-md-6 mb-3">
+          <div class="row">
+            <div class="col-md-12 mb-3">
               <label class="form-label" for="dir_conyuge">Dirección (*)</label>
               <textarea class="form-control" name="dir_conyuge" id="dir_conyuge" rows="2"></textarea>
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">

@@ -9,6 +9,8 @@ class TelNegocio extends Model
 {
     use HasFactory;
 
+    protected $table = 'tel_negocio'; // Nombre de la tabla en la base de datos.
+
     public function negocio() {
       return $this->belongsTo(Negocio::class, 'id_negocio');
     }
