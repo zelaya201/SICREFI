@@ -32,8 +32,8 @@
                   <th>#</th>
                   <th>Nombre</th>
                   <th>Dirección</th>
-                  <th>Parentesco</th>
                   <th>Ocupación</th>
+                  <th>Parentesco</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>

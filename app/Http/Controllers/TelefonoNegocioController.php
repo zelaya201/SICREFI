@@ -52,6 +52,8 @@ class TelefonoNegocioController extends Controller
           $array = Arr::except($array, $request->input('id'));
           $request->session()->put('telefonos_negocio_temporal', $array);
         }
+      }else if($request->input('opcion') == 'limpiar'){
+        $request->session()->forget('telefonos_negocio_temporal');
       }
 
       return $request->session()->get('telefonos_negocio_temporal');

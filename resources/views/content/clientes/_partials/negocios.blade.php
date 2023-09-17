@@ -207,8 +207,6 @@
                         </button>
                       </div>
 
-
-
                     <table class="table table-bordered border-top table-hover">
                       <thead>
                       <tr>

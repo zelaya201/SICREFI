@@ -62,10 +62,12 @@ class NegocioController extends Controller
             'gasto_alquiler_negocio' => $request->input('gasto_alquiler_negocio'),
             'gasto_impuesto_negocio' => $request->input('gasto_impuesto_negocio'),
             'gasto_credito_negocio' => $request->input('gasto_credito_negocio'),
-            'gasto_otro_negocio' => $request->input('gasto_otro_negocio')
+            'gasto_otro_negocio' => $request->input('gasto_otro_negocio'),
+            'telefonos_negocio' => $request->session()->get('telefonos_negocio_temporal')
           ]
         );
 
+        $request->session()->forget('telefonos_negocio_temporal');
         $request->session()->put('negocios', $array);
       }
 
@@ -77,7 +79,14 @@ class NegocioController extends Controller
       }
     }else if($request->input('opcion') == 'obtener'){
       if($request->input('session') == 'true') {
+        $request->session()->forget('telefonos_negocio_temporal');
         $array = $request->session()->get('negocios');
+
+        $request->session()->put(
+          'telefonos_negocio_temporal',
+          $array[$request->input('id')]['telefonos_negocio']
+        );
+
         return Arr::get($array, $request->input('id'));
       }
     }else if($request->input('opcion') == 'actualizar') {
@@ -97,9 +106,11 @@ class NegocioController extends Controller
           'gasto_alquiler_negocio' => $request->input('gasto_alquiler_negocio'),
           'gasto_impuesto_negocio' => $request->input('gasto_impuesto_negocio'),
           'gasto_credito_negocio' => $request->input('gasto_credito_negocio'),
-          'gasto_otro_negocio' => $request->input('gasto_otro_negocio')
+          'gasto_otro_negocio' => $request->input('gasto_otro_negocio'),
+          'telefonos_negocio' => $request->session()->get('telefonos_negocio_temporal')
         ];
 
+        $request->session()->forget('telefonos_negocio_temporal');
         $request->session()->put('negocios', $array);
       }
     }
@@ -151,4 +162,5 @@ class NegocioController extends Controller
   {
     //
   }
+
 }

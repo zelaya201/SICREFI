@@ -203,6 +203,21 @@
         $('#titulo-modal-negocio').html('Nuevo Negocio');
         $('#form-negocio').trigger('reset');
         $('#btn-agregar-negocio').html('Agregar');
+        $('#lista-telefonos-negocio').html('<tr><td colspan="3">No hay resultados</td></tr>');
+
+        $.ajax({
+          url: '{{ route("telsNegocio.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: 'opcion=limpiar',
+          success: function (data) {
+            /* Mensaje de exito */
+            mostrarTelefonosNegocio(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
       });
 
       $('#btn-agregar-negocio').click(function (e) {
@@ -274,6 +289,7 @@
               /* Mensaje de exito */
               $('#modal-ref').modal('hide');
               $('#form-ref').trigger('reset');
+
               mostrarRef(data);
             },
             error: function (xhr) {
@@ -307,6 +323,21 @@
         $('#titulo-modal-ref').html('Nueva Referencia');
         $('#form-ref').trigger('reset');
         $('#btn-agregar-ref').html('Agregar');
+        $('#lista-telefonos-ref').html('<tr><td colspan="3">No hay resultados</td></tr>');
+
+        $.ajax({
+          url: '{{ route("telsReferencia.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: 'opcion=limpiar',
+          success: function (data) {
+            /* Mensaje de exito */
+            mostrarTelefonosReferencia(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
       });
       /** FIN EVENTOS DE BOTONES REFERENCIA **/
 
@@ -370,7 +401,7 @@
       $('#btn-agregar-telefono-cliente').click(function (e) {
         e.preventDefault();
 
-        var datos = $('#form-telscliente').serialize();
+        let datos = 'tel_cliente=' + $('#tel_cliente').val();
         datos += '&opcion=agregar';
         datos += '&session=true';
 
@@ -382,7 +413,7 @@
           success: function (data) {
             /* Mensaje de exito */
             $('#telefono-modal-cliente').modal('hide');
-            $('#form-telscliente').trigger('reset');
+            $('#tel_cliente').val('');
             mostrarTelefonosCliente(data);
           },
           error: function (xhr) {
@@ -526,6 +557,8 @@
           $('#gasto_impuesto_negocio').val(data.gasto_impuesto_negocio);
           $('#gasto_credito_negocio').val(data.gasto_credito_negocio);
           $('#gasto_otro_negocio').val(data.gasto_otro_negocio);
+
+          mostrarTelefonosNegocio(data.telefonos_negocio);
         },
         error: function (xhr) {
           /* Mensajes de error */
@@ -622,6 +655,8 @@
           $('#ocupacion_ref').val(data.ocupacion_ref);
           $('#parentesco_ref').val(data.parentesco_ref);
           $('#dir_ref').val(data.dir_ref);
+
+          mostrarTelefonosReferencia(data.telefonos_ref);
         },
         error: function (xhr) {
           /* Mensajes de error */

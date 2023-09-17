@@ -25,6 +25,9 @@ class TelefonoReferenciaController extends Controller
      */
     public function store(Request $request)
     {
+
+
+
       if($request->input('opcion') == 'agregar'){
         if($request->input('session') == 'true') {
           $size = 1;
@@ -52,6 +55,8 @@ class TelefonoReferenciaController extends Controller
           $array = Arr::except($array, $request->input('id'));
           $request->session()->put('telefonos_referencia_temporal', $array);
         }
+      }else if($request->input('opcion') == 'limpiar'){
+        $request->session()->forget('telefonos_referencia_temporal');
       }
 
       return $request->session()->get('telefonos_referencia_temporal');
