@@ -127,7 +127,7 @@
 
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="primer_ape_ref" class="form-label">Segundo apellido</label>
+                    <label for="segundo_ape_ref" class="form-label">Segundo apellido</label>
                     <input type="text" name="segundo_ape_ref" id="segundo_ape_ref" class="form-control">
                   </div>
 
