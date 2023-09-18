@@ -172,10 +172,11 @@
           data: $('#form-cliente').serialize(),
           success: function (data) {
             /* Mensaje de exito */
-
+            if(data.success){
+              window.location.href = '{{ route("clientes.index") }}';
+            }
           },
           error: function (xhr) {
-
             /* Remover errores */
             var inputs = $('#form-cliente').find('input, select, textarea');
 

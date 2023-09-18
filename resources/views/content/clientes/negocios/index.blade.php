@@ -367,7 +367,7 @@
         }
       });
 
-      // Agregar nuevo negocio
+      /** EVENTOS DE NEGOCIO **/
       $('#btn-nuevo-negocio').click(function () {
         $('#titulo-modal-negocio').html('Nuevo negocio');
         $('#btn-agregar-negocio').html('Agregar');
@@ -389,22 +389,140 @@
           data: data,
           dataType: "json",
           success: function (data) {
-            if (data.errors) {
-              console.log(data.errors);
-            }
             if (data.success) {
-              console.log(data.success);
-
-              $('#form-negocio').trigger('reset');
-              $('#modal-negocio').modal('hide');
-              $('#tabla-negocios').html(data.table_data);
+              alert(data.success);
+              // Recargar pagina
+              location.reload();
             }
           }
         })
       });
 
+      $('#btn-nuevo-negocio').click(function (e) {
+        e.preventDefault();
+        $('#titulo-modal-negocio').html('Nuevo Negocio');
+        $('#form-negocio').trigger('reset');
+        $('#btn-agregar-negocio').html('Agregar');
+        $('#lista-telefonos-negocio').html('<tr><td colspan="3">No hay resultados</td></tr>');
+
+        $.ajax({
+          url: '{{ route("telsNegocio.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: 'opcion=limpiar',
+          success: function (data) {
+            /* Mensaje de exito */
+            mostrarTelefonosNegocio(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
+      });
+      /** FIN EVENTOS DE NEGOCIO **/
+
+      /** EVENTOS DE BOTONES TELEFONO NEGOCIO **/
+      $('#btn-agregar-telefono-negocio').click(function (e) {
+        e.preventDefault();
+
+        let datos = 'tel_negocio=' + $('#tel_negocio').val();
+        datos += '&opcion=agregar';
+        datos += '&session=true';
+
+        $.ajax({
+          url: '{{ route("telsNegocio.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: datos,
+          success: function (data) {
+            /* Mensaje de exito */
+            $('#tel_negocio').val('');
+            mostrarTelefonosNegocio(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
+      });
+      /** FIN EVENTOS DE BOTONES TELEFONO NEGOCIO **/
+
     });
 
+    function obtenerNegocio(id_cliente){
+
+      $.ajax({
+        url: '{{ route("negocios.edit", ":id_cliente") }}'.replace(':id_cliente', id_cliente),
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#titulo-modal-negocio').html('Editar Negocio');
+
+          $('#modal-negocio').modal('show');
+          $('#form-negocio').trigger('reset');
+          $('#btn-agregar-negocio').html('Modificar');
+
+          $('#id_negocio').val(data.negocio.id_negocio);
+          $('#nom_negocio').val(data.negocio.nom_negocio);
+          $('#dir_negocio').val(data.negocio.dir_negocio);
+          $('#tiempo_negocio').val(data.negocio.tiempo_negocio);
+          $('#buena_venta_negocio').val(data.negocio.buena_venta_negocio);
+          $('#mala_venta_negocio').val(data.negocio.mala_venta_negocio);
+          $('#ganancia_diaria_negocio').val(data.negocio.ganancia_diaria_negocio);
+          $('#inversion_diaria_negocio').val(data.negocio.inversion_diaria_negocio);
+          $('#gasto_emp_negocio').val(data.negocio.gasto_emp_negocio);
+          $('#gasto_alquiler_negocio').val(data.negocio.gasto_alquiler_negocio);
+          $('#gasto_impuesto_negocio').val(data.negocio.gasto_impuesto_negocio);
+          $('#gasto_credito_negocio').val(data.negocio.gasto_credito_negocio);
+          $('#gasto_otro_negocio').val(data.negocio.gasto_otro_negocio);
+
+          mostrarTelefonosNegocio(data.tel_negocio);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarTelefonosNegocio(data){
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="ref_' + key + '">';
+        html += '<td>' + value.id_tel_negocio + '</td>';
+        html += '<td>' + value.tel_negocio + '</td>';
+        html += "<td>" +
+          "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoNegocio(" + value.id_tel_negocio + ")'>" +
+          "<i class='tf-icons bx bx-trash'></i>" +
+          "</button>" +
+          "</td>";
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="3">No hay resultados</td></tr>';
+      }
+
+      $('#lista-telefonos-negocio').html(html);
+    }
+
+    function eliminarTelefonoNegocio(id) {
+
+      $.ajax({
+        url: '{{ route("telsNegocio.destroy", 'id_tel_negocio') }}'.replace('id_tel_negocio', id),
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#form-telsnegocio').trigger('reset');
+          mostrarTelefonosNegocio(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+          console.log(xhr);
+        }
+      });
+    }
 
   </script>
 

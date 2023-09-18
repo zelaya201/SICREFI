@@ -195,9 +195,12 @@ class ClienteController extends Controller
         $b->id_cliente = $identificador;
         $b->save();
       }
+
+      return ['success' => true, 'message' => 'Cliente agregado con éxito'];
+
     }
 
-    return to_route('clientes.index')->with('mensaje', 'Cliente agregado con éxito');
+    return ['success' => false, 'message' => 'Error al agregar cliente', 'errors' => $cliente->errors()];
   }
 
   /**
@@ -219,7 +222,7 @@ class ClienteController extends Controller
    */
   public function edit($id)
   {
-    //
+
   }
 
   /**

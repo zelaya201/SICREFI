@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TelNegocio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -90,13 +91,19 @@ class TelefonoNegocioController extends Controller
         //
     }
 
-    /**
-     * Remove the resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy()
-    {
-        abort(404);
-    }
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param int $id
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy($id)
+  {
+    $tel_negocio = TelNegocio::where('id_tel_negocio', $id)->first();
+    $tel_negocio->delete();
+
+    //$telefonos = TelNegocio::where('id_negocio', $tel_negocio->id_negocio)->all();
+
+    return ['success' => true, 'message' => 'Teléfono eliminado con éxito'];
+  }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Negocio;
+use App\Models\TelNegocio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -86,9 +87,21 @@ class NegocioController extends Controller
         $negocio->gasto_impuesto_negocio = $request->input('gasto_impuesto_negocio');
         $negocio->gasto_credito_negocio = $request->input('gasto_credito_negocio');
         $negocio->gasto_otro_negocio = $request->input('gasto_otro_negocio');
-        $negocio->save();
 
-        return to_route('negocios.show', $request->input('id_cliente'));
+        if($negocio->save()){
+          $tel_negocios = $request->session()->get('telefonos_negocio_temporal');
+
+          foreach ($tel_negocios as $telefono) {
+            $tel = new TelNegocio();
+            $tel->tel_negocio = $telefono['tel_negocio'];
+            $tel->id_negocio = Negocio::latest('id_negocio')->first()->id_negocio;
+            $tel->save();
+          }
+
+          $request->session()->forget('telefonos_negocio_temporal');
+          return ['success' => true, 'message' => 'Negocio agregado correctamente'];
+        }
+
       }
 
     }else if($request->input('opcion') == 'eliminar'){
@@ -96,9 +109,6 @@ class NegocioController extends Controller
         $array = $request->session()->get('negocios');
         $array = Arr::except($array, $request->input('id'));
         $request->session()->put('negocios', $array);
-      }else{
-        /* Eliminar Negocio de Base de Datos */
-
       }
     }else if($request->input('opcion') == 'obtener'){
       if($request->input('session') == 'true') {
@@ -168,7 +178,10 @@ class NegocioController extends Controller
    */
   public function edit($id)
   {
+      $negocio = Negocio::where('id_negocio', $id)->first();
+      $tel_negocio = TelNegocio::where('id_negocio', $id)->get();
 
+      return ['negocio' => $negocio, 'tel_negocio' => $tel_negocio];
   }
 
   /**
