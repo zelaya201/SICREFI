@@ -107,10 +107,9 @@
               <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
                 <div class="invoice_status mb-3 mb-md-0">
                   <select id="filter_bar" class="form-select">
-                    <option value="">Estado</option>
                     <option value="Activo" class="text-capitalize">Activos</option>
                     <option value="Inactivo" class="text-capitalize">Inactivos</option>
-                    <option value="Todos" class="text-capitalize">Todos</option>
+                    <option value="">Todos</option>
                   </select>
                 </div>
                 <div class="dataTables_length" id="DataTables_Table_0_length"><label><select
@@ -411,10 +410,13 @@
                                    Borrar</a>\
                                 </div>\
                               </div>\
+                          </tr>\
+                          <tr class="noSearch" style="display:none; text-align: center">\
+                            <td colspan="6"></td>\
                           </tr>'
               }
             }else {
-              html += '<tr style="display:none; text-align: center">\
+              html += '<tr style="text-align: center">\
                         <td colspan="6">No se han encontrado clientes</td>\
                       </tr>'
             }
