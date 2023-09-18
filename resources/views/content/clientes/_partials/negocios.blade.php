@@ -103,12 +103,18 @@
                   <div class="col-md-6 mb-3">
                     <label for="nom_negocio" class="form-label">Nombre (*)</label>
                     <input type="text" name="nom_negocio" id="nom_negocio" class="form-control">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="nom_negocio_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
                     <label for="tiempo_negocio" class="form-label">Tiempo de operación (*)</label>
                     <input type="text" name="tiempo_negocio" id="tiempo_negocio" class="form-control"
-                           placeholder="Cantidad en meses">
+                           placeholder="Cantidad en meses" onkeypress="return soloNumeros(event)">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="tiempo_negocio_error"></div>
+                    </div>
                   </div>
                 </div>
 
@@ -116,6 +122,9 @@
                   <div class="col-md-12 mb-3">
                     <label class="form-label" for="dir_negocio">Dirección (*)</label>
                     <textarea class="form-control" name="dir_negocio" id="dir_negocio" rows="2"></textarea>
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="dir_negocio_error"></div>
+                    </div>
                   </div>
                 </div>
 
@@ -123,13 +132,19 @@
                   <div class="col-md-6 mb-3">
                     <label for="buena_venta_negocio" class="form-label">Venta en dia bueno (*)</label>
                     <input type="text" name="buena_venta_negocio" id="buena_venta_negocio" class="form-control"
-                           placeholder="0.00">
+                           placeholder="0.00" onkeypress="return filterFloat(event,this);">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="buena_venta_negocio_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
                     <label for="mala_venta_negocio" class="form-label">Venta en dia malo (*)</label>
                     <input type="text" name="mala_venta_negocio" id="mala_venta_negocio" class="form-control"
-                           placeholder="0.00">
+                           placeholder="0.00" onkeypress="return filterFloat(event,this);">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="mala_venta_negocio_error"></div>
+                    </div>
                   </div>
                 </div>
 
@@ -137,13 +152,19 @@
                   <div class="col-md-6 mb-3">
                     <label for="ganancia_diaria_negocio" class="form-label">Ganancia diaria (*)</label>
                     <input type="text" name="ganancia_diaria_negocio" id="ganancia_diaria_negocio" class="form-control"
-                           placeholder="0.00">
+                           placeholder="0.00" onkeypress="return filterFloat(event,this);">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="ganancia_diaria_negocio_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
                     <label for="inversion_diaria_negocio" class="form-label">Inversión diaria (*)</label>
                     <input type="text" name="inversion_diaria_negocio" id="inversion_diaria_negocio"
-                           class="form-control" placeholder="0.00">
+                           class="form-control" placeholder="0.00" onkeypress="return filterFloat(event,this);">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="inversion_diaria_negocio_error"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -159,13 +180,19 @@
                   <div class="col-md-6 mb-3">
                     <label for="gasto_emp_negocio" class="form-label">Pago de empleados (*)</label>
                     <input type="text" name="gasto_emp_negocio" id="gasto_emp_negocio" class="form-control"
-                           placeholder="0.00">
+                           placeholder="0.00" onkeypress="return filterFloat(event,this);">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="gasto_emp_negocio_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
                     <label for="gasto_alquiler_negocio" class="form-label">Alquiler de local (*)</label>
                     <input type="text" name="gasto_alquiler_negocio" id="gasto_alquiler_negocio" class="form-control"
-                           placeholder="0.00">
+                           placeholder="0.00" onkeypress="return filterFloat(event,this);">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="gasto_alquiler_negocio_error"></div>
+                    </div>
                   </div>
                 </div>
 
@@ -173,63 +200,77 @@
                   <div class="col-md-4 mb-3">
                     <label for="gasto_impuesto_negocio" class="form-label">Impuestos (*)</label>
                     <input type="text" name="gasto_impuesto_negocio" id="gasto_impuesto_negocio" class="form-control"
-                           placeholder="0.00">
+                           placeholder="0.00" onkeypress="return filterFloat(event,this);">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="gasto_impuesto_negocio_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-4 mb-3">
                     <label for="gasto_credito_negocio" class="form-label">Cuotas de créditos (*)</label>
                     <input type="text" name="gasto_credito_negocio" id="gasto_credito_negocio" class="form-control"
-                           placeholder="0.00">
+                           placeholder="0.00" onkeypress="return filterFloat(event,this);">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="gasto_credito_negocio_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-4 mb-3">
                     <label for="gasto_otro_negocio" class="form-label">Otros pagos (*)</label>
                     <input type="text" name="gasto_otro_negocio" id="gasto_otro_negocio" class="form-control"
-                           placeholder="0.00">
+                           placeholder="0.00" onkeypress="return filterFloat(event,this);">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="gasto_otro_negocio_error"></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
 
-              <div class="col-lg-12">
-                <div class="pb-0">
-                  <span class="fw-bold">Datos de contacto</span>
-                  <hr class="my-2">
-                </div>
-                <div>
-                  <div class="col-md-12">
-                    <label class="form-label" for="tel_negocio">Teléfono (*)</label>
-                      <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="tel_negocio" name="tel_negocio" placeholder="00000000" />
-                        <button type="button" class="btn btn-outline-info" id="btn-agregar-telefono-negocio">
-                          <span class="tf-icons bx bx-plus"></span> Agregar
-                        </button>
-                      </div>
-
-                    <table class="table table-bordered border-top table-hover">
-                      <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Teléfono</th>
-                        <th></th>
-                      </tr>
-                      </thead>
-                      <tbody id="lista-telefonos-negocio">
-                      <tr>
-                        <td colspan="3">No hay resultados</td>
-                      </tr>
-                      </tbody>
-                    </table>
+            <div class="col-lg-12">
+              <div class="pb-0">
+                <span class="fw-bold">Datos de contacto</span>
+                <hr class="my-2">
+              </div>
+              <div>
+                <div class="col-md-12">
+                  <label class="form-label" for="tel_negocio">Teléfono (*)</label>
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="tel_negocio" name="tel_negocio" placeholder="00000000"
+                           maxlength="8" onkeypress="return soloNumeros(event)"/>
+                    <button type="button" class="btn btn-outline-info" id="btn-agregar-telefono-negocio">
+                      <span class="tf-icons bx bx-plus"></span> Agregar
+                    </button>
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="tel_negocio_error"></div>
+                    </div>
                   </div>
+
+                  <table class="table table-bordered border-top table-hover" id="tabla-telefonos-negocio">
+                    <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Teléfono</th>
+                      <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="lista-telefonos-negocio">
+                    <tr>
+                      <td colspan="3">No hay resultados</td>
+                    </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
+            </div>
           </div>
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" id="btn-agregar-negocio">
-            Agregar
+          <button type="button" class="btn btn-primary" id="btn-agregar-negocio">
+            <i class="bx bx-save"></i>
+            Guardar
           </button>
           <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal"
                   aria-label="Close">Cerrar

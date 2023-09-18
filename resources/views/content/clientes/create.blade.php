@@ -221,6 +221,12 @@
                 case 'referencia':
                   cambiarTab('referencia');
                   $('#cant-errores-referencia').html(1).removeClass('d-none');
+                  break;
+
+                case 'bienes':
+                  cambiarTab('bienes');
+                  $('#cant-errores-bienes').html(1).removeClass('d-none');
+                  break;
 
               }
 
@@ -291,6 +297,9 @@
         $('#btn-agregar-negocio').html('Agregar');
         $('#lista-telefonos-negocio').html('<tr><td colspan="3">No hay resultados</td></tr>');
 
+        $('#tabla-telefonos-negocio').removeClass('border border-danger');
+        $('#tel_negocio').removeClass('is-invalid');
+
         $.ajax({
           url: '{{ route("telsNegocio.store") }}',
           type: 'post',
@@ -315,42 +324,49 @@
           datos += '&opcion=actualizar';
           datos += '&id=' + id_negocio;
           datos += '&session=true';
-
-          $.ajax({
-            url: '{{ route("negocios.store") }}',
-            type: 'post',
-            dataType: 'json',
-            data: datos,
-            success: function (data) {
-              /* Mensaje de exito */
-              $('#modal-negocio').modal('hide');
-              $('#form-negocio').trigger('reset');
-              mostrarNegocios(data);
-            },
-            error: function (xhr) {
-              /* Mensajes de error */
-            }
-          });
-        } else {
+        }else {
           datos += '&opcion=agregar';
           datos += '&session=true';
+        }
 
-          $.ajax({
-            url: '{{ route("negocios.store") }}',
-            type: 'post',
-            dataType: 'json',
-            data: datos,
-            success: function (data) {
-              /* Mensaje de exito */
+        $.ajax({
+          url: '{{ route("negocios.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: datos,
+          success: function (data) {
+            /* Mensaje de exito */
+            if(data.success === false){
+              $('#tabla-telefonos-negocio').addClass('border border-danger');
+              $('#tel_negocio').addClass('is-invalid');
+              $('#tel_negocio_error').html(data.message);
+            }else{
               $('#modal-negocio').modal('hide');
               $('#form-negocio').trigger('reset');
               mostrarNegocios(data);
-            },
-            error: function (xhr) {
-              /* Mensajes de error */
             }
-          });
-        }
+
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+            var inputs = $('#form-negocio').find('input, select, textarea');
+
+            inputs.change(function () {
+              $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+            });
+
+            var data = xhr.responseJSON;
+            if ($.isEmptyObject(data.errors) === false) {
+
+              $.each(data.errors, function (key, value) {
+                // Mostrar errores en los inputs
+                $('#' + key).addClass('is-invalid');
+                $('#' + key + '_error').html(value); // Agregar el mensaje de error
+              });
+
+            }
+          }
+        });
       })
       /** FIN EVENTO DE BOTONES NEGOCIO **/
 
@@ -522,25 +538,32 @@
       $('#btn-agregar-telefono-conyuge').click(function (e) {
         e.preventDefault();
 
-        var datos = $('#form-telsconyuge').serialize();
-        datos += '&opcion=agregar';
-        datos += '&session=true';
+        if($('#tel_conyuge').val() === '') {
+          $('#tel_conyuge').addClass('is-invalid');
+          $('#mensaje-telefono-conyuge').html('El campo es obligatorio.');
+        }else{
+          var datos = $('#form-telsconyuge').serialize();
+          datos += '&opcion=agregar';
+          datos += '&session=true';
 
-        $.ajax({
-          url: '{{ route("telsConyuge.store") }}',
-          type: 'post',
-          dataType: 'json',
-          data: datos,
-          success: function (data) {
-            /* Mensaje de exito */
-            $('#telefono-modal-conyuge').modal('hide');
-            $('#form-telsconyuge').trigger('reset');
-            mostrarTelefonosConyuge(data);
-          },
-          error: function (xhr) {
-            /* Mensajes de error */
-          }
-        });
+          $.ajax({
+            url: '{{ route("telsConyuge.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#telefono-modal-conyuge').modal('hide');
+              $('#form-telsconyuge').trigger('reset');
+              mostrarTelefonosConyuge(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }
+
+
       });
       /** FIN EVENTOS DE BOTONES TELEFONO CONYUGE **/
 
@@ -548,24 +571,34 @@
       $('#btn-agregar-telefono-negocio').click(function (e) {
         e.preventDefault();
 
-        let datos = 'tel_negocio=' + $('#tel_negocio').val();
-        datos += '&opcion=agregar';
-        datos += '&session=true';
+        if ($('#tel_negocio').val() === '') {
+          $('#tel_negocio').addClass('is-invalid');
+          $('#tel_negocio_error').html('El campo es obligatorio.');
+        }else if($('#tel_negocio').val().length < 8){
+          $('#tel_negocio').addClass('is-invalid');
+          $('#tel_negocio_error').html('El campo debe tener al menos 8 caracteres.');
+        }else{
+          let datos = 'tel_negocio=' + $('#tel_negocio').val();
+          datos += '&opcion=agregar';
+          datos += '&session=true';
 
-        $.ajax({
-          url: '{{ route("telsNegocio.store") }}',
-          type: 'post',
-          dataType: 'json',
-          data: datos,
-          success: function (data) {
-            /* Mensaje de exito */
-            $('#tel_negocio').val('');
-            mostrarTelefonosNegocio(data);
-          },
-          error: function (xhr) {
-            /* Mensajes de error */
-          }
-        });
+          $.ajax({
+            url: '{{ route("telsNegocio.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#telefono-modal-negocio').modal('hide');
+              $('#tel_negocio').val('');
+              mostrarTelefonosNegocio(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }
+
       });
       /** FIN EVENTOS DE BOTONES TELEFONO NEGOCIO **/
 
@@ -599,7 +632,7 @@
     function cambiarTab(tab) {
       $('#card-cliente').removeClass('active show');
       $('#card-conyuge').removeClass('active show');
-      $('#card-datos-negocios').removeClass('active show');
+      $('#card-negocios').removeClass('active show');
       $('#card-referencia').removeClass('active show');
       $('#card-bienes').removeClass('active show');
 
@@ -1050,6 +1083,9 @@
         html += '<tr><td colspan="3">No hay resultados</td></tr>';
       }
 
+      $('#tel_negocio_error').html('');
+      $('#tel_negocio').removeClass('is-invalid');
+      $('#tabla-telefonos-negocio').removeClass('border border-danger');
       $('#lista-telefonos-negocio').html(html);
     }
 

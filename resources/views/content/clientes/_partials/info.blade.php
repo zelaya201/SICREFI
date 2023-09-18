@@ -11,7 +11,8 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="dui_cliente">DUI (*)</label>
 
-              <input type="text" class="form-control" name="dui_cliente" id="dui_cliente" placeholder="000000000">
+              <input type="text" class="form-control" name="dui_cliente" id="dui_cliente" placeholder="000000000"
+                     maxlength="9" onkeypress="return soloNumeros(event)">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="dui_cliente_error"></div>
@@ -121,7 +122,8 @@
           <div class="row">
             <div class="col-md-12 mb-3">
               <label class="form-label" for="dir_cliente">Dirección (*)</label>
-              <textarea class="form-control" name="dir_cliente" id="dir_cliente" rows="2" placeholder="Calle / Municipio / Departamento"></textarea>
+              <textarea class="form-control" name="dir_cliente" id="dir_cliente" rows="2"
+                        placeholder="Calle / Municipio / Departamento"></textarea>
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="dir_cliente_error"></div>
               </div>
@@ -260,7 +262,9 @@
             </table>
 
             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-              <div data-field="name" data-validator="notEmpty" id="email_cliente_error">Debe ingresar al menos un numero de teléfono</div>
+              <div data-field="name" data-validator="notEmpty" id="email_cliente_error">Debe ingresar al menos un numero
+                de teléfono
+              </div>
             </div>
           </div>
         </div>
@@ -270,7 +274,8 @@
 </div>
 
 <!-- Modal agregar telefono cliente -->
-<form action="{{ route('telsCliente.store') }}" method="post" autocomplete="off" enctype="multipart/form-data" id="form-telscliente">
+<form action="{{ route('telsCliente.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
+      id="form-telscliente">
 
   <div class="modal fade" id="telefono-modal-cliente" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -284,8 +289,9 @@
           <div class="row">
             <div class="col mb-3">
               <label for="tel_cliente" class="form-label">Teléfono (*)</label>
-              <input type="text" id="tel_cliente" name="tel_cliente" class="form-control" placeholder="00000000" onkeypress="return filterTelefono(event,this);">
-              <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback" >
+              <input type="text" id="tel_cliente" name="tel_cliente" class="form-control" placeholder="00000000"
+                     maxlength="8" onkeypress="return soloNumeros(event)">
+              <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="mensaje_tel_cliente"></div>
               </div>
             </div>

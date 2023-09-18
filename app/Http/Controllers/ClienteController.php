@@ -133,17 +133,17 @@ class ClienteController extends Controller
             'dir_conyuge' => 'required_if:estado_civil_cliente,Casado',
     ]);
 
-    $request->validate([
-      'primer_nom_conyuge' => 'min:2|max:50|alpha',
-      'segundo_nom_conyuge' => 'nullable|min:2|max:50|alpha',
-      'tercer_nom_conyuge' => 'nullable|min:2|max:50|alpha',
-      'primer_ape_conyuge' => 'min:2|max:50|alpha',
-      'segundo_ape_conyuge' => 'nullable|min:2|max:50|alpha',
-      'ocupacion_conyuge' => 'min:3',
-      'dir_conyuge' => 'min:3',
-    ]);
-
     if($request->estado_civil_cliente == 'Casado') {
+      $request->validate([
+        'primer_nom_conyuge' => 'required:min:2|max:50|alpha',
+        'segundo_nom_conyuge' => 'nullable|min:2|max:50|alpha',
+        'tercer_nom_conyuge' => 'nullable|min:2|max:50|alpha',
+        'primer_ape_conyuge' => 'required:min:2|max:50|alpha',
+        'segundo_ape_conyuge' => 'nullable|min:2|max:50|alpha',
+        'ocupacion_conyuge' => 'required:min:3',
+        'dir_conyuge' => 'required:min:3',
+      ]);
+
       if(empty($array_telefonos_conyuge)) {
         return ['success' => false, 'message' => 'Debe agregar al menos un teléfono del conyuge', 'tab' => 'conyuge'];
       }
@@ -154,7 +154,7 @@ class ClienteController extends Controller
     }
 
     if(empty($array_bienes)) {
-      return ['success' => false, 'message' => 'Debe agregar al menos un bien', 'tab' => 'bien'];
+      return ['success' => false, 'message' => 'Debe agregar un bien', 'tab' => 'bien'];
     }
 
     $cliente = new Cliente();
@@ -190,19 +190,21 @@ class ClienteController extends Controller
 
       $array = $request->session()->get('negocios');
 
-      foreach ($array as $negocio) {
-        $neg = new Negocio();
-        $neg->fill($negocio);
-        $neg->estado_negocio = 'Activo';
-        $neg->id_cliente = $identificador;
+      if(!empty($array)) {
+        foreach ($array as $negocio) {
+          $neg = new Negocio();
+          $neg->fill($negocio);
+          $neg->estado_negocio = 'Activo';
+          $neg->id_cliente = $identificador;
 
-        if($neg->save()){
-          $tel_negocios = $negocio['telefonos_negocio'];
-          foreach ($tel_negocios as $telefono) {
-            $tel = new TelNegocio();
-            $tel->tel_negocio = $telefono['tel_negocio'];
-            $tel->id_negocio = Negocio::latest('id_negocio')->first()->id_negocio;
-            $tel->save();
+          if ($neg->save()) {
+            $tel_negocios = $negocio['telefonos_negocio'];
+            foreach ($tel_negocios as $telefono) {
+              $tel = new TelNegocio();
+              $tel->tel_negocio = $telefono['tel_negocio'];
+              $tel->id_negocio = Negocio::latest('id_negocio')->first()->id_negocio;
+              $tel->save();
+            }
           }
         }
       }
