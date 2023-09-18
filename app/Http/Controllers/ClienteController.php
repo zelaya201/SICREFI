@@ -49,8 +49,12 @@ class ClienteController extends Controller
         $clientes = $query->where(['estado_cliente' => $estado])->orderBy('primer_nom_cliente','ASC')->paginate($mostrar);
       }
 
+      $contar = count(Cliente::all());
+      $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
+      $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
+
       //return response()->json(['clientes' => $clientes]);
-      return view('content.clientes.index', compact('clientes'));
+      return view('content.clientes.index', compact('clientes' , 'contar', 'activos', 'inactivos'));
     }
 
 
