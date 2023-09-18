@@ -76,6 +76,7 @@ class NegocioController extends Controller
         /* Agregar Negocio a Base de Datos */
         $negocio = new Negocio();
         $negocio->fill($request->input());
+        $negocio->estado_negocio = 'Activo';
 
         if($negocio->save()){
           $tel_negocios = $request->session()->get('telefonos_negocio_temporal');
@@ -117,9 +118,6 @@ class NegocioController extends Controller
         );
 
         return Arr::get($array, $request->input('id'));
-      }else{
-        /* Obtener Negocio de Base de Datos */
-
       }
     }else if($request->input('opcion') == 'actualizar') {
       if ($request->input('session') == 'true') {

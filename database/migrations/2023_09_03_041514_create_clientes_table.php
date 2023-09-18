@@ -24,6 +24,7 @@ return new class extends Migration
           $table->date('fech_nac_cliente');
           $table->string('dir_cliente', 150);
           $table->string('email_cliente', 200)->unique();
+          $table->string('estado_civil_cliente', 150);
           $table->string('tipo_vivienda_cliente', 75);
           $table->string('ocupacion_cliente', 75);
           $table->double('gasto_aliment_cliente', 8, 2);
