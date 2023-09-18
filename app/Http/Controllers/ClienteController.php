@@ -28,15 +28,15 @@ class ClienteController extends Controller
 
     if ($request->ajax()) {
       if (empty($request->estado) || $request->estado == 'Todos') {
-        $clientes = $query->get();
+        $clientes = $query->orderBy('primer_nom_cliente','ASC')->get();
       }else {
-        $clientes = $query->where(['estado_cliente' => $request->estado])->get();
+        $clientes = $query->where(['estado_cliente' => $request->estado])->orderBy('primer_nom_cliente','ASC')->get();
       }
 
       return response()->json(['clientes' => $clientes]);
     }
 
-    $clientes = $query->get();
+    $clientes = $query->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente','ASC')->get();
 
     return view('content.clientes.index', compact('clientes'));
   }

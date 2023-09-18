@@ -259,7 +259,9 @@
                 </div>
               </div>
               <div class="col-sm-12 col-md-6 d-flex justify-content-end">
-                <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+
+
+                <!--<div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                   <ul class="pagination">
                     <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous"><a
                         aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous"
@@ -283,7 +285,8 @@
                                                                                                class="page-link">Siguiente</a>
                     </li>
                   </ul>
-                </div>
+                </div>-->
+
               </div>
             </div>
           </div>
