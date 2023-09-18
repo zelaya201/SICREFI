@@ -131,7 +131,7 @@
                         <td>{{ $i }}</td>
                         <td>{{ $negocio->nom_negocio }}</td>
                         <td>{{ $negocio->dir_negocio }}</td>
-                        <td>{{ $negocio->tiempo_negocio }}</td>
+                        <td>{{ number_format($negocio->tiempo_negocio / 12, 0) . ' año(s) ' }}</td>
                         <td><span
                             class="badge rounded-pill {{ ($negocio->estado_negocio == 'Activo') ? 'bg-label-success' : 'bg-label-danger' }} ">{{ $negocio->estado_negocio }}</span>
                         </td>
@@ -154,12 +154,12 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item text-danger" href="javascript:void(0);"
                                    onclick="eliminarNegocio({{ $negocio->id_negocio }})"><i
-                                    class="bx bx-trash me-1"></i> Borrar</a>
+                                    class="bx bx-trash me-1"></i> Dar de baja</a>
 
                               @else
                                 <a class="dropdown-item" href="javascript:void(0);"
                                    onclick="darAltaNegocio({{ $negocio->id_negocio }})">
-                                  <i class='bx bxs-upvote' ></i> Dar de alta
+                                  <i class='bx bx-up-arrow-circle' ></i> Dar de alta
                                 </a>
                               @endif
                             </div>
@@ -515,19 +515,7 @@
           $('#form-negocio').trigger('reset');
           $('#btn-agregar-negocio').html('Modificar');
 
-          $('#id_negocio').val(data.negocio.id_negocio);
-          $('#nom_negocio').val(data.negocio.nom_negocio);
-          $('#dir_negocio').val(data.negocio.dir_negocio);
-          $('#tiempo_negocio').val(data.negocio.tiempo_negocio);
-          $('#buena_venta_negocio').val(data.negocio.buena_venta_negocio.toFixed(2));
-          $('#mala_venta_negocio').val(data.negocio.mala_venta_negocio);
-          $('#ganancia_diaria_negocio').val(data.negocio.ganancia_diaria_negocio);
-          $('#inversion_diaria_negocio').val(data.negocio.inversion_diaria_negocio);
-          $('#gasto_emp_negocio').val(data.negocio.gasto_emp_negocio);
-          $('#gasto_alquiler_negocio').val(data.negocio.gasto_alquiler_negocio);
-          $('#gasto_impuesto_negocio').val(data.negocio.gasto_impuesto_negocio);
-          $('#gasto_credito_negocio').val(data.negocio.gasto_credito_negocio);
-          $('#gasto_otro_negocio').val(data.negocio.gasto_otro_negocio);
+          mostrarNegocio(data);
 
           mostrarTelefonosNegocio(data.tel_negocio);
           resetFormularioNegocio();
@@ -536,6 +524,22 @@
           /* Mensajes de error */
         }
       });
+    }
+
+    function mostrarNegocio(data){
+      $('#id_negocio').val(data.negocio.id_negocio);
+      $('#nom_negocio').val(data.negocio.nom_negocio);
+      $('#dir_negocio').val(data.negocio.dir_negocio);
+      $('#tiempo_negocio').val(data.negocio.tiempo_negocio);
+      $('#buena_venta_negocio').val(data.negocio.buena_venta_negocio.toFixed(2));
+      $('#mala_venta_negocio').val(data.negocio.mala_venta_negocio.toFixed(2));
+      $('#ganancia_diaria_negocio').val(data.negocio.ganancia_diaria_negocio.toFixed(2));
+      $('#inversion_diaria_negocio').val(data.negocio.inversion_diaria_negocio.toFixed(2));
+      $('#gasto_emp_negocio').val(data.negocio.gasto_emp_negocio.toFixed(2));
+      $('#gasto_alquiler_negocio').val(data.negocio.gasto_alquiler_negocio.toFixed(2));
+      $('#gasto_impuesto_negocio').val(data.negocio.gasto_impuesto_negocio.toFixed(2));
+      $('#gasto_credito_negocio').val(data.negocio.gasto_credito_negocio.toFixed(2));
+      $('#gasto_otro_negocio').val(data.negocio.gasto_otro_negocio.toFixed(2));
     }
 
     function verNegocio(id_cliente) {
@@ -558,26 +562,14 @@
           $('#tel_negocio').addClass('d-none');
           $('#label-telefono-negocio').addClass('d-none');
 
+          mostrarNegocio(data);
           mostrarTelefonosNegocio(data.tel_negocio);
 
           // Eliminar tercera columna de la tabla
           $('#lista-telefonos-negocio tr td:nth-child(3)').addClass('d-none');
           $('#tabla-head-negocio tr th:nth-child(3)').addClass('d-none');
 
-          $('#id_negocio').val(data.negocio.id_negocio);
-          $('#nom_negocio').val(data.negocio.nom_negocio);
-          $('#dir_negocio').val(data.negocio.dir_negocio);
-          $('#tiempo_negocio').val(data.negocio.tiempo_negocio);
-          $('#buena_venta_negocio').val(data.negocio.buena_venta_negocio);
-          $('#mala_venta_negocio').val(data.negocio.mala_venta_negocio);
-          $('#ganancia_diaria_negocio').val(data.negocio.ganancia_diaria_negocio);
-          $('#inversion_diaria_negocio').val(data.negocio.inversion_diaria_negocio);
-          $('#gasto_emp_negocio').val(data.negocio.gasto_emp_negocio);
-          $('#gasto_alquiler_negocio').val(data.negocio.gasto_alquiler_negocio);
-          $('#gasto_impuesto_negocio').val(data.negocio.gasto_impuesto_negocio);
-          $('#gasto_credito_negocio').val(data.negocio.gasto_credito_negocio);
-          $('#gasto_otro_negocio').val(data.negocio.gasto_otro_negocio);
-
+          mostrarNegocio(data);
 
         },
         error: function (xhr) {

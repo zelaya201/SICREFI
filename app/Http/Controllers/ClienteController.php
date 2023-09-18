@@ -71,11 +71,16 @@ class ClienteController extends Controller
   public function store(Request $request)
   {
 
+    $date = date('Y-m-d', strtotime('-18 years'));
+
     $request->validate([
-      'dui_cliente' => 'required|unique:cliente|numeric',
-      'primer_nom_cliente' => 'required|min:2|max:50',
-      'primer_ape_cliente' => 'required|min:2|max:50',
-      'fech_nac_cliente' => 'required|date',
+      'dui_cliente' => 'required|unique:cliente|numeric|digits:9',
+      'primer_nom_cliente' => 'required|min:2|max:50|alpha',
+      'segundo_nom_cliente' => 'nullable|min:2|max:50|alpha',
+      'tercer_nom_cliente' => 'nullable|min:2|max:50|alpha',
+      'primer_ape_cliente' => 'required|min:2|max:50|alpha',
+      'segundo_ape_cliente' => 'nullable|min:2|max:50|alpha',
+      'fech_nac_cliente' => 'required|date|before_or_equal:' . $date,
       'ocupacion_cliente' => 'required|min:3',
       'tipo_vivienda_cliente' => 'required',
       'dir_cliente' => 'required',
@@ -86,7 +91,49 @@ class ClienteController extends Controller
       'gasto_vivienda_cliente' => 'required|numeric',
       'gasto_otro_cliente' => 'required|numeric',
       'email_cliente' => 'required|unique:cliente|email',
+      'estado_civil_cliente' => 'required',
     ]);
+
+    $array_telefonos_clientes = $request->session()->get('telefonos_clientes');
+    $array_telefonos_conyuge = $request->session()->get('telefonos_conyuge');
+    $array_negocios = $request->session()->get('negocios');
+    $array_referencias = $request->session()->get('referencias');
+    $array_bienes = $request->session()->get('bienes');
+
+    if(empty($array_telefonos_clientes)) {
+      return ['success' => false, 'message' => 'Debe agregar al menos un teléfono del cliente', 'tab' => 'cliente'];
+    }
+
+    $request->validate([
+      'primer_nom_conyuge' => 'required_if:estado_civil_cliente,Casado',
+      'primer_ape_conyuge' => 'required_if:estado_civil_cliente,Casado',
+      'ocupacion_conyuge' => 'required_if:estado_civil_cliente,Casado',
+            'dir_conyuge' => 'required_if:estado_civil_cliente,Casado',
+    ]);
+
+    $request->validate([
+      'primer_nom_conyuge' => 'min:2|max:50|alpha',
+      'segundo_nom_conyuge' => 'nullable|min:2|max:50|alpha',
+      'tercer_nom_conyuge' => 'nullable|min:2|max:50|alpha',
+      'primer_ape_conyuge' => 'min:2|max:50|alpha',
+      'segundo_ape_conyuge' => 'nullable|min:2|max:50|alpha',
+      'ocupacion_conyuge' => 'min:3',
+      'dir_conyuge' => 'min:3',
+    ]);
+
+    if($request->estado_civil_cliente == 'Casado') {
+      if(empty($array_telefonos_conyuge)) {
+        return ['success' => false, 'message' => 'Debe agregar al menos un teléfono del conyuge', 'tab' => 'conyuge'];
+      }
+    }
+
+    if(empty($array_referencias) || count($array_referencias) < 2) {
+      return ['success' => false, 'message' => 'Debe agregar al menos tres referencias personales', 'tab' => 'referencia'];
+    }
+
+    if(empty($array_bienes)) {
+      return ['success' => false, 'message' => 'Debe agregar al menos un bien', 'tab' => 'bien'];
+    }
 
     $cliente = new Cliente();
     $cliente->fill($request->all());
@@ -103,7 +150,7 @@ class ClienteController extends Controller
         $tel_cliente->save();
       }
 
-      //if($cliente->estado_civil_cliente == 'Casado') {
+      if($cliente->estado_civil_cliente == 'Casado') {
         $conyuge = new Conyuge();
         $conyuge->fill($request->all());
         $conyuge->id_cliente = $identificador;
@@ -117,7 +164,7 @@ class ClienteController extends Controller
             $tel_conyuge->save();
           }
         }
-      //}
+      }
 
       $array = $request->session()->get('negocios');
 

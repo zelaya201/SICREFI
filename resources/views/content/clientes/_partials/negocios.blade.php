@@ -1,4 +1,4 @@
-<div class="tab-pane fade pt-3" id="card-datos-negocios" role="tabpanel">
+<div class="tab-pane fade pt-3" id="card-negocios" role="tabpanel">
   <div class="row">
     <div class="col-md-12 mb-4">
       <!-- Negocios -->
