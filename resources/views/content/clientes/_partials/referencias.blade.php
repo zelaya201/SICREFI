@@ -32,8 +32,8 @@
                   <th>#</th>
                   <th>Nombre</th>
                   <th>Dirección</th>
-                  <th>Parentesco</th>
                   <th>Ocupación</th>
+                  <th>Parentesco</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>
@@ -82,8 +82,8 @@
 <!-- Modal agregar negocio -->
 <form action="{{ route('referencias.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
       id="form-ref">
-  @csrf {{-- Security --}}
-  <div class="modal fade" id="modal-ref" tabindex="-1" aria-hidden="true">
+
+  <div class="modal fade" data-bs-backdrop="static" id="modal-ref" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
       <div class="modal-content">
 
@@ -127,7 +127,7 @@
 
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="primer_ape_ref" class="form-label">Segundo apellido</label>
+                    <label for="segundo_ape_ref" class="form-label">Segundo apellido</label>
                     <input type="text" name="segundo_ape_ref" id="segundo_ape_ref" class="form-control">
                   </div>
 
@@ -158,24 +158,25 @@
               </div>
               <div>
                 <div class="col-md-12">
-                  <label class="form-label d-flex align-items-center justify-content-between">Teléfonos:
-                    (*)
-                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#telefono-modal-ref">
+                  <label class="form-label" for="tel_ref">Teléfono (*)</label>
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="tel_ref" name="tel_ref" placeholder="00000000" />
+                    <button type="button" class="btn btn-outline-info" id="btn-agregar-telefono-referencias">
                       <span class="tf-icons bx bx-plus"></span> Agregar
                     </button>
-                  </label>
+                  </div>
 
                   <table class="table table-bordered border-top table-hover">
                     <thead>
                     <tr>
+                      <th>#</th>
                       <th>Teléfono</th>
                       <th></th>
                     </tr>
                     </thead>
                     <tbody id="lista-telefonos-ref">
                     <tr>
-                      <td colspan="2">No hay resultados</td>
+                      <td colspan="3">No hay resultados</td>
                     </tr>
                     </tbody>
                   </table>

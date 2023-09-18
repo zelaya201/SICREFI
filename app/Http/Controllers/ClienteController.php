@@ -2,7 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bien;
 use App\Models\Cliente;
+use App\Models\Conyuge;
+use App\Models\Negocio;
+use App\Models\Referencia;
+use App\Models\TelCliente;
+use App\Models\TelConyuge;
+use App\Models\TelNegocio;
+use App\Models\TelReferencia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
@@ -14,10 +22,48 @@ class ClienteController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
+    $query = Cliente::query();
 
-    return view('content.clientes.index');
+    /*if ($request->ajax()) {
+      if (empty($request->estado) || $request->estado == 'Todos') {
+        $clientes = $query->orderBy('estado_cliente','ASC')->orderBy('primer_nom_cliente','ASC')->get();
+      }else {
+        $clientes = $query->where(['estado_cliente' => $request->estado])->orderBy('primer_nom_cliente','ASC')->get();
+      }
+
+      //return response()->json(['clientes' => $clientes]);
+      return view('content.clientes.table', compact('clientes'))->render();
+    }*/
+
+    if ($request->input('estado') || $request->input('mostrar')) {
+      $estado = $request->input('estado');
+      $mostrar = $request->input('mostrar', 10);
+
+      session(['estado_filtro' => $estado, 'mostrar' => $mostrar]);
+
+      if ($estado == 'Todos') {
+        $clientes = $query->orderBy('estado_cliente','ASC')->orderBy('primer_nom_cliente','ASC')->paginate($mostrar);
+      }else {
+        $clientes = $query->where(['estado_cliente' => $estado])->orderBy('primer_nom_cliente','ASC')->paginate($mostrar);
+      }
+
+      $contar = count(Cliente::all());
+      $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
+      $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
+
+      //return response()->json(['clientes' => $clientes]);
+      return view('content.clientes.index', compact('clientes' , 'contar', 'activos', 'inactivos'));
+    }
+
+
+    $clientes = $query->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente','ASC')->paginate(10);
+    $contar = count(Cliente::all());
+    $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
+    $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
+
+    return view('content.clientes.index', compact('clientes' , 'contar', 'activos', 'inactivos'));
   }
 
   /**
@@ -30,6 +76,11 @@ class ClienteController extends Controller
     Session::forget('negocios'); // Elimina todos los registros de la sesión de negocios
     Session::forget('referencias'); // Elimina todos los registros de la sesión de referencias
     Session::forget('bienes'); // Elimina todos los registros de la sesión de bienes
+    Session::forget('telefonos_clientes'); // Elimina todos los registros de la sesión de telefonos_clientes
+    Session::forget('telefonos_conyuge'); // Elimina todos los registros de la sesión de telefonos_conyuge
+    Session::forget('telefonos_negocio_temporal'); // Elimina todos los registros de la sesión de telefonos_negocio_temporal
+    Session::forget('telefonos_referencia_temporal'); // Elimina todos los registros de la sesión de telefonos_referencia_temporal
+
     return view('content.clientes.create');
   }
 
@@ -42,81 +93,155 @@ class ClienteController extends Controller
   public function store(Request $request)
   {
 
-    $request->session()->flush(); // Elimina todos los registros de la sesión
+    $date = date('Y-m-d', strtotime('-18 years'));
 
-//    Inserción de registros en Session
-    $array = $request->session()->get('clientes');
-    $array = Arr::add($array,
-      $request->input('dui_cliente'),
-      [
-        'dui_cliente' => $request->input('dui_cliente'),
-        'primer_nom_cliente' => $request->input('primer_nom_cliente'),
-        'segundo_nom_cliente' => $request->input('segundo_nom_cliente'),
-        'tercer_nom_cliente' => $request->input('tercer_nom_cliente'),
-        'primer_ape_cliente' => $request->input('primer_ape_cliente'),
-        'segundo_ape_cliente' => $request->input('segundo_ape_cliente'),
-        'fech_nac_cliente' => $request->input('fech_nac_cliente'),
-        'dir_cliente' => $request->input('dir_cliente'),
-        'email_cliente' => $request->input('email_cliente'),
-        'tipo_vivienda_cliente' => $request->input('tipo_vivienda_cliente'),
-        'ocupacion_cliente' => $request->input('ocupacion_cliente'),
-        'gasto_aliment_cliente' => $request->input('gasto_aliment_cliente'),
-        'gasto_agua_cliente' => $request->input('gasto_agua_cliente'),
-        'gasto_luz_cliente' => $request->input('gasto_luz_cliente'),
-        'gasto_cable_cliente' => $request->input('gasto_cable_cliente'),
-        'gasto_vivienda_cliente' => $request->input('gasto_vivienda_cliente'),
-        'gasto_otro_cliente' => $request->input('gasto_otro_cliente'),
-        'estado_cliente' => 'Activo',
-      ]
-    );
+    $request->validate([
+      'dui_cliente' => 'required|unique:cliente|numeric|digits:9',
+      'primer_nom_cliente' => 'required|min:2|max:50|alpha',
+      'segundo_nom_cliente' => 'nullable|min:2|max:50|alpha',
+      'tercer_nom_cliente' => 'nullable|min:2|max:50|alpha',
+      'primer_ape_cliente' => 'required|min:2|max:50|alpha',
+      'segundo_ape_cliente' => 'nullable|min:2|max:50|alpha',
+      'fech_nac_cliente' => 'required|date|before_or_equal:' . $date,
+      'ocupacion_cliente' => 'required|min:3',
+      'tipo_vivienda_cliente' => 'required',
+      'dir_cliente' => 'required',
+      'gasto_aliment_cliente' => 'required|numeric',
+      'gasto_agua_cliente' => 'required|numeric',
+      'gasto_luz_cliente' => 'required|numeric',
+      'gasto_cable_cliente' => 'required|numeric',
+      'gasto_vivienda_cliente' => 'required|numeric',
+      'gasto_otro_cliente' => 'required|numeric',
+      'email_cliente' => 'required|unique:cliente|email',
+      'estado_civil_cliente' => 'required',
+    ]);
 
+    $array_telefonos_clientes = $request->session()->get('telefonos_clientes');
+    $array_telefonos_conyuge = $request->session()->get('telefonos_conyuge');
+    $array_negocios = $request->session()->get('negocios');
+    $array_referencias = $request->session()->get('referencias');
+    $array_bienes = $request->session()->get('bienes');
 
-//
-    $request->session()->put('clientes', $array);
+    if(empty($array_telefonos_clientes)) {
+      return ['success' => false, 'message' => 'Debe agregar al menos un teléfono del cliente', 'tab' => 'cliente'];
+    }
 
-//    $request->validate([
-//      'dui_cliente' => 'required|unique:cliente|numeric',
-//      'primer_nom_cliente' => 'required|min:2|max:50',
-//      'primer_ape_cliente' => 'required|min:2|max:50',
-//      'fech_nac_cliente' => 'required|date',
-//      'ocupacion_cliente' => 'required|min:3',
-//      'tipo_vivienda_cliente' => 'required',
-//      'dir_cliente' => 'required',
-//      'gasto_aliment_cliente' => 'required|numeric',
-//      'gasto_agua_cliente' => 'required|numeric',
-//      'gasto_luz_cliente' => 'required|numeric',
-//      'gasto_cable_cliente' => 'required|numeric',
-//      'gasto_vivienda_cliente' => 'required|numeric',
-//      'gasto_otro_cliente' => 'required|numeric',
-//      'email_cliente' => 'required|unique:cliente|email',
-//    ]);
-//
-//    $cliente = new Cliente();
-//    $cliente->setTable('cliente');
-//
-//    $cliente->dui_cliente = $request->input('dui_cliente');
-//    $cliente->primer_nom_cliente = $request->input('primer_nom_cliente');
-//    $cliente->segundo_nom_cliente = $request->input('segundo_nom_cliente');
-//    $cliente->tercer_nom_cliente = $request->input('tercer_nom_cliente');
-//    $cliente->primer_ape_cliente = $request->input('primer_ape_cliente');
-//    $cliente->segundo_ape_cliente = $request->input('segundo_ape_cliente');
-//    $cliente->fech_nac_cliente = $request->input('fech_nac_cliente');
-//    $cliente->dir_cliente = $request->input('dir_cliente');
-//    $cliente->email_cliente = $request->input('email_cliente');
-//    $cliente->tipo_vivienda_cliente = $request->input('tipo_vivienda_cliente');
-//    $cliente->ocupacion_cliente = $request->input('ocupacion_cliente');
-//    $cliente->gasto_aliment_cliente = $request->input('gasto_aliment_cliente');
-//    $cliente->gasto_agua_cliente = $request->input('gasto_agua_cliente');
-//    $cliente->gasto_luz_cliente = $request->input('gasto_luz_cliente');
-//    $cliente->gasto_cable_cliente = $request->input('gasto_cable_cliente');
-//    $cliente->gasto_vivienda_cliente = $request->input('gasto_vivienda_cliente');
-//    $cliente->gasto_otro_cliente = $request->input('gasto_otro_cliente');
-//    $cliente->estado_cliente = 'Activo';
-//
-//    $cliente->save(); // INSERT INTO - SQL
+    $request->validate([
+      'primer_nom_conyuge' => 'required_if:estado_civil_cliente,Casado',
+      'primer_ape_conyuge' => 'required_if:estado_civil_cliente,Casado',
+      'ocupacion_conyuge' => 'required_if:estado_civil_cliente,Casado',
+            'dir_conyuge' => 'required_if:estado_civil_cliente,Casado',
+    ]);
 
-    //return to_route('clientes.index')->with('mensaje', 'Cliente agregado con éxito');
-    return $request->session()->all();
+    $request->validate([
+      'primer_nom_conyuge' => 'min:2|max:50|alpha',
+      'segundo_nom_conyuge' => 'nullable|min:2|max:50|alpha',
+      'tercer_nom_conyuge' => 'nullable|min:2|max:50|alpha',
+      'primer_ape_conyuge' => 'min:2|max:50|alpha',
+      'segundo_ape_conyuge' => 'nullable|min:2|max:50|alpha',
+      'ocupacion_conyuge' => 'min:3',
+      'dir_conyuge' => 'min:3',
+    ]);
+
+    if($request->estado_civil_cliente == 'Casado') {
+      if(empty($array_telefonos_conyuge)) {
+        return ['success' => false, 'message' => 'Debe agregar al menos un teléfono del conyuge', 'tab' => 'conyuge'];
+      }
+    }
+
+    if(empty($array_referencias) || count($array_referencias) < 2) {
+      return ['success' => false, 'message' => 'Debe agregar al menos tres referencias personales', 'tab' => 'referencia'];
+    }
+
+    if(empty($array_bienes)) {
+      return ['success' => false, 'message' => 'Debe agregar al menos un bien', 'tab' => 'bien'];
+    }
+
+    $cliente = new Cliente();
+    $cliente->fill($request->all());
+    $cliente->estado_cliente = 'Activo';
+
+    if($cliente->save()) {
+      $identificador = Cliente::latest('id_cliente')->first()->id_cliente;
+
+      $array = $request->session()->get('telefonos_clientes');
+      foreach ($array as $telefono) {
+        $tel_cliente = new TelCliente();
+        $tel_cliente->tel_cliente = $telefono['tel_cliente'];
+        $tel_cliente->id_cliente = $identificador;
+        $tel_cliente->save();
+      }
+
+      if($cliente->estado_civil_cliente == 'Casado') {
+        $conyuge = new Conyuge();
+        $conyuge->fill($request->all());
+        $conyuge->id_cliente = $identificador;
+
+        if($conyuge->save()) {
+          $array = $request->session()->get('telefonos_conyuge');
+          foreach ($array as $telefono) {
+            $tel_conyuge = new TelConyuge();
+            $tel_conyuge->tel_conyuge = $telefono['tel_conyuge'];
+            $tel_conyuge->id_conyuge = Conyuge::latest('id_conyuge')->first()->id_conyuge;
+            $tel_conyuge->save();
+          }
+        }
+      }
+
+      $array = $request->session()->get('negocios');
+
+      foreach ($array as $negocio) {
+        $neg = new Negocio();
+        $neg->fill($negocio);
+        $neg->estado_negocio = 'Activo';
+        $neg->id_cliente = $identificador;
+
+        if($neg->save()){
+          $tel_negocios = $negocio['telefonos_negocio'];
+          foreach ($tel_negocios as $telefono) {
+            $tel = new TelNegocio();
+            $tel->tel_negocio = $telefono['tel_negocio'];
+            $tel->id_negocio = Negocio::latest('id_negocio')->first()->id_negocio;
+            $tel->save();
+          }
+        }
+      }
+
+      $array = $request->session()->get('referencias');
+
+      foreach ($array as $referencia) {
+        $ref = new Referencia();
+        $ref->fill($referencia);
+        $ref->estado_ref = 'Activo';
+
+        $ref->id_cliente = $identificador;
+
+        if($ref->save()) {
+          $tel_referencias = $referencia['telefonos_ref'];
+          foreach ($tel_referencias as $telefono) {
+            $tel = new TelReferencia();
+            $tel->tel_ref = $telefono['tel_ref'];
+            $tel->id_ref = Referencia::latest('id_ref')->first()->id_ref;
+            $tel->save();
+          }
+        }
+      }
+
+      $array = $request->session()->get('bienes');
+
+      foreach ($array as $bien) {
+        $b = new Bien();
+        $b->nom_bien = $bien['nom_bien'];
+        $b->estado_bien = 'Activo';
+        $b->id_cliente = $identificador;
+        $b->save();
+      }
+
+      return ['success' => true, 'message' => 'Cliente agregado con éxito'];
+
+    }
+
+    return ['success' => false, 'message' => 'Error al agregar cliente', 'errors' => $cliente->errors()];
   }
 
   /**
@@ -138,7 +263,7 @@ class ClienteController extends Controller
    */
   public function edit($id)
   {
-    //
+
   }
 
   /**

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('segundo_ape_ref',50)->nullable();
             $table->string('dir_ref',175);
             $table->string('ocupacion_ref',75);
+            $table->string('parentesco_ref',75);
+            $table->string('estado_ref',75);
             $table->bigInteger('id_cliente')->unsigned();
             $table->foreign('id_cliente')
               ->references('id_cliente')

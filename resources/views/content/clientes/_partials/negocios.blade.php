@@ -1,4 +1,4 @@
-<div class="tab-pane fade pt-3" id="card-datos-negocios" role="tabpanel">
+<div class="tab-pane fade pt-3" id="card-negocios" role="tabpanel">
   <div class="row">
     <div class="col-md-12 mb-4">
       <!-- Negocios -->
@@ -81,8 +81,8 @@
 <!-- Modal agregar negocio -->
 <form action="{{ route('negocios.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
       id="form-negocio">
-  @csrf {{-- Security --}}
-  <div class="modal fade" id="modal-negocio" tabindex="-1" aria-hidden="true">
+
+  <div class="modal fade" data-bs-backdrop="static" id="modal-negocio" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
       <div class="modal-content">
 
@@ -106,7 +106,7 @@
                   </div>
 
                   <div class="col-md-6 mb-3">
-                    <label for="tiempo_negocio" class="form-label">Tiempo de tenerlo (*)</label>
+                    <label for="tiempo_negocio" class="form-label">Tiempo de operación (*)</label>
                     <input type="text" name="tiempo_negocio" id="tiempo_negocio" class="form-control"
                            placeholder="Cantidad en meses">
                   </div>
@@ -191,39 +191,40 @@
               </div>
             </div>
 
-            <div class="col-lg-12">
-              <div class="pb-0">
-                <span class="fw-bold">Datos de contacto</span>
-                <hr class="my-2">
-              </div>
-              <div>
-                <div class="col-md-12">
-                  <label class="form-label d-flex align-items-center justify-content-between">Teléfonos:
-                    (*)
-                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                            data-bs-target="#telefono-modal-negocio">
-                      <span class="tf-icons bx bx-plus"></span> Agregar
-                    </button>
-                  </label>
 
-                  <table class="table table-bordered border-top table-hover">
-                    <thead>
-                    <tr>
-                      <th>Teléfono</th>
-                      <th></th>
-                    </tr>
-                    </thead>
-                    <tbody id="lista-telefonos-negocio">
-                    <tr>
-                      <td colspan="2">No hay resultados</td>
-                    </tr>
-                    </tbody>
-                  </table>
+              <div class="col-lg-12">
+                <div class="pb-0">
+                  <span class="fw-bold">Datos de contacto</span>
+                  <hr class="my-2">
+                </div>
+                <div>
+                  <div class="col-md-12">
+                    <label class="form-label" for="tel_negocio">Teléfono (*)</label>
+                      <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="tel_negocio" name="tel_negocio" placeholder="00000000" />
+                        <button type="button" class="btn btn-outline-info" id="btn-agregar-telefono-negocio">
+                          <span class="tf-icons bx bx-plus"></span> Agregar
+                        </button>
+                      </div>
+
+                    <table class="table table-bordered border-top table-hover">
+                      <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Teléfono</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody id="lista-telefonos-negocio">
+                      <tr>
+                        <td colspan="3">No hay resultados</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
-            </div>
           </div>
-
         </div>
 
         <div class="modal-footer">

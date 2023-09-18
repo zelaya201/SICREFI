@@ -9,6 +9,10 @@ class Bien extends Model
 {
     use HasFactory;
 
+    protected $table = 'bien'; // Nombre de la tabla en la base de datos.
+
+  protected $primaryKey = 'id_bien'; // Nombre de la llave primaria en la tabla.
+
     public function cliente() {
       return $this->belongsTo(Cliente::class, 'id_cliente');
     }

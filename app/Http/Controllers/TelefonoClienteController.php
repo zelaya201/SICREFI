@@ -39,7 +39,7 @@ class TelefonoClienteController extends Controller
             $size,
             [
               'id' => $size,
-              'nom_bien' => $request->input('nom_bien')
+              'tel_cliente' => $request->input('tel_cliente')
             ]
           );
 
