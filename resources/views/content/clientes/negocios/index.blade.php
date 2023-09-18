@@ -403,13 +403,7 @@
         $('#btn-agregar-negocio').html('Agregar');
         $('#form-negocio').trigger('reset');
 
-        // Regresar Formulario al estado original
-        $('#form-negocio input').removeClass('d-none').removeAttr('disabled');
-        $('#form-negocio label').removeClass('d-none');
-        $('#form-negocio textarea').removeClass('d-none').removeAttr('disabled');
-        $('#tabla-head-negocio tr th:nth-child(3)').removeClass('d-none');
-        $('#form-negocio button').removeClass('d-none');
-
+        resetFormularioNegocio();
 
         $('#id_negocio').val('');
         $('#lista-telefonos-negocio').html('<tr><td colspan="3">No hay resultados</td></tr>');
@@ -498,6 +492,15 @@
 
     });
 
+    function resetFormularioNegocio(){
+      // Regresar Formulario al estado original
+      $('#form-negocio input').removeClass('d-none').removeAttr('disabled');
+      $('#form-negocio label').removeClass('d-none');
+      $('#form-negocio textarea').removeClass('d-none').removeAttr('disabled');
+      $('#tabla-head-negocio tr th:nth-child(3)').removeClass('d-none');
+      $('#form-negocio button').removeClass('d-none');
+    }
+
     function obtenerNegocio(id_cliente) {
 
       $.ajax({
@@ -516,7 +519,7 @@
           $('#nom_negocio').val(data.negocio.nom_negocio);
           $('#dir_negocio').val(data.negocio.dir_negocio);
           $('#tiempo_negocio').val(data.negocio.tiempo_negocio);
-          $('#buena_venta_negocio').val(data.negocio.buena_venta_negocio);
+          $('#buena_venta_negocio').val(data.negocio.buena_venta_negocio.toFixed(2));
           $('#mala_venta_negocio').val(data.negocio.mala_venta_negocio);
           $('#ganancia_diaria_negocio').val(data.negocio.ganancia_diaria_negocio);
           $('#inversion_diaria_negocio').val(data.negocio.inversion_diaria_negocio);
@@ -527,6 +530,7 @@
           $('#gasto_otro_negocio').val(data.negocio.gasto_otro_negocio);
 
           mostrarTelefonosNegocio(data.tel_negocio);
+          resetFormularioNegocio();
         },
         error: function (xhr) {
           /* Mensajes de error */
