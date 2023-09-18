@@ -34,7 +34,7 @@ class ClienteFactory extends Factory
           'gasto_cable_cliente' => $this->faker->numberBetween(1,100),
           'gasto_vivienda_cliente' => $this->faker->numberBetween(1,100),
           'gasto_otro_cliente' => $this->faker->numberBetween(1,100),
-          'estado_cliente' => 'Activo',
+          'estado_cliente' => 'Inactivo',
           'created_at' => $this->faker->dateTime(),
           'updated_at' => $this->faker->dateTime(),
         ];

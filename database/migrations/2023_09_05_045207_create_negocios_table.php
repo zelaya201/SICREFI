@@ -27,6 +27,7 @@ return new class extends Migration
             $table->double('gasto_impuesto_negocio',8,2);
             $table->double('gasto_otro_negocio',8,2);
             $table->double('gasto_credito_negocio',8,2);
+            $table->string('estado_negocio',75);
             $table->bigInteger('id_cliente')->unsigned();
             $table->foreign('id_cliente')
               ->references('id_cliente')

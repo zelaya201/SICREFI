@@ -172,10 +172,11 @@
           data: $('#form-cliente').serialize(),
           success: function (data) {
             /* Mensaje de exito */
-
+            if(data.success){
+              window.location.href = '{{ route("clientes.index") }}';
+            }
           },
           error: function (xhr) {
-
             /* Remover errores */
             var inputs = $('#form-cliente').find('input, select, textarea');
 
@@ -891,7 +892,7 @@
     function eliminarTelefonoNegocio(id) {
       var datos = $('#form-telsnegocio').serialize();
       datos += '&opcion=eliminar';
-      datos += '&id=' + id;
+      datos += '&id_tel_negocio=' + id;
       datos += '&session=true';
 
       $.ajax({

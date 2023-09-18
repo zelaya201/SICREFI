@@ -36,7 +36,7 @@
               <div class="col-sm-6 col-lg-3">
                 <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
                   <div>
-                    <h3 class="mb-1">Total</h3>
+                    <h3 class="mb-1">{{$contar}}</h3>
                     <p class="mb-0">Clientes</p>
                   </div>
                   <div class="avatar me-sm-4">
@@ -50,8 +50,8 @@
               <div class="col-sm-6 col-lg-3">
                 <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
                   <div>
-                    <h3 class="mb-1">???</h3>
-                    <p class="mb-0">???</p>
+                    <h3 class="mb-1">0</h3>
+                    <p class="mb-0">Clientes con préstamos</p>
                   </div>
                   <div class="avatar me-lg-4">
               <span class="avatar-initial rounded bg-label-secondary">
@@ -64,12 +64,12 @@
               <div class="col-sm-6 col-lg-3">
                 <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
                   <div>
-                    <h3 class="mb-1">$$$</h3>
-                    <p class="mb-0">Pagados</p>
+                    <h3 class="mb-1">{{$activos}}</h3>
+                    <p class="mb-0">Clientes Activos</p>
                   </div>
                   <div class="avatar me-sm-4">
               <span class="avatar-initial rounded bg-label-secondary">
-                <i class="bx bx-check-double bx-sm"></i>
+                <i class='bx bx-user-check bx-sm'></i>
               </span>
                   </div>
                 </div>
@@ -77,12 +77,12 @@
               <div class="col-sm-6 col-lg-3">
                 <div class="d-flex justify-content-between align-items-start">
                   <div>
-                    <h3 class="mb-1">$$$</h3>
-                    <p class="mb-0">Sin pagar</p>
+                    <h3 class="mb-1">{{$inactivos}}</h3>
+                    <p class="mb-0">Clientes Inactivos</p>
                   </div>
                   <div class="avatar">
               <span class="avatar-initial rounded bg-label-secondary">
-                <i class="bx bx-error-circle bx-sm"></i>
+                <i class='bx bx-user-minus bx-sm'></i>
               </span>
                   </div>
                 </div>
@@ -146,9 +146,17 @@
                       <td>{{$contador}}</td>
                       <td>{{$cliente->dui_cliente}}</td>
                       <!--Filtro para Nombre-->
-                      @if($cliente->tercer_nom_cliente == null)
+                      @if($cliente->segundo_nom_cliente == null or $cliente->segundo_nom_cliente == null && $clientes->tercer_nom_cliente == null)
+                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
+                      @elseif($cliente->segundo_nom_cliente == null && $clientes->segundo_ape_cliente == null or $cliente->segundo_nom_cliente == null && $clientes->tercer_nom_cliente == null && $cliente->segundo_ape_cliente = null)
+                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->primer_ape_cliente}}</td>
+                      @elseif($cliente->tercer_nom_cliente == null)
                         <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
-                      @elseif($cliente->tercer_nom_cliente != null)
+                      @elseif($cliente->tercer_nom_cliente == null && $cliente->segundo_ape_cliente = null )
+                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->primer_ape_cliente}}</td>
+                      @elseif($cliente->segundo_ape_cliente == null)
+                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->tercer_nom_cliente.' '.$cliente->primer_ape_cliente}}</td>
+                      @else
                         <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->tercer_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
                       @endif
                       <td>{{$cliente->dir_cliente}}</td>
@@ -165,6 +173,7 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </a>
                           <div class="dropdown-menu" style="">
+                            @if($cliente->estado_cliente == 'Activo')
                             <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-show me-1"></i>
                               Ver</a>
                             <a class="dropdown-item" href="{{ route('negocios.show', $cliente->id_cliente) }}"><i class="bx bx-store-alt me-1"></i>
@@ -183,6 +192,13 @@
 
                             <a class="dropdown-item text-danger" href="javascript:void(0);"><i
                                 class="bx bx-trash me-1"></i> Borrar</a>
+
+                            @else
+                              <a class="dropdown-item" href="">
+                                <i class='bx bxs-upvote' ></i> Dar de alta
+                              </a>
+
+                            @endif
                           </div>
                         </div>
                       </td>
@@ -299,7 +315,7 @@
       }
     }
 
-    /* Filtro por estado */
+    /* Filtro por estado*/
     $(document).ready(function() {
       $('#estado').on('change', function() {
         $(this).closest('form').submit();

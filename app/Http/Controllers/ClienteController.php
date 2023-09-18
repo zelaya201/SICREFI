@@ -28,7 +28,7 @@ class ClienteController extends Controller
 
     /*if ($request->ajax()) {
       if (empty($request->estado) || $request->estado == 'Todos') {
-        $clientes = $query->orderBy('primer_nom_cliente','ASC')->get();
+        $clientes = $query->orderBy('estado_cliente','ASC')->orderBy('primer_nom_cliente','ASC')->get();
       }else {
         $clientes = $query->where(['estado_cliente' => $request->estado])->orderBy('primer_nom_cliente','ASC')->get();
       }
@@ -55,8 +55,11 @@ class ClienteController extends Controller
 
 
     $clientes = $query->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente','ASC')->paginate(10);
+    $contar = count(Cliente::all());
+    $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
+    $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
 
-    return view('content.clientes.index', compact('clientes'));
+    return view('content.clientes.index', compact('clientes' , 'contar', 'activos', 'inactivos'));
   }
 
   /**
@@ -104,25 +107,7 @@ class ClienteController extends Controller
     ]);
 
     $cliente = new Cliente();
-
-    $cliente->dui_cliente = $request->input('dui_cliente');
-    $cliente->primer_nom_cliente = $request->input('primer_nom_cliente');
-    $cliente->segundo_nom_cliente = $request->input('segundo_nom_cliente');
-    $cliente->tercer_nom_cliente = $request->input('tercer_nom_cliente');
-    $cliente->primer_ape_cliente = $request->input('primer_ape_cliente');
-    $cliente->segundo_ape_cliente = $request->input('segundo_ape_cliente');
-    $cliente->fech_nac_cliente = $request->input('fech_nac_cliente');
-    $cliente->dir_cliente = $request->input('dir_cliente');
-    $cliente->email_cliente = $request->input('email_cliente');
-    $cliente->tipo_vivienda_cliente = $request->input('tipo_vivienda_cliente');
-    $cliente->ocupacion_cliente = $request->input('ocupacion_cliente');
-    $cliente->gasto_aliment_cliente = $request->input('gasto_aliment_cliente');
-    $cliente->gasto_agua_cliente = $request->input('gasto_agua_cliente');
-    $cliente->gasto_luz_cliente = $request->input('gasto_luz_cliente');
-    $cliente->gasto_cable_cliente = $request->input('gasto_cable_cliente');
-    $cliente->gasto_vivienda_cliente = $request->input('gasto_vivienda_cliente');
-    $cliente->gasto_otro_cliente = $request->input('gasto_otro_cliente');
-    $cliente->estado_civil_cliente = $request->input('estado_civil_cliente');
+    $cliente->fill($request->all());
     $cliente->estado_cliente = 'Activo';
 
     if($cliente->save()) {
@@ -138,15 +123,8 @@ class ClienteController extends Controller
 
       //if($cliente->estado_civil_cliente == 'Casado') {
         $conyuge = new Conyuge();
-        $conyuge->primer_nom_conyuge = $request->input('primer_nom_conyuge');
-        $conyuge->segundo_nom_conyuge = $request->input('segundo_nom_conyuge');
-        $conyuge->tercer_nom_conyuge = $request->input('tercer_nom_conyuge');
-        $conyuge->primer_ape_conyuge = $request->input('primer_ape_conyuge');
-        $conyuge->segundo_ape_conyuge = $request->input('segundo_ape_conyuge');
-        $conyuge->dir_conyuge = $request->input('dir_conyuge');
-        $conyuge->ocupacion_conyuge = $request->input('ocupacion_conyuge');
+        $conyuge->fill($request->all());
         $conyuge->id_cliente = $identificador;
-
 
         if($conyuge->save()) {
           $array = $request->session()->get('telefonos_conyuge');
@@ -163,20 +141,8 @@ class ClienteController extends Controller
 
       foreach ($array as $negocio) {
         $neg = new Negocio();
-        $neg->nom_negocio = $negocio['nom_negocio'];
-        $neg->tiempo_negocio = $negocio['tiempo_negocio'];
-        $neg->dir_negocio = $negocio['dir_negocio'];
-        $neg->tiempo_negocio = $negocio['tiempo_negocio'];
-        $neg->buena_venta_negocio = $negocio['buena_venta_negocio'];
-        $neg->mala_venta_negocio = $negocio['mala_venta_negocio'];
-        $neg->ganancia_diaria_negocio = $negocio['ganancia_diaria_negocio'];
-        $neg->inversion_diaria_negocio= $negocio['inversion_diaria_negocio'];
-        $neg->gasto_emp_negocio = $negocio['gasto_emp_negocio'];
-        $neg->gasto_alquiler_negocio = $negocio['gasto_alquiler_negocio'];
-        $neg->gasto_impuesto_negocio = $negocio['gasto_impuesto_negocio'];
-        $neg->gasto_otro_negocio = $negocio['gasto_otro_negocio'];
-        $neg->gasto_credito_negocio = $negocio['gasto_credito_negocio'];
-
+        $neg->fill($negocio);
+        $neg->estado_negocio = 'Activo';
         $neg->id_cliente = $identificador;
 
         if($neg->save()){
@@ -194,14 +160,8 @@ class ClienteController extends Controller
 
       foreach ($array as $referencia) {
         $ref = new Referencia();
-        $ref->primer_nom_ref = $referencia['primer_nom_ref'];
-        $ref->segundo_nom_ref = $referencia['segundo_nom_ref'];
-        $ref->tercer_nom_ref = $referencia['tercer_nom_ref'];
-        $ref->primer_ape_ref = $referencia['primer_ape_ref'];
-        $ref->segundo_ape_ref = $referencia['segundo_ape_ref'];
-        $ref->dir_ref = $referencia['dir_ref'];
-        $ref->ocupacion_ref = $referencia['ocupacion_ref'];
-        $ref->parentesco_ref = $referencia['parentesco_ref'];
+        $ref->fill($referencia);
+        $ref->estado_ref = 'Activo';
 
         $ref->id_cliente = $identificador;
 
@@ -225,9 +185,12 @@ class ClienteController extends Controller
         $b->id_cliente = $identificador;
         $b->save();
       }
+
+      return ['success' => true, 'message' => 'Cliente agregado con éxito'];
+
     }
 
-    return to_route('clientes.index')->with('mensaje', 'Cliente agregado con éxito');
+    return ['success' => false, 'message' => 'Error al agregar cliente', 'errors' => $cliente->errors()];
   }
 
   /**
@@ -249,7 +212,7 @@ class ClienteController extends Controller
    */
   public function edit($id)
   {
-    //
+
   }
 
   /**
