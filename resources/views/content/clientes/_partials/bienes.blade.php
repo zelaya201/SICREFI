@@ -77,7 +77,7 @@
 <!-- Modal agregar bien -->
 <form action="{{ route('bienes.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
       id="form-bien">
-  @csrf {{-- Security --}}
+
   <div class="modal fade" id="modal-bien" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-sm" role="document">
       <div class="modal-content">

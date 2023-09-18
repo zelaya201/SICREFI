@@ -46,10 +46,12 @@ class ReferenciaController extends Controller
               'segundo_ape_ref' => $request->input('segundo_ape_ref'),
               'dir_ref' => $request->input('dir_ref'),
               'ocupacion_ref' => $request->input('ocupacion_ref'),
-              'parentesco_ref' => $request->input('parentesco_ref')
+              'parentesco_ref' => $request->input('parentesco_ref'),
+              'telefonos_ref' => $request->session()->get('telefonos_referencia_temporal')
             ]
           );
 
+          $request->session()->forget('telefonos_referencia_temporal');
           $request->session()->put('referencias', $array);
         }
 
@@ -61,7 +63,15 @@ class ReferenciaController extends Controller
         }
       }else if($request->input('opcion') == 'obtener'){
         if($request->input('session') == 'true') {
+
+          $request->session()->forget('telefonos_referencia_temporal');
           $array = $request->session()->get('referencias');
+
+          $request->session()->put(
+            'telefonos_referencia_temporal',
+            $array[$request->input('id')]['telefonos_ref']
+          );
+
           return Arr::get($array, $request->input('id'));
         }
       }else if($request->input('opcion') == 'actualizar') {
@@ -77,9 +87,11 @@ class ReferenciaController extends Controller
             'segundo_ape_ref' => $request->input('segundo_ape_ref'),
             'dir_ref' => $request->input('dir_ref'),
             'ocupacion_ref' => $request->input('ocupacion_ref'),
-            'parentesco_ref' => $request->input('parentesco_ref')
+            'parentesco_ref' => $request->input('parentesco_ref'),
+            'telefonos_ref' => $request->session()->get('telefonos_referencia_temporal')
           ];
 
+          $request->session()->forget('telefonos_referencia_temporal');
           $request->session()->put('referencias', $array);
         }
       }
