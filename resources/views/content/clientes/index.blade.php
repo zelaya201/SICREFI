@@ -142,11 +142,9 @@
                       <td>{{$contador}}</td>
                       <td>{{$cliente->dui_cliente}}</td>
                       <!--Filtro para Nombre-->
-                      @if($cliente->segundo_nom_cliente == null)
+                      @if($cliente->segundo_nom_cliente == null or $cliente->segundo_nom_cliente == null && $clientes->tercer_nom_cliente == null)
                         <td>{{$cliente->primer_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
-                      @elseif($cliente->segundo_nom_cliente == null && $clientes->tercer_nom_cliente == null)
-                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
-                      @elseif($cliente->segundo_nom_cliente == null && $clientes->tercer_nom_cliente == null && $cliente->segundo_ape_cliente = null)
+                      @elseif($cliente->segundo_nom_cliente == null && $clientes->segundo_ape_cliente == null or $cliente->segundo_nom_cliente == null && $clientes->tercer_nom_cliente == null && $cliente->segundo_ape_cliente = null)
                         <td>{{$cliente->primer_nom_cliente.' '.$cliente->primer_ape_cliente}}</td>
                       @elseif($cliente->tercer_nom_cliente == null)
                         <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
@@ -171,6 +169,7 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </a>
                           <div class="dropdown-menu" style="">
+                            @if($cliente->estado_cliente == 'Activo')
                             <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-show me-1"></i>
                               Ver</a>
                             <a class="dropdown-item" href="{{ route('negocios.show', $cliente->id_cliente) }}"><i class="bx bx-store-alt me-1"></i>
@@ -189,6 +188,13 @@
 
                             <a class="dropdown-item text-danger" href="javascript:void(0);"><i
                                 class="bx bx-trash me-1"></i> Borrar</a>
+
+                            @else
+                              <a class="dropdown-item" href="">
+                                <i class='bx bxs-upvote' ></i> Dar de alta
+                              </a>
+
+                            @endif
                           </div>
                         </div>
                       </td>
@@ -369,7 +375,7 @@
       }
     }
 
-    /* Filtro por estado */
+    /* Filtro por estado*/
     $(document).ready(function() {
       $("#filter_bar").on("change", function() {
         let estado = $(this).val()

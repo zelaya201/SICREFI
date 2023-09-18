@@ -36,6 +36,7 @@ class ClienteController extends Controller
       return response()->json(['clientes' => $clientes]);
     }
 
+
     $clientes = $query->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente','ASC')->get();
     $contar = count(Cliente::all());
     $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
