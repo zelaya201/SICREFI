@@ -28,7 +28,7 @@ class ClienteController extends Controller
 
     if ($request->ajax()) {
       if (empty($request->estado) || $request->estado == 'Todos') {
-        $clientes = $query->orderBy('primer_nom_cliente','ASC')->get();
+        $clientes = $query->orderBy('estado_cliente','ASC')->orderBy('primer_nom_cliente','ASC')->get();
       }else {
         $clientes = $query->where(['estado_cliente' => $request->estado])->orderBy('primer_nom_cliente','ASC')->get();
       }
@@ -37,8 +37,11 @@ class ClienteController extends Controller
     }
 
     $clientes = $query->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente','ASC')->get();
+    $contar = count(Cliente::all());
+    $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
+    $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
 
-    return view('content.clientes.index', compact('clientes'));
+    return view('content.clientes.index', compact('clientes' , 'contar', 'activos', 'inactivos'));
   }
 
   /**
