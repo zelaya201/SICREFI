@@ -26,17 +26,35 @@ class ClienteController extends Controller
   {
     $query = Cliente::query();
 
-    if ($request->ajax()) {
+    /*if ($request->ajax()) {
       if (empty($request->estado) || $request->estado == 'Todos') {
         $clientes = $query->orderBy('primer_nom_cliente','ASC')->get();
       }else {
         $clientes = $query->where(['estado_cliente' => $request->estado])->orderBy('primer_nom_cliente','ASC')->get();
       }
 
-      return response()->json(['clientes' => $clientes]);
+      //return response()->json(['clientes' => $clientes]);
+      return view('content.clientes.table', compact('clientes'))->render();
+    }*/
+
+    if ($request->input('estado') || $request->input('mostrar')) {
+      $estado = $request->input('estado');
+      $mostrar = $request->input('mostrar', 10);
+
+      session(['estado_filtro' => $estado, 'mostrar' => $mostrar]);
+
+      if ($estado == 'Todos') {
+        $clientes = $query->orderBy('estado_cliente','ASC')->orderBy('primer_nom_cliente','ASC')->paginate($mostrar);
+      }else {
+        $clientes = $query->where(['estado_cliente' => $estado])->orderBy('primer_nom_cliente','ASC')->paginate($mostrar);
+      }
+
+      //return response()->json(['clientes' => $clientes]);
+      return view('content.clientes.index', compact('clientes'));
     }
 
-    $clientes = $query->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente','ASC')->get();
+
+    $clientes = $query->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente','ASC')->paginate(10);
 
     return view('content.clientes.index', compact('clientes'));
   }

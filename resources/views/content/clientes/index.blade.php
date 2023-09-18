@@ -93,50 +93,54 @@
       </div>
 
       <!-- Invoice List Table -->
-      <div class="card p-3">
-        <div class="card-datatable">
-          <div class="dataTables_wrapper dt-bootstrap5 no-footer">
-            <div class="row my-3">
-              <div class="col-md-6">
+      <form action="{{route('clientes.index')}}" method="GET">
+        <div class="card p-3">
+          <div class="card-datatable">
+            <div class="dataTables_wrapper dt-bootstrap5 no-footer">
+              <div class="row my-3">
                 <div class="col-md-6">
-                  <label>
-                    <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." aria-controls="DataTables_Table_0" onkeyup="search()">
-                  </label>
+                  <div class="col-md-6">
+                    <label>
+                      <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." aria-controls="DataTables_Table_0" onkeyup="search()">
+                    </label>
+                  </div>
                 </div>
-              </div>
-              <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
-                <div class="invoice_status mb-3 mb-md-0">
-                  <select id="filter_bar" class="form-select">
-                    <option value="Activo" class="text-capitalize">Activos</option>
-                    <option value="Inactivo" class="text-capitalize">Inactivos</option>
-                    <option value="">Todos</option>
-                  </select>
-                </div>
-                <div class="dataTables_length" id="DataTables_Table_0_length"><label><select
-                      name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-select">
-                      <option value="">Mostrar</option>
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                    </select></label></div>
-              </div>
-            </div>
 
-            <div class="table-responsive">
-              <table id="clientes_table" class="invoice-list-table table border-top dataTable no-footer dtr-column my-2"
-                     aria-describedby="DataTables_Table_0_info">
-                <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Dui</th>
-                  <th>Cliente</th>
-                  <th>Dirección</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody id="clientes_tbody">
-                  @php $contador = 1; @endphp
+                <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
+                  <div class="invoice_status mb-3 mb-md-0">
+                    <select id="estado" name="estado" class="form-select">
+                      <option value="Activo" {{ session('estado_filtro') === 'Activo' ? 'selected' : '' }} class="text-capitalize">Activos</option>
+                      <option value="Inactivo" {{ session('estado_filtro') === 'Inactivo' ? 'selected' : '' }} class="text-capitalize">Inactivos</option>
+                      <option value="Todos" {{ session('estado_filtro') === 'Todos' ? 'selected' : '' }}>Todos</option>
+                    </select>
+                  </div>
+                  <div class="dataTables_length" ><label>
+                      <select id="mostrar" name="mostrar" class="form-select">
+                        <option value="">Mostrar</option>
+                        <option value="10" {{ session('mostrar') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ session('mostrar') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ session('mostrar') == 50 ? 'selected' : '' }}>50</option>
+                      </select></label></div>
+                </div>
+              </div>
+
+              <div id="table_div">
+                <table id="clientes_table" class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
+                  <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Dui</th>
+                    <th>Cliente</th>
+                    <th>Dirección</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                  </thead>
+                  <tbody id="clientes_tbody">
+                  @php
+                    $registrosPerPage = 10;
+                    $contador = ($clientes->currentPage()-1) * $registrosPerPage + 1;
+                  @endphp
                   @foreach($clientes as $cliente)
                     <tr>
                       <td>{{$contador}}</td>
@@ -183,85 +187,20 @@
                         </div>
                       </td>
                     </tr>
-                  @php $contador = $contador +1; @endphp
+                    @php $contador++; @endphp
                   @endforeach
                   <tr class='noSearch' style="display:none; text-align: center">
                     <td colspan="6"></td>
                   </tr>
-                  <!--
+                  </tbody>
+                </table>
 
-                  <tr>
-                    <td>5</td>
-                    <td>01245687-8</td>
-                    <td>Mario Ernesto Zelaya Lainez</td>
-                    <td>Col San Ramón Pje 3 Lt 44, Quezaltepeque</td>
-                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
-                    <td>Acciones</td>
-                  </tr>
+                <div class="row">
+                  <div class="col-sm-12 col-md-6"></div>
+                  <div class="col-sm-12 col-md-6 d-flex justify-content-end">
+                    {{ $clientes->appends(['estado' => session('estado_filtro'), 'mostrar' => session('mostrar')])->links() }}
 
-                  <tr>
-                    <td>6</td>
-                    <td>08547485-9</td>
-                    <td>Kevin Eduardo Ceron Lopez</td>
-                    <td>Urb San Antonio Las Palmeras 15 Cl Pte Y10 Av Nte Ptl Baja Plaza Salomé</td>
-                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
-                    <td>Acciones</td>
-                  </tr>
-
-                  <tr>
-                    <td>7</td>
-                    <td>04579685-8</td>
-                    <td>Luis Fernando Vaquerano Ramos</td>
-                    <td>Bo Candelaria 1 Av Sur No 7, Usulutan</td>
-                    <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
-                    <td>Acciones</td>
-                  </tr>
-
-                  <tr>
-                    <td>8</td>
-                    <td>01204578-8</td>
-                    <td>Julio Antonio Torres Rodriguez</td>
-                    <td>Col. Las Delicias Final 4° Cl. Pte. N° 23-B</td>
-                    <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
-                    <td>Acciones</td>
-                  </tr>
-
-                  <tr>
-                    <td>9</td>
-                    <td>08754986-5</td>
-                    <td>Marta Candelaria Ortiz Gomez</td>
-                    <td>7 Av Sur No 219 Loc 4</td>
-                    <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
-                    <td>Acciones</td>
-                  </tr>
-
-                  <tr>
-                    <td>10</td>
-                    <td>06543212-5</td>
-                    <td>Ivania Elizabeth Lainez Cruz</td>
-                    <td>Blvd Constitución Col Escalón Y 1 Cl Pte No 3538</td>
-                    <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
-                    <td>Acciones</td>
-                  </tr>
-
-                  <tr class='noSearch' style="display:none; text-align: center">
-                    <td colspan="6"></td>
-                  </tr>
-                  -->
-
-                </tbody>
-              </table>
-            </div>
-
-            <div class="row">
-              <div class="col-sm-12 col-md-6">
-                <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Mostrar 1 de 10 de 50 clientes
-                </div>
-              </div>
-              <div class="col-sm-12 col-md-6 d-flex justify-content-end">
-
-
-                <!--<div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                    <!--<div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                   <ul class="pagination">
                     <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous"><a
                         aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous"
@@ -287,12 +226,13 @@
                   </ul>
                 </div>-->
 
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
+      </form>
 
     </div>
 
@@ -361,16 +301,26 @@
 
     /* Filtro por estado */
     $(document).ready(function() {
+      $('#estado').on('change', function() {
+        $(this).closest('form').submit();
+      })
+
+      $('#mostrar').on('change', function() {
+        $(this).closest('form').submit();
+      })
+    })
+    /*$(document).ready(function() {
       $("#filter_bar").on("change", function() {
         let estado = $(this).val()
+        let token = $('#token').val()
 
         $.ajax({
-          url: "{{ route('clientes.index') }}",
-          type: "GET",
-          data: {'estado' : estado},
+          url: "",
+          type: "post",
+          data: {'estado' : estado, "_token": token},
           success: function (data) {
-            //console.log(data)
-            let clientes = data.clientes
+            console.log(data)
+            /*let clientes = data.clientes
             let html = ''
 
             if (clientes.length > 0) {
@@ -416,18 +366,20 @@
                           </tr>\
                           <tr class="noSearch" style="display:none; text-align: center">\
                             <td colspan="6"></td>\
-                          </tr>'
-              }
-            }else {
-              html += '<tr style="text-align: center">\
-                        <td colspan="6">No se han encontrado clientes</td>\
-                      </tr>'
-            }
+                          </tr>'*/
+                //$('#table_div').html('');
+                //$('table_div').html(data)
 
-            $('#clientes_tbody').html(html)
-          }
+            //}else {
+              //html += '<tr style="text-align: center">\
+                //        <td colspan="6">No se han encontrado clientes</td>\
+                  //    </tr>'
+            //}
+
+          //  $('#clientes_tbody').html(html)
+          /*}
         })
       })
-    })
+    })*/
   </script>
 @endsection
