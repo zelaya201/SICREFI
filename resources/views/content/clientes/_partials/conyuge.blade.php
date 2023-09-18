@@ -55,24 +55,16 @@
             </div>
 
             <div class="col-md-6 mb-3">
-              <label class="form-label" for="fech_nac_conyuge">Fecha de nacimiento (*)</label>
-              <input type="date" class="form-control" name="fech_nac_conyuge" id="fech_nac_conyuge" value="">
-              <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                <div data-field="name" data-validator="notEmpty" id="fech_nac_conyuge_error"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
               <label class="form-label" for="ocupacion_conyuge">Ocupación (*)</label>
               <input type="text" class="form-control" name="ocupacion_conyuge" id="ocupacion_conyuge">
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="ocupacion_conyuge_error"></div>
               </div>
             </div>
+          </div>
 
-            <div class="col-md-6 mb-3">
+          <div class="row">
+            <div class="col-md-12 mb-3">
               <label class="form-label" for="dir_conyuge">Dirección (*)</label>
               <textarea class="form-control" name="dir_conyuge" id="dir_conyuge" rows="2"></textarea>
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
@@ -93,7 +85,7 @@
         </div>
         <div class="card-body">
           <div class="col-md-12">
-            <label class="form-label d-flex align-items-center justify-content-between" for="input-nom-socio">Teléfonos:
+            <label class="form-label d-flex align-items-center justify-content-between">Teléfonos:
               (*)
               <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
                       data-bs-target="#telefono-modal-conyuge">
@@ -104,13 +96,14 @@
             <table class="table table-bordered border-top table-hover">
               <thead>
               <tr>
+                <th>#</th>
                 <th>Teléfono</th>
                 <th></th>
               </tr>
               </thead>
-              <tbody id="lista-telefonos">
+              <tbody id="lista-telefonos-conyuge">
               <tr>
-                <td colspan="2">No hay resultados</td>
+                <td colspan="3">No hay resultados</td>
               </tr>
               </tbody>
             </table>
@@ -120,3 +113,41 @@
     </div>
   </div>
 </div>
+
+
+<form action="{{ route('telsConyuge.store') }}" method="post" autocomplete="off" enctype="multipart/form-data" id="form-telsconyuge">
+
+<!-- Modal agregar telefono conyuge -->
+<div class="modal fade" id="telefono-modal-conyuge" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white text-center">Nuevo teléfono</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="tel_conyuge" class="form-label">Teléfono (*)</label>
+            <input type="text" id="tel_conyuge" name="tel_conyuge" class="form-control" placeholder="00000000">
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty" id="mensaje-telefono-conyuge"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 text-center">
+          <button type="button" class="btn btn-primary me-sm-3 me-1 mt-3" id="btn-agregar-telefono-conyuge"><span
+              class="tf-icons bx bx-plus"></span>
+            Agregar
+          </button>
+          <button type="button" class="btn btn-label-secondary mt-3" data-bs-dismiss="modal"
+                  aria-label="Close">Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form>

@@ -6,8 +6,8 @@
 @extends('layouts/contentNavbarLayout')
 @section('title', 'Nuevo Cliente')
 @section('content')
-  {{--  <form action="{{ route('clientes.store') }}" method="post" autocomplete="off" enctype="multipart/form-data" id="form-cliente">--}}
-  {{--    @csrf --}}{{-- Security --}}
+  <form action="{{ route('clientes.store') }}" method="post" autocomplete="off" enctype="multipart/form-data" id="form-cliente">
+
 
   <div class="d-flex align-items-center justify-content-between py-3">
     <div class="flex-grow-1">
@@ -126,11 +126,7 @@
 
     @include('content.clientes._partials.bienes') {{-- Información de los bienes --}}
   </div>
-  {{--  </form>--}}
-
-  @include('content.clientes._partials.modals') {{-- Modal para agregar teléfonos --}}
-
-
+  </form>
 
   {{-- Off canvas de Ayuda--}}
   {{--<div class="mt-3">--}}
@@ -153,11 +149,17 @@
 @endsection
 
 @section('page-script')
-  <script src="{{ asset('assets/js/cliente.js') }}"></script>
+
 
   {{-- Guardar Cliente y todos sus datos --}}
   <script>
     $(document).ready(function () {
+
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
 
       /** EVENTOS DE BOTONES CLIENTE **/
       $('#btn-guardar-cliente').click(function (e) {
@@ -201,6 +203,21 @@
         $('#titulo-modal-negocio').html('Nuevo Negocio');
         $('#form-negocio').trigger('reset');
         $('#btn-agregar-negocio').html('Agregar');
+        $('#lista-telefonos-negocio').html('<tr><td colspan="3">No hay resultados</td></tr>');
+
+        $.ajax({
+          url: '{{ route("telsNegocio.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: 'opcion=limpiar',
+          success: function (data) {
+            /* Mensaje de exito */
+            mostrarTelefonosNegocio(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
       });
 
       $('#btn-agregar-negocio').click(function (e) {
@@ -272,6 +289,7 @@
               /* Mensaje de exito */
               $('#modal-ref').modal('hide');
               $('#form-ref').trigger('reset');
+
               mostrarRef(data);
             },
             error: function (xhr) {
@@ -298,13 +316,28 @@
             }
           });
         }
-      })
+      });
 
       $('#btn-nuevo-ref').click(function (e) {
         e.preventDefault();
         $('#titulo-modal-ref').html('Nueva Referencia');
         $('#form-ref').trigger('reset');
         $('#btn-agregar-ref').html('Agregar');
+        $('#lista-telefonos-ref').html('<tr><td colspan="3">No hay resultados</td></tr>');
+
+        $.ajax({
+          url: '{{ route("telsReferencia.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: 'opcion=limpiar',
+          success: function (data) {
+            /* Mensaje de exito */
+            mostrarTelefonosReferencia(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
       });
       /** FIN EVENTOS DE BOTONES REFERENCIA **/
 
@@ -361,8 +394,111 @@
             }
           });
         }
-      })
+      });
       /** FIN EVENTOS DE BOTONES BIEN **/
+
+      /** EVENTOS DE BOTONES TELEFONO CLIENTE **/
+      $('#btn-agregar-telefono-cliente').click(function (e) {
+        e.preventDefault();
+
+        let datos = 'tel_cliente=' + $('#tel_cliente').val();
+        datos += '&opcion=agregar';
+        datos += '&session=true';
+
+        $.ajax({
+          url: '{{ route("telsCliente.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: datos,
+          success: function (data) {
+            /* Mensaje de exito */
+            $('#telefono-modal-cliente').modal('hide');
+            $('#tel_cliente').val('');
+            mostrarTelefonosCliente(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
+      });
+      /** FIN EVENTOS DE BOTONES TELEFONO CLIENTE **/
+
+      /** EVENTOS DE BOTONES TELEFONO CONYUGE **/
+      $('#btn-agregar-telefono-conyuge').click(function (e) {
+        e.preventDefault();
+
+        var datos = $('#form-telsconyuge').serialize();
+        datos += '&opcion=agregar';
+        datos += '&session=true';
+
+        $.ajax({
+          url: '{{ route("telsConyuge.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: datos,
+          success: function (data) {
+            /* Mensaje de exito */
+            $('#telefono-modal-conyuge').modal('hide');
+            $('#form-telsconyuge').trigger('reset');
+            mostrarTelefonosConyuge(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
+      });
+      /** FIN EVENTOS DE BOTONES TELEFONO CONYUGE **/
+
+      /** EVENTOS DE BOTONES TELEFONO NEGOCIO **/
+      $('#btn-agregar-telefono-negocio').click(function (e) {
+        e.preventDefault();
+
+        let datos = 'tel_negocio=' + $('#tel_negocio').val();
+        datos += '&opcion=agregar';
+        datos += '&session=true';
+
+        $.ajax({
+          url: '{{ route("telsNegocio.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: datos,
+          success: function (data) {
+            /* Mensaje de exito */
+            $('#tel_negocio').val('');
+            mostrarTelefonosNegocio(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
+      });
+      /** FIN EVENTOS DE BOTONES TELEFONO NEGOCIO **/
+
+      /** EVENTOS DE BOTONES TELEFONO REFERENCIA **/
+      $('#btn-agregar-telefono-referencias').click(function (e) {
+        e.preventDefault();
+
+        let datos = 'tel_ref=' + $('#tel_ref').val();
+        datos += '&opcion=agregar';
+        datos += '&session=true';
+
+        $.ajax({
+          url: '{{ route("telsReferencia.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: datos,
+          success: function (data) {
+            /* Mensaje de exito */
+            $('#tel_ref').val('');
+            mostrarTelefonosReferencia(data);
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+          }
+        });
+      });
+      /** FIN EVENTOS DE BOTONES TELEFONO REFERENCIA **/
+
     });
 
     /** FUNCIONES DE NEGOCIO **/
@@ -421,6 +557,8 @@
           $('#gasto_impuesto_negocio').val(data.gasto_impuesto_negocio);
           $('#gasto_credito_negocio').val(data.gasto_credito_negocio);
           $('#gasto_otro_negocio').val(data.gasto_otro_negocio);
+
+          mostrarTelefonosNegocio(data.telefonos_negocio);
         },
         error: function (xhr) {
           /* Mensajes de error */
@@ -517,6 +655,8 @@
           $('#ocupacion_ref').val(data.ocupacion_ref);
           $('#parentesco_ref').val(data.parentesco_ref);
           $('#dir_ref').val(data.dir_ref);
+
+          mostrarTelefonosReferencia(data.telefonos_ref);
         },
         error: function (xhr) {
           /* Mensajes de error */
@@ -651,6 +791,193 @@
       $('#tabla-bien').html(html);
     }
     /** FIN FUNCIONES DE BIEN **/
+
+
+    /** FUNCIONES DE TELEFONO CLIENTE **/
+    function eliminarTelefonoCliente(id) {
+      var datos = $('#form-telscliente').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("telsCliente.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#telefono-modal-cliente').modal('hide');
+          $('#form-telscliente').trigger('reset');
+          mostrarTelefonosCliente(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarTelefonosCliente(data){
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="ref_' + key + '">';
+        html += '<td>' + key + '</td>';
+        html += '<td>' + value.tel_cliente + '</td>';
+        html += "<td>" +
+          "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoCliente(" + key + ")'>" +
+          "<i class='tf-icons bx bx-trash'></i>" +
+          "</button>" +
+          "</td>";
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="3">No hay resultados</td></tr>';
+      }
+
+      $('#lista-telefonos-cliente').html(html);
+    }
+    /** FIN FUNCIONES DE TELEFONO CLIENTE **/
+
+    /** FUNCIONES DE TELEFONO CONYUGE **/
+    function eliminarTelefonoConyuge(id) {
+      var datos = $('#form-telsconyuge').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("telsConyuge.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#telefono-modal-conyuge').modal('hide');
+          $('#form-telsconyuge').trigger('reset');
+          mostrarTelefonosConyuge(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarTelefonosConyuge(data){
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="ref_' + key + '">';
+        html += '<td>' + key + '</td>';
+        html += '<td>' + value.tel_conyuge + '</td>';
+        html += "<td>" +
+          "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoConyuge(" + key + ")'>" +
+          "<i class='tf-icons bx bx-trash'></i>" +
+          "</button>" +
+          "</td>";
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="3">No hay resultados</td></tr>';
+      }
+
+      $('#lista-telefonos-conyuge').html(html);
+    }
+    /** FIN FUNCIONES DE TELEFONO CONYUGE **/
+
+    /** FUNCIONES DE TELEFONO NEGOCIO **/
+    function eliminarTelefonoNegocio(id) {
+      var datos = $('#form-telsnegocio').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("telsNegocio.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#form-telsnegocio').trigger('reset');
+          mostrarTelefonosNegocio(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarTelefonosNegocio(data){
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="ref_' + key + '">';
+        html += '<td>' + key + '</td>';
+        html += '<td>' + value.tel_negocio + '</td>';
+        html += "<td>" +
+          "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoNegocio(" + key + ")'>" +
+          "<i class='tf-icons bx bx-trash'></i>" +
+          "</button>" +
+          "</td>";
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="3">No hay resultados</td></tr>';
+      }
+
+      $('#lista-telefonos-negocio').html(html);
+    }
+    /** FIN FUNCIONES DE TELEFONO NEGOCIO **/
+
+    /** FUNCIONES DE TELEFONO REFERENCIA **/
+    function eliminarTelefonoReferencia(id) {
+      var datos = $('#form-telsreferencia').serialize();
+      datos += '&opcion=eliminar';
+      datos += '&id=' + id;
+      datos += '&session=true';
+
+      $.ajax({
+        url: '{{ route("telsReferencia.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#form-telsreferencia').trigger('reset');
+          mostrarTelefonosReferencia(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarTelefonosReferencia(data){
+      var html = "";
+
+      $.each(data, function (key, value) {
+        html += '<tr id="ref_' + key + '">';
+        html += '<td>' + key + '</td>';
+        html += '<td>' + value.tel_ref + '</td>';
+        html += "<td>" +
+          "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoReferencia(" + key + ")'>" +
+          "<i class='tf-icons bx bx-trash'></i>" +
+          "</button>" +
+          "</td>";
+        html += '</tr>';
+      });
+
+      if (data.length === 0){
+        html += '<tr><td colspan="3">No hay resultados</td></tr>';
+      }
+
+      $('#lista-telefonos-ref').html(html);
+    }
+    /** FIN FUNCIONES DE TELEFONO REFERENCIA **/
 
   </script>
 @endsection

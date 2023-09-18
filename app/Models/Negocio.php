@@ -9,6 +9,8 @@ class Negocio extends Model
 {
     use HasFactory;
 
+    protected $table = 'negocio'; // Nombre de la tabla en la base de datos.
+
     public function telefonos() {
       return $this->hasMany(TelNegocio::class, 'id_negocio');
     }
