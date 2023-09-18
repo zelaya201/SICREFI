@@ -15,7 +15,8 @@
         <div class="user-profile-info">
           <h4 class="fw-bold m-0">
             <span class="text-muted fw-light">Clientes /</span> Negocios
-            <span class="text-muted fw-light fw">/ {{ $cliente->dui_cliente }} - {{ $cliente->primer_nom_cliente . ' ' . $cliente->primer_ape_cliente }}</span>
+            <span
+              class="text-muted fw-light fw">/ {{ $cliente->dui_cliente }} - {{ $cliente->primer_nom_cliente . ' ' . $cliente->primer_ape_cliente }}</span>
 
           </h4>
         </div>
@@ -119,6 +120,7 @@
                       <th>Nombre</th>
                       <th>Dirección</th>
                       <th>Tiempo de operación</th>
+                      <th>Estado</th>
                       <th>Acciones</th>
                     </tr>
                     </thead>
@@ -130,18 +132,36 @@
                         <td>{{ $negocio->nom_negocio }}</td>
                         <td>{{ $negocio->dir_negocio }}</td>
                         <td>{{ $negocio->tiempo_negocio }}</td>
+                        <td><span
+                            class="badge rounded-pill {{ ($negocio->estado_negocio == 'Activo') ? 'bg-label-success' : 'bg-label-danger' }} ">{{ $negocio->estado_negocio }}</span>
+                        </td>
                         <td>
+
                           <div class="dropdown-icon-demo">
                             <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm hide-arrow"
                                data-bs-toggle="dropdown" aria-expanded="false">
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </a>
-                            <div class="dropdown-menu" style="">
-                              <a class="dropdown-item" href="javascript:void(0);" onclick="obtenerNegocio({{ $negocio->id_negocio }})"><i class="bx bx-edit-alt me-1"></i>
-                                Editar</a>
-                              <div class="dropdown-divider"></div>
-                              <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminarNegocio({{ $negocio->id_negocio }})"><i
-                                  class="bx bx-trash me-1" ></i> Borrar</a>
+                            <div class="dropdown-menu">
+                              @if($negocio->estado_negocio == 'Activo')
+                                <a class="dropdown-item" href="javascript:void(0);"
+                                   onclick="verNegocio({{ $negocio->id_negocio }})"><i class="bx bx-show me-1"></i>
+                                  Ver</a>
+                                <a class="dropdown-item" href="javascript:void(0);"
+                                   onclick="obtenerNegocio({{ $negocio->id_negocio }})"><i
+                                    class="bx bx-edit-alt me-1"></i>
+                                  Editar</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="javascript:void(0);"
+                                   onclick="eliminarNegocio({{ $negocio->id_negocio }})"><i
+                                    class="bx bx-trash me-1"></i> Borrar</a>
+
+                              @else
+                                <a class="dropdown-item" href="javascript:void(0);"
+                                   onclick="darAltaNegocio({{ $negocio->id_negocio }})">
+                                  <i class='bx bxs-upvote' ></i> Dar de alta
+                                </a>
+                              @endif
                             </div>
                           </div>
                         </td>
@@ -151,7 +171,7 @@
 
                     @if(count($negocios) <= 0)
                       <tr>
-                        <td colspan="5">No hay resultados</td>
+                        <td colspan="6">No hay resultados</td>
                       </tr>
                     @endif
 
@@ -194,7 +214,8 @@
     </div>
 
     <!-- Modal agregar negocio -->
-    <form action="{{ route('negocios.store') }}" method="post" autocomplete="off" enctype="multipart/form-data" id="form-negocio">
+    <form action="{{ route('negocios.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
+          id="form-negocio">
 
       <div class="modal fade" data-bs-backdrop="static" id="modal-negocio" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
@@ -316,7 +337,7 @@
                   </div>
                   <div>
                     <div class="col-md-12">
-                      <label class="form-label" for="tel_negocio">Teléfono (*)</label>
+                      <label class="form-label" for="tel_negocio" id="label-telefono-negocio">Teléfono (*)</label>
                       <div class="input-group mb-3">
                         <input type="text" class="form-control" id="tel_negocio" name="tel_negocio"
                                placeholder="00000000"/>
@@ -326,7 +347,7 @@
                       </div>
 
                       <table class="table table-bordered border-top table-hover">
-                        <thead>
+                        <thead id="tabla-head-negocio">
                         <tr>
                           <th>#</th>
                           <th>Teléfono</th>
@@ -381,20 +402,29 @@
         $('#titulo-modal-negocio').html('Nuevo negocio');
         $('#btn-agregar-negocio').html('Agregar');
         $('#form-negocio').trigger('reset');
+
+        // Regresar Formulario al estado original
+        $('#form-negocio input').removeClass('d-none').removeAttr('disabled');
+        $('#form-negocio label').removeClass('d-none');
+        $('#form-negocio textarea').removeClass('d-none').removeAttr('disabled');
+        $('#tabla-head-negocio tr th:nth-child(3)').removeClass('d-none');
+        $('#form-negocio button').removeClass('d-none');
+
+
         $('#id_negocio').val('');
         $('#lista-telefonos-negocio').html('<tr><td colspan="3">No hay resultados</td></tr>');
       });
 
-      $('#btn-agregar-negocio').click(function (){
+      $('#btn-agregar-negocio').click(function () {
 
         let data = $('#form-negocio').serialize();
         let id_cliente = $('#id_cliente').val();
         data += '&id_cliente=' + id_cliente;
 
-        if($('#id_negocio').val() !== ''){
+        if ($('#id_negocio').val() !== '') {
           data += '&id_negocio=' + $('#id_negocio').val();
           data += '&opcion=actualizar';
-        }else{
+        } else {
           data += '&opcion=agregar';
         }
 
@@ -443,7 +473,7 @@
         let datos = 'tel_negocio=' + $('#tel_negocio').val();
         datos += '&id_negocio=' + $('#id_negocio').val();
 
-        if($('#id_negocio').val() === ''){
+        if ($('#id_negocio').val() === '') {
           datos += '&session=true';
         }
 
@@ -468,7 +498,7 @@
 
     });
 
-    function obtenerNegocio(id_cliente){
+    function obtenerNegocio(id_cliente) {
 
       $.ajax({
         url: '{{ route("negocios.edit", ":id_cliente") }}'.replace(':id_cliente', id_cliente),
@@ -504,7 +534,55 @@
       });
     }
 
-    function mostrarTelefonosNegocio(data){
+    function verNegocio(id_cliente) {
+
+      $.ajax({
+        url: '{{ route("negocios.edit", ":id_cliente") }}'.replace(':id_cliente', id_cliente),
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+          /* Mensaje de exito */
+          $('#titulo-modal-negocio').html('Ver Negocio');
+
+          $('#modal-negocio').modal('show');
+          $('#form-negocio').trigger('reset');
+          $('#btn-agregar-negocio').addClass('d-none');
+
+          $('#form-negocio input').attr('disabled', 'disabled');
+          $('#form-negocio textarea').attr('disabled', 'disabled');
+          $('#btn-agregar-telefono-negocio').addClass('d-none');
+          $('#tel_negocio').addClass('d-none');
+          $('#label-telefono-negocio').addClass('d-none');
+
+          mostrarTelefonosNegocio(data.tel_negocio);
+
+          // Eliminar tercera columna de la tabla
+          $('#lista-telefonos-negocio tr td:nth-child(3)').addClass('d-none');
+          $('#tabla-head-negocio tr th:nth-child(3)').addClass('d-none');
+
+          $('#id_negocio').val(data.negocio.id_negocio);
+          $('#nom_negocio').val(data.negocio.nom_negocio);
+          $('#dir_negocio').val(data.negocio.dir_negocio);
+          $('#tiempo_negocio').val(data.negocio.tiempo_negocio);
+          $('#buena_venta_negocio').val(data.negocio.buena_venta_negocio);
+          $('#mala_venta_negocio').val(data.negocio.mala_venta_negocio);
+          $('#ganancia_diaria_negocio').val(data.negocio.ganancia_diaria_negocio);
+          $('#inversion_diaria_negocio').val(data.negocio.inversion_diaria_negocio);
+          $('#gasto_emp_negocio').val(data.negocio.gasto_emp_negocio);
+          $('#gasto_alquiler_negocio').val(data.negocio.gasto_alquiler_negocio);
+          $('#gasto_impuesto_negocio').val(data.negocio.gasto_impuesto_negocio);
+          $('#gasto_credito_negocio').val(data.negocio.gasto_credito_negocio);
+          $('#gasto_otro_negocio').val(data.negocio.gasto_otro_negocio);
+
+
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarTelefonosNegocio(data) {
       var html = "";
 
       let i = 1;
@@ -524,7 +602,7 @@
         i++;
       });
 
-      if (data.length === 0){
+      if (data.length === 0) {
         html += '<tr><td colspan="3">No hay resultados</td></tr>';
       }
 
@@ -534,12 +612,10 @@
     function eliminarTelefonoNegocio(id) {
       let datos = 'id_tel_negocio=' + id;
       datos += '&id_negocio=' + $('#id_negocio').val();
-      if($('#id_negocio').val() === ''){
+      if ($('#id_negocio').val() === '') {
         datos += '&session=true';
       }
       datos += '&opcion=eliminar';
-
-
 
       $.ajax({
         url: '{{ route("telsNegocio.store") }}',
@@ -559,6 +635,27 @@
     function eliminarNegocio(id) {
       let datos = 'id_negocio=' + id;
       datos += '&opcion=eliminar';
+
+      $.ajax({
+        url: '{{ route("negocios.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          alert(data.success);
+          // Recargar pagina
+          location.reload();
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function darAltaNegocio(id){
+      let datos = 'id_negocio=' + id;
+      datos += '&opcion=darAlta';
 
       $.ajax({
         url: '{{ route("negocios.store") }}',

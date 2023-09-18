@@ -101,9 +101,10 @@ class NegocioController extends Controller
         $request->session()->put('negocios', $array);
       }else{
         /* Eliminar Negocio de Base de Datos */
-        $negocio = Negocio::where('id_negocio', $request->input('id_negocio'))->delete();
+        $negocio = Negocio::findOrfail($request->input('id_negocio'));
+        $negocio->estado_negocio = 'Inactivo';
 
-        if($negocio){
+        if($negocio->save()) {
           return ['success' => true, 'message' => 'Negocio eliminado correctamente'];
         }
       }
@@ -151,6 +152,13 @@ class NegocioController extends Controller
         if($negocio->save()) {
           return ['success' => true, 'message' => 'Negocio actualizado correctamente'];
         }
+      }
+    }else if($request->input('opcion') == 'darAlta') {
+      $negocio = Negocio::findOrfail($request->input('id_negocio'));
+      $negocio->estado_negocio = 'Activo';
+
+      if($negocio->save()) {
+        return ['success' => true, 'message' => 'Negocio restaurado correctamente'];
       }
     }
 
