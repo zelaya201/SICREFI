@@ -123,9 +123,10 @@
                     </tr>
                     </thead>
                     <tbody id="tabla-negocios">
+                    @php($i = 1)
                     @foreach($negocios as $negocio)
                       <tr>
-                        <td>{{ $negocio->id_negocio }}</td>
+                        <td>{{ $i }}</td>
                         <td>{{ $negocio->nom_negocio }}</td>
                         <td>{{ $negocio->dir_negocio }}</td>
                         <td>{{ $negocio->tiempo_negocio }}</td>
@@ -145,7 +146,15 @@
                           </div>
                         </td>
                       </tr>
+                      @php($i++)
                     @endforeach
+
+                    @if(count($negocios) <= 0)
+                      <tr>
+                        <td colspan="5">No hay resultados</td>
+                      </tr>
+                    @endif
+
                     </tbody>
                   </table>
                 </div>
@@ -381,7 +390,13 @@
         let data = $('#form-negocio').serialize();
         let id_cliente = $('#id_cliente').val();
         data += '&id_cliente=' + id_cliente;
-        data += '&opcion=agregar';
+
+        if($('#id_negocio').val() !== ''){
+          data += '&id_negocio=' + $('#id_negocio').val();
+          data += '&opcion=actualizar';
+        }else{
+          data += '&opcion=agregar';
+        }
 
         $.ajax({
           url: "{{ route('negocios.store') }}",
@@ -426,8 +441,13 @@
         e.preventDefault();
 
         let datos = 'tel_negocio=' + $('#tel_negocio').val();
+        datos += '&id_negocio=' + $('#id_negocio').val();
+
+        if($('#id_negocio').val() === ''){
+          datos += '&session=true';
+        }
+
         datos += '&opcion=agregar';
-        datos += '&session=true';
 
         $.ajax({
           url: '{{ route("telsNegocio.store") }}',
@@ -487,16 +507,21 @@
     function mostrarTelefonosNegocio(data){
       var html = "";
 
+      let i = 1;
+
       $.each(data, function (key, value) {
         html += '<tr id="ref_' + key + '">';
-        html += '<td>' + value.id_tel_negocio + '</td>';
+        html += '<td>' + i + '</td>';
         html += '<td>' + value.tel_negocio + '</td>';
         html += "<td>" +
           "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoNegocio(" + value.id_tel_negocio + ")'>" +
           "<i class='tf-icons bx bx-trash'></i>" +
           "</button>" +
           "</td>";
+
         html += '</tr>';
+
+        i++;
       });
 
       if (data.length === 0){
@@ -507,19 +532,47 @@
     }
 
     function eliminarTelefonoNegocio(id) {
+      let datos = 'id_tel_negocio=' + id;
+      datos += '&id_negocio=' + $('#id_negocio').val();
+      if($('#id_negocio').val() === ''){
+        datos += '&session=true';
+      }
+      datos += '&opcion=eliminar';
+
+
 
       $.ajax({
-        url: '{{ route("telsNegocio.destroy", 'id_tel_negocio') }}'.replace('id_tel_negocio', id),
-        type: 'get',
+        url: '{{ route("telsNegocio.store") }}',
+        type: 'post',
         dataType: 'json',
+        data: datos,
         success: function (data) {
           /* Mensaje de exito */
-          $('#form-telsnegocio').trigger('reset');
           mostrarTelefonosNegocio(data);
         },
         error: function (xhr) {
           /* Mensajes de error */
-          console.log(xhr);
+        }
+      });
+    }
+
+    function eliminarNegocio(id) {
+      let datos = 'id_negocio=' + id;
+      datos += '&opcion=eliminar';
+
+      $.ajax({
+        url: '{{ route("negocios.store") }}',
+        type: 'post',
+        dataType: 'json',
+        data: datos,
+        success: function (data) {
+          /* Mensaje de exito */
+          alert(data.success);
+          // Recargar pagina
+          location.reload();
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
         }
       });
     }

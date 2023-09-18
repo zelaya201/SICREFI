@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Negocio;
 use App\Models\TelNegocio;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
 class NegocioController extends Controller
@@ -13,7 +14,7 @@ class NegocioController extends Controller
   /**
    * Display a listing of the resource.
    *
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
   public function index()
   {
@@ -23,7 +24,7 @@ class NegocioController extends Controller
   /**
    * Show the form for creating a new resource.
    *
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
   public function create()
   {
@@ -34,7 +35,7 @@ class NegocioController extends Controller
    * Store a newly created resource in storage.
    *
    * @param \Illuminate\Http\Request $request
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
   public function store(Request $request)
   {
@@ -74,19 +75,7 @@ class NegocioController extends Controller
       }else{
         /* Agregar Negocio a Base de Datos */
         $negocio = new Negocio();
-        $negocio->id_cliente = $request->input('id_cliente');
-        $negocio->nom_negocio = $request->input('nom_negocio');
-        $negocio->tiempo_negocio = $request->input('tiempo_negocio');
-        $negocio->dir_negocio = $request->input('dir_negocio');
-        $negocio->buena_venta_negocio = $request->input('buena_venta_negocio');
-        $negocio->mala_venta_negocio = $request->input('mala_venta_negocio');
-        $negocio->ganancia_diaria_negocio = $request->input('ganancia_diaria_negocio');
-        $negocio->inversion_diaria_negocio = $request->input('inversion_diaria_negocio');
-        $negocio->gasto_emp_negocio = $request->input('gasto_emp_negocio');
-        $negocio->gasto_alquiler_negocio = $request->input('gasto_alquiler_negocio');
-        $negocio->gasto_impuesto_negocio = $request->input('gasto_impuesto_negocio');
-        $negocio->gasto_credito_negocio = $request->input('gasto_credito_negocio');
-        $negocio->gasto_otro_negocio = $request->input('gasto_otro_negocio');
+        $negocio->fill($request->input());
 
         if($negocio->save()){
           $tel_negocios = $request->session()->get('telefonos_negocio_temporal');
@@ -109,6 +98,13 @@ class NegocioController extends Controller
         $array = $request->session()->get('negocios');
         $array = Arr::except($array, $request->input('id'));
         $request->session()->put('negocios', $array);
+      }else{
+        /* Eliminar Negocio de Base de Datos */
+        $negocio = Negocio::where('id_negocio', $request->input('id_negocio'))->delete();
+
+        if($negocio){
+          return ['success' => true, 'message' => 'Negocio eliminado correctamente'];
+        }
       }
     }else if($request->input('opcion') == 'obtener'){
       if($request->input('session') == 'true') {
@@ -150,7 +146,13 @@ class NegocioController extends Controller
         $request->session()->put('negocios', $array);
       }else{
         /* Actualizar Negocio de Base de Datos */
+        $negocio = Negocio::findOrfail($request->input('id_negocio'));
 
+        $negocio->fill($request->input());
+
+        if($negocio->save()) {
+          return ['success' => true, 'message' => 'Negocio actualizado correctamente'];
+        }
       }
     }
 
@@ -161,7 +163,7 @@ class NegocioController extends Controller
    * Display the specified resource.
    *
    * @param int $id
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
   public function show($id)
   {
@@ -174,7 +176,7 @@ class NegocioController extends Controller
    * Show the form for editing the specified resource.
    *
    * @param int $id
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
   public function edit($id)
   {
@@ -189,7 +191,7 @@ class NegocioController extends Controller
    *
    * @param \Illuminate\Http\Request $request
    * @param int $id
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
   public function update(Request $request, $id)
   {
@@ -200,11 +202,11 @@ class NegocioController extends Controller
    * Remove the specified resource from storage.
    *
    * @param int $id
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
   public function destroy($id)
   {
-    //
+
   }
 
 }

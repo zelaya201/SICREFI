@@ -892,7 +892,7 @@
     function eliminarTelefonoNegocio(id) {
       var datos = $('#form-telsnegocio').serialize();
       datos += '&opcion=eliminar';
-      datos += '&id=' + id;
+      datos += '&id_tel_negocio=' + id;
       datos += '&session=true';
 
       $.ajax({

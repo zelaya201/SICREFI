@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TelNegocio;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
 class TelefonoNegocioController extends Controller
@@ -11,18 +12,18 @@ class TelefonoNegocioController extends Controller
     /**
      * Show the form for creating the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
-        abort(404);
+
     }
 
     /**
      * Store the newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -39,19 +40,39 @@ class TelefonoNegocioController extends Controller
           $array = Arr::add($array,
             $size,
             [
-              'id' => $size,
+              'id_tel_negocio' => $size,
               'tel_negocio' => $request->input('tel_negocio')
             ]
           );
 
           $request->session()->put('telefonos_negocio_temporal', $array);
+        }else{
+          $telefono_negocio = new TelNegocio();
+          $telefono_negocio->id_negocio = $request->input('id_negocio');
+          $telefono_negocio->tel_negocio = $request->input('tel_negocio');
+
+          if($telefono_negocio->save()){
+            $telefonos = TelNegocio::where('id_negocio', $request->input('id_negocio'))->get();
+            return $telefonos;
+          }else{
+            return '';
+          }
         }
 
       }else if($request->input('opcion') == 'eliminar'){
         if($request->input('session') == 'true') {
           $array = $request->session()->get('telefonos_negocio_temporal');
-          $array = Arr::except($array, $request->input('id'));
+          $array = Arr::except($array, $request->input('id_tel_negocio'));
           $request->session()->put('telefonos_negocio_temporal', $array);
+        }else{
+          $telefono_negocio = TelNegocio::where('id_tel_negocio', $request->input('id_tel_negocio'))->delete();
+
+          if($telefono_negocio){
+            $telefonos = TelNegocio::where('id_negocio', $request->input('id_negocio'))->get();
+            return $telefonos;
+          }else{
+            return '';
+          }
         }
       }else if($request->input('opcion') == 'limpiar'){
         $request->session()->forget('telefonos_negocio_temporal');
@@ -63,7 +84,7 @@ class TelefonoNegocioController extends Controller
     /**
      * Display the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show()
     {
@@ -73,7 +94,7 @@ class TelefonoNegocioController extends Controller
     /**
      * Show the form for editing the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit()
     {
@@ -84,7 +105,7 @@ class TelefonoNegocioController extends Controller
      * Update the resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request)
     {
@@ -95,15 +116,10 @@ class TelefonoNegocioController extends Controller
    * Remove the specified resource from storage.
    *
    * @param int $id
-   * @return \Illuminate\Http\Response
+   * @return Response
    */
   public function destroy($id)
   {
-    $tel_negocio = TelNegocio::where('id_tel_negocio', $id)->first();
-    $tel_negocio->delete();
 
-    //$telefonos = TelNegocio::where('id_negocio', $tel_negocio->id_negocio)->all();
-
-    return ['success' => true, 'message' => 'Teléfono eliminado con éxito'];
   }
 }
