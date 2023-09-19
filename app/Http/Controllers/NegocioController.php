@@ -156,12 +156,13 @@ class NegocioController extends Controller
         'gasto_otro_negocio' => 'required|numeric'
       ]);
 
-      // Si es vacio el array de telefonos
-      if(empty($request->session()->get('telefonos_negocio_temporal'))){
-        return ['success' => false, 'message' => 'Debe agregar al menos un teléfono'];
-      }
 
       if ($request->input('session') == 'true') {
+        // Si es vacio el array de telefonos
+        if(empty($request->session()->get('telefonos_negocio_temporal'))){
+          return ['success' => false, 'message' => 'Debe agregar al menos un teléfono'];
+        }
+
         $array = $request->session()->get('negocios');
         /* Actualizar elemento del array session */
         $array[$request->input('id')] = [
@@ -184,6 +185,7 @@ class NegocioController extends Controller
         $request->session()->forget('telefonos_negocio_temporal');
         $request->session()->put('negocios', $array);
       }else{
+
         /* Actualizar Negocio de Base de Datos */
         $negocio = Negocio::findOrfail($request->input('id_negocio'));
 

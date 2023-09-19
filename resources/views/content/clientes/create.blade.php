@@ -9,7 +9,6 @@
   <form action="{{ route('clientes.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
         id="form-cliente">
 
-
     <div class="d-flex align-items-center justify-content-between py-3">
       <div class="flex-grow-1">
         <div
@@ -161,8 +160,6 @@
   <script>
 
     /* Función para validar el monto */
-
-
     $(document).ready(function () {
 
       $.ajaxSetup({
@@ -454,37 +451,29 @@
         e.preventDefault();
         $('#titulo-modal-bien').html('Nuevo Bien');
         $('#form-bien').trigger('reset');
-        $('#btn-agregar-bien').html('Agregar');
+        $('#nom_bien').removeClass('is-invalid');
+        $('#btn-agregar-bien').html('<i class="bx bx-save"></i> Guardar');
       });
 
       $('#btn-agregar-bien').click(function (e) {
         e.preventDefault();
-        var datos = $('#form-bien').serialize();
-        let id_bien = $('#id_bien').val();
 
-        if (id_bien !== '') {
-          datos += '&opcion=actualizar';
-          datos += '&id=' + id_bien;
-          datos += '&session=true';
+        if($('#nom_bien').val() === ''){
+          $('#nom_bien').addClass('is-invalid');
+          $('#nom_bien_error').html('El campo es obligatorio.');
 
-          $.ajax({
-            url: '{{ route("bienes.store") }}',
-            type: 'post',
-            dataType: 'json',
-            data: datos,
-            success: function (data) {
-              /* Mensaje de exito */
-              $('#modal-bien').modal('hide');
-              $('#form-bien').trigger('reset');
-              mostrarBienes(data);
-            },
-            error: function (xhr) {
-              /* Mensajes de error */
-            }
-          });
-        } else {
-          datos += '&opcion=agregar';
-          datos += '&session=true';
+        }else{
+          var datos = $('#form-bien').serialize();
+          let id_bien = $('#id_bien').val();
+
+          if (id_bien !== '') {
+            datos += '&opcion=actualizar';
+            datos += '&id=' + id_bien;
+            datos += '&session=true';
+          } else {
+            datos += '&opcion=agregar';
+            datos += '&session=true';
+          }
 
           $.ajax({
             url: '{{ route("bienes.store") }}',
@@ -502,6 +491,7 @@
             }
           });
         }
+
       });
       /** FIN EVENTOS DE BOTONES BIEN **/
 
@@ -612,13 +602,13 @@
       $('#btn-agregar-telefono-referencias').click(function (e) {
         e.preventDefault();
 
-        if($('#tel_ref').val() === ''){
+        if ($('#tel_ref').val() === '') {
           $('#tel_ref').addClass('is-invalid');
           $('#tel_ref_error').html('El campo es obligatorio.');
-        }else if($('#tel_ref').val().length < 8){
+        } else if ($('#tel_ref').val().length < 8) {
           $('#tel_ref').addClass('is-invalid');
           $('#tel_ref_error').html('El campo debe tener al menos 8 caracteres.');
-        }else{
+        } else {
           let datos = 'tel_ref=' + $('#tel_ref').val();
           datos += '&opcion=agregar';
           datos += '&session=true';

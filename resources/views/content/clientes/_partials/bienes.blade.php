@@ -78,7 +78,7 @@
 <form action="{{ route('bienes.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
       id="form-bien">
 
-  <div class="modal fade" id="modal-bien" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" data-bs-backdrop="static" id="modal-bien" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-sm" role="document">
       <div class="modal-content">
 
@@ -93,7 +93,11 @@
               <div class="row">
                 <div class="col-md-12 mb-3">
                   <label for="nom_bien" class="form-label">Nombre (*)</label>
-                  <input type="text" name="nom_bien" id="nom_bien" class="form-control">
+                  <textarea name="nom_bien" id="nom_bien" class="form-control" rows="3"
+                            placeholder="Descripción"></textarea>
+                  <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                    <div data-field="name" data-validator="notEmpty" id="nom_bien_error"></div>
+                  </div>
                 </div>
               </div>
             </div>

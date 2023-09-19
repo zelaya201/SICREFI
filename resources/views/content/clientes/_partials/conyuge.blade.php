@@ -120,7 +120,7 @@
 <form action="{{ route('telsConyuge.store') }}" method="post" autocomplete="off" enctype="multipart/form-data" id="form-telsconyuge">
 
 <!-- Modal agregar telefono conyuge -->
-<div class="modal fade" id="telefono-modal-conyuge" tabindex="-1" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="telefono-modal-conyuge" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
