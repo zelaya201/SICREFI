@@ -54,7 +54,3 @@ Route::resource('telsNegocio', TelefonoNegocioController::class);
 
 // Telefono Referencia Route
 Route::resource('telsReferencia', TelefonoReferenciaController::class);
-
-
-
-//Route::post('/clientes/{cliente}/edit/', [ClienteController::class, 'showEdit'])->name('clientes.showEdit');

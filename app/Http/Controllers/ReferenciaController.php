@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
+use App\Models\Referencia;
+use App\Models\TelReferencia;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
 class ReferenciaController extends Controller
@@ -73,6 +77,30 @@ class ReferenciaController extends Controller
 
           $request->session()->forget('telefonos_referencia_temporal');
           $request->session()->put('referencias', $array);
+        }else{
+          $referencia = new Referencia();
+          $referencia->fill($request->all());
+          $referencia->estado_ref = 'Activo';
+          $referencia->save();
+
+          $telefonos = $request->session()->get('telefonos_referencia_temporal');
+
+          foreach ($telefonos as $telefono) {
+            $tel = new TelReferencia();
+            $tel->tel_ref = $telefono['tel_ref'];
+            $tel->id_ref = Referencia::latest('id_ref')->first()->id_ref;
+            $tel->save();
+          }
+
+          $request->session()->forget('telefonos_referencia_temporal');
+
+          $request->session()->flash('success');
+          $request->session()->flash('mensaje', 'Referencia agregada correctamente');
+
+          return [
+            'success' => true,
+            'message' => 'Referencia agregada correctamente'
+          ];
         }
 
       }else if($request->input('opcion') == 'eliminar'){
@@ -80,6 +108,16 @@ class ReferenciaController extends Controller
           $array = $request->session()->get('referencias');
           $array = Arr::except($array, $request->input('id'));
           $request->session()->put('referencias', $array);
+        }else{
+          /* Eliminar Negocio de Base de Datos */
+          $referencia = Referencia::findOrfail($request->input('id_ref'));
+          $referencia->estado_ref = 'Inactivo';
+
+          if($referencia->save()) {
+            $request->session()->flash('success');
+            $request->session()->flash('mensaje', 'Referencia eliminada correctamente');
+            return ['success' => true, 'message' => 'Referencia eliminada correctamente'];
+          }
         }
       }else if($request->input('opcion') == 'obtener'){
         if($request->input('session') == 'true') {
@@ -93,6 +131,11 @@ class ReferenciaController extends Controller
           );
 
           return Arr::get($array, $request->input('id'));
+        }else{
+          $referencia = Referencia::where('id_ref', $request->input('id_ref'))->first();
+          $tel_ref = TelReferencia::where('id_ref', $request->input('id_ref'))->get();
+
+          return ['ref' => $referencia, 'tel_ref' => $tel_ref];
         }
       }else if($request->input('opcion') == 'actualizar') {
 
@@ -107,15 +150,16 @@ class ReferenciaController extends Controller
           'parentesco_ref' => 'required'
         ]);
 
-        // Si es vacio el array de telefonos
-        if(empty($request->session()->get('telefonos_referencia_temporal'))){
-          return [
-            'success' => false,
-            'message' => 'Debe agregar al menos un teléfono'
-          ];
-        }
-
         if ($request->input('session') == 'true') {
+
+          // Si es vacio el array de telefonos
+          if(empty($request->session()->get('telefonos_referencia_temporal'))){
+            return [
+              'success' => false,
+              'message' => 'Debe agregar al menos un teléfono'
+            ];
+          }
+
           $array = $request->session()->get('referencias');
           /* Actualizar elemento del array session */
           $array[$request->input('id')] = [
@@ -133,30 +177,59 @@ class ReferenciaController extends Controller
 
           $request->session()->forget('telefonos_referencia_temporal');
           $request->session()->put('referencias', $array);
+        }else{
+          $referencia = Referencia::where('id_ref', $request->input('id_ref'))->first();
+          $referencia->fill($request->all());
+
+          if($referencia->save()){
+            $request->session()->flash('success');
+            $request->session()->flash('mensaje', 'Referencia actualizada correctamente');
+
+            return [
+              'success' => true,
+              'message' => 'Referencia actualizada correctamente'
+            ];
+          }
+        }
+      }else if($request->input('opcion') == 'darAlta') {
+        $referencia = Referencia::findOrfail($request->input('id_ref'));
+        $referencia->estado_ref = 'Activo';
+
+        if($referencia->save()) {
+          $request->session()->flash('success');
+          $request->session()->flash('mensaje', 'Referencia restaurada correctamente');
+          return ['success' => true];
         }
       }
 
       return $request->session()->get('referencias');
     }
 
-    /**
-     * Display the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
+  /**
+   * Display the specified resource.
+   *
+   * @param int $id
+   * @return Response
+   */
+    public function show($id)
     {
-        //
+      $referencias = Referencia::where('id_cliente', $id)->get();
+      $cliente = Cliente::where('id_cliente', $id)->first();
+      return view('content.clientes.referencias.index', ['cliente' => $cliente], compact('referencias'));
     }
 
     /**
      * Show the form for editing the resource.
      *
      * @return \Illuminate\Http\Response
+     * @param int $id
      */
-    public function edit()
+    public function edit($id)
     {
-        //
+      $referencia = Referencia::where('id_ref', $id)->first();
+      $tel_ref = TelReferencia::where('id_ref', $id)->get();
+
+      return ['ref' => $referencia, 'tel_ref' => $tel_ref];
     }
 
     /**

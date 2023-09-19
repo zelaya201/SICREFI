@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bien;
+use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -33,6 +35,14 @@ class BienController extends Controller
           if ($request->session()->has('bienes')) {
             end($array);
             $size = key($array) + 1;
+
+            // Verificar si existe el bien existe en session
+            foreach ($array as $negocio) {
+              if($negocio['nom_bien'] == $request->input('nom_bien')){
+                return ['success' => false, 'message' => 'El bien ya existe', 'input' => 'nom_bien'];
+              }
+            }
+
           }
 
           $array = Arr::add($array,
@@ -44,6 +54,25 @@ class BienController extends Controller
           );
 
           $request->session()->put('bienes', $array);
+        }else{
+          // Validación por si ya existe el bien perteneciente al cliente
+          $bien = Bien::where('id_cliente', $request->input('id_cliente'))
+            ->where('nom_bien', $request->input('nom_bien'))
+            ->first();
+
+          if($bien){
+            return ['success' => false, 'message' => 'El bien ya existe.'];
+          }
+
+          // Guardar bien en base de datos
+          $bien = new Bien();
+          $bien->fill($request->all());
+          $bien->estado_bien = 'Activo';
+          if($bien->save()){
+            $request->session()->flash('success');
+            $request->session()->flash('mensaje', 'Bien mueble agregado correctamente.');
+            return ['success' => true];
+          }
         }
 
       }else if($request->input('opcion') == 'eliminar'){
@@ -51,15 +80,36 @@ class BienController extends Controller
           $array = $request->session()->get('bienes');
           $array = Arr::except($array, $request->input('id'));
           $request->session()->put('bienes', $array);
+        }else{
+          // Eliminar bien en base de datos
+          $bien = Bien::where('id_bien', $request->input('id'))->first();
+          $bien->estado_bien = 'Inactivo';
+          if($bien->save()){
+            $request->session()->flash('success');
+            $request->session()->flash('mensaje', 'Bien mueble dado de baja correctamente.');
+            return ['success' => true];
+          }
         }
       }else if($request->input('opcion') == 'obtener'){
         if($request->input('session') == 'true') {
           $array = $request->session()->get('bienes');
           return Arr::get($array, $request->input('id'));
+        }else{
+          // Obtener bien en base de datos
+          $bien = Bien::where('id_bien', $request->input('id_bien'))->first();
+          return $bien;
         }
       }else if($request->input('opcion') == 'actualizar') {
         if ($request->input('session') == 'true') {
           $array = $request->session()->get('bienes');
+
+          // Verificar si existe el bien existe en session
+          foreach ($array as $negocio) {
+            if($negocio['nom_bien'] == $request->input('nom_bien') && $negocio['id'] != $request->input('id')){
+              return ['success' => false, 'message' => 'El bien ya existe.', 'input' => 'nom_bien'];
+            }
+          }
+
           /* Actualizar elemento del array session */
           $array[$request->input('id')] = [
             'id' => $request->input('id'),
@@ -67,6 +117,27 @@ class BienController extends Controller
           ];
 
           $request->session()->put('bienes', $array);
+        }else{
+          // Validación por si ya existe el bien perteneciente al cliente
+
+
+          // Actualizar bien en base de datos
+          $bien = Bien::where('id_bien', $request->input('id_bien'))->first();
+          $bien->fill($request->all());
+          if($bien->save()){
+            $request->session()->flash('success');
+            $request->session()->flash('mensaje', 'Bien mueble actualizado correctamente.');
+            return ['success' => true];
+          }
+        }
+      }else if($request->input('opcion') == 'darAlta') {
+        $bien = Bien::findOrfail($request->input('id_bien'));
+        $bien->estado_bien = 'Activo';
+
+        if($bien->save()) {
+          $request->session()->flash('success');
+          $request->session()->flash('mensaje', 'Negocio restaurado correctamente');
+          return ['success' => true];
         }
       }
 
@@ -77,10 +148,13 @@ class BienController extends Controller
      * Display the resource.
      *
      * @return \Illuminate\Http\Response
+     * @param  int  $id
      */
-    public function show()
+    public function show($id)
     {
-        //
+      $bienes = Bien::where('id_cliente', $id)->get();
+      $cliente = Cliente::where('id_cliente', $id)->first();
+      return view('content.clientes.bienes.index', ['cliente' => $cliente], compact('bienes'));
     }
 
     /**

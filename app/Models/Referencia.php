@@ -21,7 +21,8 @@ class Referencia extends Model
       'segundo_ape_ref',
       'dir_ref',
       'ocupacion_ref',
-      'parentesco_ref'
+      'parentesco_ref',
+      'estado_ref'
     ];
 
     public function cliente() {
