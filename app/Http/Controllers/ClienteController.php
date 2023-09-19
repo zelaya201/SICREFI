@@ -24,6 +24,8 @@ class ClienteController extends Controller
    */
   public function index(Request $request)
   {
+    Session::forget('estado_filtro');
+    Session::forget('mostrar');
     $query = Cliente::query();
 
     /*if ($request->ajax()) {
@@ -232,8 +234,9 @@ class ClienteController extends Controller
         $b->save();
       }
 
-      return ['success' => true, 'message' => 'Cliente agregado con éxito'];
+      $request->session()->flash(['success' => true, 'mensaje' => 'Cliente agregado con éxito']);
 
+      return ['success' => true];
     }
 
     return ['success' => false, 'message' => 'Error al agregar cliente', 'errors' => $cliente->errors()];
@@ -270,7 +273,18 @@ class ClienteController extends Controller
    */
   public function update(Request $request, $id)
   {
-    //
+    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
+    $cliente->fill(['estado_cliente' => 'Activo']);
+
+    if($cliente->save()) {
+      /* Mensaje Flash */
+      Session::flash('success', '');
+      Session::flash('mensaje', 'Cliente restaurado con éxito');
+
+      return ['success' => true];
+    }
+
+    return ['success' => false];
   }
 
   /**
@@ -281,6 +295,17 @@ class ClienteController extends Controller
    */
   public function destroy($id)
   {
-    //
+    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
+    $cliente->fill(['estado_cliente' => 'Inactivo']);
+
+    if($cliente->save()) {
+      /* Mensaje Flash */
+      Session::flash('success', '');
+      Session::flash('mensaje', 'Cliente eliminado con éxito');
+
+      return ['success' => true];
+    }
+
+    return ['success' => false];
   }
 }

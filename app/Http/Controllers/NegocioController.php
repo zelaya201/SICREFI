@@ -62,12 +62,20 @@ class NegocioController extends Controller
       }
 
       if($request->input('session') == 'true') {
+
         $size = 1;
         $array = $request->session()->get('negocios');
 
         if ($request->session()->has('negocios')) {
           end($array);
           $size = key($array) + 1;
+
+          /* Verificar si el negocio existe en los session */
+          foreach ($array as $negocio) {
+            if($negocio['nom_negocio'] == $request->input('nom_negocio')){
+              return ['success' => false, 'message' => 'El negocio ya existe', 'input' => 'nom_negocio'];
+            }
+          }
         }
 
         $array = Arr::add($array,
@@ -77,15 +85,15 @@ class NegocioController extends Controller
             'nom_negocio' => $request->input('nom_negocio'),
             'tiempo_negocio' => $request->input('tiempo_negocio'),
             'dir_negocio' => $request->input('dir_negocio'),
-            'buena_venta_negocio' => number_format($request->input('buena_venta_negocio'), 2),
-            'mala_venta_negocio' => number_format($request->input('mala_venta_negocio'), 2),
-            'ganancia_diaria_negocio' => number_format($request->input('ganancia_diaria_negocio'), 2),
-            'inversion_diaria_negocio' => number_format($request->input('inversion_diaria_negocio'), 2),
-            'gasto_emp_negocio' => number_format($request->input('gasto_emp_negocio'), 2),
-            'gasto_alquiler_negocio' => number_format($request->input('gasto_alquiler_negocio'), 2),
-            'gasto_impuesto_negocio' => number_format($request->input('gasto_impuesto_negocio'), 2),
-            'gasto_credito_negocio' => number_format($request->input('gasto_credito_negocio'), 2),
-            'gasto_otro_negocio' => number_format($request->input('gasto_otro_negocio'), 2),
+            'buena_venta_negocio' => $request->input('buena_venta_negocio'),
+            'mala_venta_negocio' => $request->input('mala_venta_negocio'),
+            'ganancia_diaria_negocio' => $request->input('ganancia_diaria_negocio'),
+            'inversion_diaria_negocio' => $request->input('inversion_diaria_negocio'),
+            'gasto_emp_negocio' => $request->input('gasto_emp_negocio'),
+            'gasto_alquiler_negocio' => $request->input('gasto_alquiler_negocio'),
+            'gasto_impuesto_negocio' => $request->input('gasto_impuesto_negocio'),
+            'gasto_credito_negocio' => $request->input('gasto_credito_negocio'),
+            'gasto_otro_negocio' => $request->input('gasto_otro_negocio'),
             'telefonos_negocio' => $request->session()->get('telefonos_negocio_temporal')
           ]
         );
@@ -93,6 +101,18 @@ class NegocioController extends Controller
         $request->session()->forget('telefonos_negocio_temporal');
         $request->session()->put('negocios', $array);
       }else{
+
+        /* Verificar si el negocio existe en la base de datos */
+        $negocios = Negocio::where('id_cliente', $request->input('id_cliente'))->get();
+
+
+        foreach ($negocios as $negocio) {
+          if($negocio->nom_negocio == $request->input('nom_negocio')){
+            return ['success' => false, 'message' => 'El negocio ya existe', 'input' => 'nom_negocio'];
+          }
+        }
+
+
         /* Agregar Negocio a Base de Datos */
         $negocio = new Negocio();
         $negocio->fill($request->input());
@@ -109,7 +129,9 @@ class NegocioController extends Controller
           }
 
           $request->session()->forget('telefonos_negocio_temporal');
-          return ['success' => true, 'message' => 'Negocio agregado correctamente'];
+          $request->session()->flash('success', true);
+          $request->session()->flash('mensaje', 'Negocio agregado correctamente');
+          return ['success' => true];
         }
 
       }
@@ -125,6 +147,8 @@ class NegocioController extends Controller
         $negocio->estado_negocio = 'Inactivo';
 
         if($negocio->save()) {
+          $request->session()->flash('success');
+          $request->session()->flash('mensaje', 'Negocio eliminado correctamente');
           return ['success' => true, 'message' => 'Negocio eliminado correctamente'];
         }
       }
@@ -156,7 +180,6 @@ class NegocioController extends Controller
         'gasto_otro_negocio' => 'required|numeric'
       ]);
 
-
       if ($request->input('session') == 'true') {
         // Si es vacio el array de telefonos
         if(empty($request->session()->get('telefonos_negocio_temporal'))){
@@ -164,6 +187,14 @@ class NegocioController extends Controller
         }
 
         $array = $request->session()->get('negocios');
+
+        /* Verificar si el negocio existe en los session */
+        foreach ($array as $negocio) {
+          if($negocio['nom_negocio'] == $request->input('nom_negocio') && $negocio['id'] != $request->input('id')){
+            return ['success' => false, 'message' => 'El negocio ya existe', 'input' => 'nom_negocio'];
+          }
+        }
+
         /* Actualizar elemento del array session */
         $array[$request->input('id')] = [
           'id' => $request->input('id'),
@@ -185,14 +216,16 @@ class NegocioController extends Controller
         $request->session()->forget('telefonos_negocio_temporal');
         $request->session()->put('negocios', $array);
       }else{
-
         /* Actualizar Negocio de Base de Datos */
         $negocio = Negocio::findOrfail($request->input('id_negocio'));
 
         $negocio->fill($request->input());
 
         if($negocio->save()) {
-          return ['success' => true, 'message' => 'Negocio actualizado correctamente'];
+          $request->session()->flash('success');
+          $request->session()->flash('mensaje', 'Negocio actualizado correctamente');
+          return ['success' => true];
+
         }
       }
     }else if($request->input('opcion') == 'darAlta') {
@@ -200,7 +233,9 @@ class NegocioController extends Controller
       $negocio->estado_negocio = 'Activo';
 
       if($negocio->save()) {
-        return ['success' => true, 'message' => 'Negocio restaurado correctamente'];
+        $request->session()->flash('success');
+        $request->session()->flash('mensaje', 'Negocio restaurado correctamente');
+        return ['success' => true];
       }
     }
 

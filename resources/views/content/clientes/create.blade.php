@@ -29,8 +29,8 @@
             <li class="list-inline-item fw-semibold">
 
               <button class="nav-link btn btn-primary" type="button" id="btn-guardar-cliente">
-                Continuar
-                <span class="tf-icons bx bx-right-arrow-alt"></span>
+                <span class="tf-icons bx bx-save"></span>
+                Guardar cliente
               </button>
             </li>
             <li class="list-inline-item fw-semibold">
@@ -112,9 +112,9 @@
 
     <div class="alert alert-danger d-none m-0 mt-3" role="alert" id="alerta-error">
       <span class="badge badge-center rounded-pill bg-danger border-label-danger p-3 me-2" id="label-error"><i
-          class="bx bx-error-circle fs-6"></i></span>
+          class="bx bx-error fs-6"></i></span>
       <div class="d-flex flex-column">
-        <h6 class="alert-heading d-flex align-items-center mb-1">Mensaje</h6>
+        <h6 class="alert-heading d-flex align-items-center mb-1">Mensaje de alerta</h6>
         <span id="mensaje-error">¡Debe agregar al menos un teléfono al cliente!</span>
       </div>
     </div>
@@ -198,7 +198,7 @@
           success: function (data) {
             /* Mensaje de exito */
             if (data.success) {
-              window.location.href = '{{ route("clientes.index") }}';
+              window.location.href = '{{ route("clientes.index") }}' + '?success=true';
             } else {
               $('#cant-errores-cliente').addClass('d-none');
               $('#cant-errores-conyuge').addClass('d-none');
@@ -217,12 +217,10 @@
 
                 case 'referencia':
                   cambiarTab('referencia');
-                  $('#cant-errores-referencia').html(1).removeClass('d-none');
                   break;
 
-                case 'bienes':
+                case 'bien':
                   cambiarTab('bienes');
-                  $('#cant-errores-bienes').html(1).removeClass('d-none');
                   break;
 
               }
@@ -326,6 +324,8 @@
           datos += '&session=true';
         }
 
+        var inputs = $('#form-negocio').find('input, select, textarea');
+
         $.ajax({
           url: '{{ route("negocios.store") }}',
           type: 'post',
@@ -334,9 +334,19 @@
           success: function (data) {
             /* Mensaje de exito */
             if (data.success === false) {
-              $('#tabla-telefonos-negocio').addClass('border border-danger');
-              $('#tel_negocio').addClass('is-invalid');
-              $('#tel_negocio_error').html(data.message);
+              if(data.input === 'nom_negocio'){
+                $('#nom_negocio').addClass('is-invalid');
+                $('#nom_negocio_error').html(data.message);
+              }else{
+                $('#tabla-telefonos-negocio').addClass('border border-danger');
+                $('#tel_negocio').addClass('is-invalid');
+                $('#tel_negocio_error').html(data.message);
+              }
+
+              inputs.change(function () {
+                $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+              });
+
             } else {
               $('#modal-negocio').modal('hide');
               $('#form-negocio').trigger('reset');
@@ -346,7 +356,7 @@
           },
           error: function (xhr) {
             /* Mensajes de error */
-            var inputs = $('#form-negocio').find('input, select, textarea');
+            //var inputs = $('#form-negocio').find('input, select, textarea');
 
             inputs.change(function () {
               $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
@@ -458,11 +468,11 @@
       $('#btn-agregar-bien').click(function (e) {
         e.preventDefault();
 
-        if($('#nom_bien').val() === ''){
+        if ($('#nom_bien').val() === '') {
           $('#nom_bien').addClass('is-invalid');
           $('#nom_bien_error').html('El campo es obligatorio.');
 
-        }else{
+        } else {
           var datos = $('#form-bien').serialize();
           let id_bien = $('#id_bien').val();
 
@@ -482,9 +492,19 @@
             data: datos,
             success: function (data) {
               /* Mensaje de exito */
-              $('#modal-bien').modal('hide');
-              $('#form-bien').trigger('reset');
-              mostrarBienes(data);
+              if(data.success === false){
+                $('#nom_bien').addClass('is-invalid');
+                $('#nom_bien_error').html(data.message);
+
+                $('#nom_bien').change(function () {
+                  $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+                });
+              }else{
+                $('#modal-bien').modal('hide');
+                $('#form-bien').trigger('reset');
+                mostrarBienes(data);
+              }
+
             },
             error: function (xhr) {
               /* Mensajes de error */
@@ -504,6 +524,9 @@
         if (objtel_cliente.val() === '') {
           objtel_cliente.addClass('is-invalid');
           $('#mensaje_tel_cliente').html('El campo es obligatorio.');
+        } else if (objtel_cliente.val().length < 8) {
+          objtel_cliente.addClass('is-invalid');
+          $('#mensaje_tel_cliente').html('El campo debe tener al menos 8 caracteres.');
         } else {
           let datos = 'tel_cliente=' + objtel_cliente.val();
           datos += '&opcion=agregar';
@@ -516,9 +539,19 @@
             data: datos,
             success: function (data) {
               /* Mensaje de exito */
-              $('#telefono-modal-cliente').modal('hide');
-              $('#tel_cliente').val('');
-              mostrarTelefonosCliente(data);
+              if(data.success === false){
+                objtel_cliente.addClass('is-invalid');
+                $('#mensaje_tel_cliente').html(data.message);
+
+                objtel_cliente.change(function () {
+                  $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+                });
+              }else{
+                $('#telefono-modal-cliente').modal('hide');
+                $('#tel_cliente').val('');
+                mostrarTelefonosCliente(data);
+              }
+
             },
             error: function (xhr) {
               /* Mensajes de error */
@@ -537,6 +570,9 @@
         if ($('#tel_conyuge').val() === '') {
           $('#tel_conyuge').addClass('is-invalid');
           $('#mensaje-telefono-conyuge').html('El campo es obligatorio.');
+        } else if ($('#tel_conyuge').val().length < 8) {
+          $('#tel_conyuge').addClass('is-invalid');
+          $('#mensaje-telefono-conyuge').html('El campo debe tener al menos 8 caracteres.');
         } else {
           var datos = $('#form-telsconyuge').serialize();
           datos += '&opcion=agregar';
@@ -558,8 +594,6 @@
             }
           });
         }
-
-
       });
       /** FIN EVENTOS DE BOTONES TELEFONO CONYUGE **/
 
@@ -699,15 +733,15 @@
           $('#nom_negocio').val(data.nom_negocio);
           $('#dir_negocio').val(data.dir_negocio);
           $('#tiempo_negocio').val(data.tiempo_negocio);
-          $('#buena_venta_negocio').val(data.buena_venta_negocio);
-          $('#mala_venta_negocio').val(data.mala_venta_negocio);
-          $('#ganancia_diaria_negocio').val(data.ganancia_diaria_negocio);
-          $('#inversion_diaria_negocio').val(data.inversion_diaria_negocio);
-          $('#gasto_emp_negocio').val(data.gasto_emp_negocio);
-          $('#gasto_alquiler_negocio').val(data.gasto_alquiler_negocio);
-          $('#gasto_impuesto_negocio').val(data.gasto_impuesto_negocio);
-          $('#gasto_credito_negocio').val(data.gasto_credito_negocio);
-          $('#gasto_otro_negocio').val(data.gasto_otro_negocio);
+          $('#buena_venta_negocio').val(parseFloat(data.buena_venta_negocio).toFixed(2));
+          $('#mala_venta_negocio').val(parseFloat(data.mala_venta_negocio).toFixed(2));
+          $('#ganancia_diaria_negocio').val(parseFloat(data.ganancia_diaria_negocio).toFixed(2));
+          $('#inversion_diaria_negocio').val(parseFloat(data.inversion_diaria_negocio).toFixed(2));
+          $('#gasto_emp_negocio').val(parseFloat(data.gasto_emp_negocio).toFixed(2));
+          $('#gasto_alquiler_negocio').val(parseFloat(data.gasto_alquiler_negocio).toFixed(2));
+          $('#gasto_impuesto_negocio').val(parseFloat(data.gasto_impuesto_negocio).toFixed(2));
+          $('#gasto_credito_negocio').val(parseFloat(data.gasto_credito_negocio).toFixed(2));
+          $('#gasto_otro_negocio').val(parseFloat(data.gasto_otro_negocio).toFixed(2));
 
           mostrarTelefonosNegocio(data.telefonos_negocio);
         },
@@ -719,13 +753,14 @@
 
     function mostrarNegocios(data) {
       var html = "";
+      var i = 0;
 
       $.each(data, function (key, value) {
         html += '<tr id="negocio_' + key + '">';
         html += '<td>' + key + '</td>';
         html += '<td>' + value.nom_negocio + '</td>';
         html += '<td>' + value.dir_negocio + '</td>';
-        html += '<td>' + value.tiempo_negocio + '</td>';
+        html += '<td>' + (value.tiempo_negocio / 12).toFixed(0) + ' año(s)</td>';
         html += '<td>';
         html += "<div class='dropdown-icon-demo'> " +
           "<a href='javascript:void(0);' class='btn dropdown-toggle btn-sm hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>" +
@@ -743,6 +778,7 @@
           "</div>"
         html += '</td>';
         html += '</tr>';
+        i++;
       });
 
       if (data.length === 0) {
@@ -751,7 +787,6 @@
 
       $('#tabla-negocios').html(html);
     }
-
     /** FIN FUNCIONES DE NEGOCIO **/
 
 
@@ -851,7 +886,6 @@
 
       $('#tabla-ref').html(html);
     }
-
     /** FIN FUNCIONES DE REFERENCIA **/
 
 
@@ -973,17 +1007,19 @@
 
     function mostrarTelefonosCliente(data) {
       var html = "";
-
+      var i = 1;
       $.each(data, function (key, value) {
         html += '<tr id="ref_' + key + '">';
-        html += '<td>' + key + '</td>';
-        html += '<td>' + value.tel_cliente + '</td>';
+        html += '<td>' + i + '</td>';
+        html += '<td>+503 ' + value.tel_cliente + '</td>';
         html += "<td>" +
           "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoCliente(" + key + ")'>" +
           "<i class='tf-icons bx bx-trash'></i>" +
           "</button>" +
           "</td>";
         html += '</tr>';
+
+        i++;
       });
 
       if (data.length === 0) {
@@ -1022,17 +1058,20 @@
 
     function mostrarTelefonosConyuge(data) {
       var html = "";
+      var i = 1;
 
       $.each(data, function (key, value) {
         html += '<tr id="ref_' + key + '">';
-        html += '<td>' + key + '</td>';
-        html += '<td>' + value.tel_conyuge + '</td>';
+        html += '<td>' + i + '</td>';
+        html += '<td>+503 ' + value.tel_conyuge + '</td>';
         html += "<td>" +
           "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoConyuge(" + key + ")'>" +
           "<i class='tf-icons bx bx-trash'></i>" +
           "</button>" +
           "</td>";
         html += '</tr>';
+
+        i++;
       });
 
       if (data.length === 0) {
@@ -1072,17 +1111,20 @@
 
     function mostrarTelefonosNegocio(data) {
       var html = "";
+      var i = 1;
 
       $.each(data, function (key, value) {
         html += '<tr id="ref_' + key + '">';
-        html += '<td>' + key + '</td>';
-        html += '<td>' + value.tel_negocio + '</td>';
+        html += '<td>' + i + '</td>';
+        html += '<td>+503 ' + value.tel_negocio + '</td>';
         html += "<td>" +
           "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoNegocio(" + key + ")'>" +
           "<i class='tf-icons bx bx-trash'></i>" +
           "</button>" +
           "</td>";
         html += '</tr>';
+
+        i++;
       });
 
       if (data.length === 0) {
@@ -1122,17 +1164,20 @@
 
     function mostrarTelefonosReferencia(data) {
       var html = "";
+      var i = 1;
 
       $.each(data, function (key, value) {
         html += '<tr id="ref_' + key + '">';
         html += '<td>' + key + '</td>';
-        html += '<td>' + value.tel_ref + '</td>';
+        html += '<td>+503 ' + value.tel_ref + '</td>';
         html += "<td>" +
           "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoReferencia(" + key + ")'>" +
           "<i class='tf-icons bx bx-trash'></i>" +
           "</button>" +
           "</td>";
         html += '</tr>';
+
+        i++;
       });
 
       if (data.length === 0) {

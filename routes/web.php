@@ -50,3 +50,5 @@ Route::resource('telsNegocio', TelefonoNegocioController::class);
 
 // Telefono Referencia Route
 Route::resource('telsReferencia', TelefonoReferenciaController::class);
+
+

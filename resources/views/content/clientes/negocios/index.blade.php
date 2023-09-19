@@ -51,40 +51,49 @@
     </li>
 
     <li class="nav-item" role="presentation">
-      <a class="nav-link disabled" type="button" aria-selected="false" tabindex="-1"
+      <a class="nav-link {{ ($cliente->estado_civil_cliente != 'Casado') ? 'disabled' : '' }}" type="button" aria-selected="false" tabindex="-1"
          href="#">
         <i class="bx bx-user-check"></i> Conyuge
       </a>
     </li>
 
     <li class="nav-item" role="presentation">
-
-      <button type="button" class="btn nav-link active" role="tab" data-bs-toggle="tab"
-              data-bs-target="#card-datos-negocios"
-              aria-controls="card-datos-negocios" aria-selected="true">
-        <i class="tf-icons bx bx-store-alt"></i> Negocios
-      </button>
+      <a class="nav-link active" type="button" aria-selected="false" tabindex="-1"
+         href="{{ route('negocios.show', $cliente->id_cliente) }}">
+        <i class="tf-icons bx bx-store-alt"></i> Negocio
+      </a>
     </li>
 
     <li class="nav-item" role="presentation">
       <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="#">
+         href="{{ route('referencias.show', $cliente->id_cliente) }}">
         <i class="bx bx-user-plus"></i> Referencias
       </a>
     </li>
 
     <li class="nav-item" role="presentation">
       <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="#">
+         href="{{ route('bienes.show', $cliente->id_cliente) }}">
         <i class="bx bx-building"></i> Bienes
       </a>
     </li>
   </ul>
   {{--  Fin --}}
 
+  @if(Session::has('success'))
+    <div class="alert alert-primary d-flex m-0 mt-3" role="alert">
+          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+      <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
+        <span>{{ Session::get('mensaje') }}</span>
+      </div>
+    </div>
+  @endif
+
   {{-- Contenido de los paneles --}}
   <div class="tab-content p-0">
-    <div class="tab-pane fade pt-3 show active" id="card-datos-negocios" role="tabpanel">
+    <div class="tab-pane fade show active pt-3" id="card-datos-negocios" role="tabpanel">
       <div class="row">
         <div class="col-md-12 mb-4">
           <!-- Negocios -->
@@ -470,12 +479,16 @@
           dataType: "json",
           success: function (data) {
             if(data.success === false){
-              $('#tabla-telefonos-negocio').addClass('border border-danger');
-              $('#tel_negocio').addClass('is-invalid');
-              $('#tel_negocio_error').html(data.message);
+
+              if(data.input === 'nom_negocio') {
+                $('#nom_negocio').addClass('is-invalid');
+                $('#nom_negocio_error').html(data.message);
+              }else{
+                $('#tabla-telefonos-negocio').addClass('border border-danger');
+                $('#tel_negocio').addClass('is-invalid');
+                $('#tel_negocio_error').html(data.message);
+              }
             }else{
-              alert(data.success);
-              // Recargar pagina
               location.reload();
             }
           },
@@ -568,6 +581,12 @@
                 });
               }
             }
+          });
+
+          $('#tel_negocio').change(function () {
+            $('#tabla-telefonos-negocio').removeClass('border border-danger');
+            $('#tel_negocio').removeClass('is-invalid');
+            $('#tel_negocio_error').html('');
           });
         }
 
@@ -673,7 +692,7 @@
       $.each(data, function (key, value) {
         html += '<tr id="ref_' + key + '">';
         html += '<td>' + i + '</td>';
-        html += '<td>' + value.tel_negocio + '</td>';
+        html += '<td>+503 ' + value.tel_negocio + '</td>';
         html += "<td>" +
           "<button type='button' class='btn btn-outline-danger btn-sm' onclick='eliminarTelefonoNegocio(" + value.id_tel_negocio + ")'>" +
           "<i class='tf-icons bx bx-trash'></i>" +
@@ -731,8 +750,6 @@
         dataType: 'json',
         data: datos,
         success: function (data) {
-          /* Mensaje de exito */
-          alert(data.success);
           // Recargar pagina
           location.reload();
         },
@@ -752,8 +769,6 @@
         dataType: 'json',
         data: datos,
         success: function (data) {
-          /* Mensaje de exito */
-          alert(data.success);
           // Recargar pagina
           location.reload();
         },

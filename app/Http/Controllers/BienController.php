@@ -33,6 +33,14 @@ class BienController extends Controller
           if ($request->session()->has('bienes')) {
             end($array);
             $size = key($array) + 1;
+
+            // Verificar si existe el bien existe en session
+            foreach ($array as $key => $value) {
+              if($value['nom_bien'] == $request->input('nom_bien')){
+                return ['success' => false, 'message' => 'El bien ya existe', 'input' => 'nom_bien'];
+              }
+            }
+
           }
 
           $array = Arr::add($array,
@@ -60,6 +68,14 @@ class BienController extends Controller
       }else if($request->input('opcion') == 'actualizar') {
         if ($request->input('session') == 'true') {
           $array = $request->session()->get('bienes');
+
+          // Verificar si existe el bien existe en session
+          foreach ($array as $negocio) {
+            if($negocio['nom_bien'] == $request->input('nom_bien')){
+              return ['success' => false, 'message' => 'El bien ya existe', 'input' => 'nom_bien'];
+            }
+          }
+
           /* Actualizar elemento del array session */
           $array[$request->input('id')] = [
             'id' => $request->input('id'),

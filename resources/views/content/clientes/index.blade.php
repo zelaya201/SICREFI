@@ -28,6 +28,16 @@
         </ul>
       </div>
 
+      @if(Session::has('success'))
+        <div class="alert alert-primary d-flex" role="alert">
+          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+          <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
+            <span>{{ Session::get('mensaje') }}</span>
+          </div>
+        </div>
+      @endif
 
       <div class="card mb-4">
         <div class="card-widget-separator-wrapper">
@@ -178,9 +188,9 @@
                               Ver</a>
                             <a class="dropdown-item" href="{{ route('negocios.show', $cliente->id_cliente) }}"><i class="bx bx-store-alt me-1"></i>
                               Negocios</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-building me-1"></i>
+                            <a class="dropdown-item" href="{{ route('bienes.show', $cliente->id_cliente) }}"><i class="bx bx-building me-1"></i>
                               Bienes</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-user-plus me-1"></i>
+                            <a class="dropdown-item" href="{{ route('referencias.show', $cliente->id_cliente) }}"><i class="bx bx-user-plus me-1"></i>
                               Referencias</a>
 
                             <div class="dropdown-divider"></div>
@@ -190,19 +200,19 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item text-danger" href="javascript:void(0);"><i
-                                class="bx bx-trash me-1"></i> Borrar</a>
+                            <a class="dropdown-item text-danger" href="javascript:void(0);" id="btn_dar_baja" onclick="darDeBaja('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}')"><i
+                                class="bx bx-trash me-1"></i> Dar de baja</a>
 
                             @else
-                              <a class="dropdown-item" href="">
+                              <a class="dropdown-item" href="javascript:void(0);" onclick="darDeAlta('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}')">
                                 <i class='bx bxs-upvote' ></i> Dar de alta
                               </a>
-
                             @endif
                           </div>
                         </div>
                       </td>
                     </tr>
+
                     @php $contador++; @endphp
                   @endforeach
                   <tr class='noSearch' style="display:none; text-align: center">
@@ -215,33 +225,6 @@
                   <div class="col-sm-12 col-md-6"></div>
                   <div class="col-sm-12 col-md-6 d-flex justify-content-end">
                     {{ $clientes->appends(['estado' => session('estado_filtro'), 'mostrar' => session('mostrar')])->links() }}
-
-                    <!--<div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-                  <ul class="pagination">
-                    <li class="paginate_button page-item previous disabled" id="DataTables_Table_0_previous"><a
-                        aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous"
-                        tabindex="0" class="page-link">Anterior</a></li>
-                    <li class="paginate_button page-item active"><a href="#" aria-controls="DataTables_Table_0"
-                                                                    role="link" aria-current="page" data-dt-idx="0"
-                                                                    tabindex="0" class="page-link">1</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
-                                                              data-dt-idx="1" tabindex="0" class="page-link">2</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
-                                                              data-dt-idx="2" tabindex="0" class="page-link">3</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
-                                                              data-dt-idx="3" tabindex="0" class="page-link">4</a></li>
-                    <li class="paginate_button page-item "><a href="#" aria-controls="DataTables_Table_0" role="link"
-                                                              data-dt-idx="4" tabindex="0" class="page-link">5</a></li>
-                    <li class="paginate_button page-item next" id="DataTables_Table_0_next"><a href="#"
-                                                                                               aria-controls="DataTables_Table_0"
-                                                                                               role="link"
-                                                                                               data-dt-idx="next"
-                                                                                               tabindex="0"
-                                                                                               class="page-link">Siguiente</a>
-                    </li>
-                  </ul>
-                </div>-->
-
                   </div>
                 </div>
               </div>
@@ -250,18 +233,13 @@
         </div>
       </form>
 
-    </div>
+      <!-- Modal Eliminar -->
+      @include('content.clientes._partials.eliminar_cliente')
 
-  @if(Session::has('mensaje'))
-    <div class="alert alert-primary d-flex" role="alert">
-          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
-              class="bx bx-command fs-6"></i></span>
-      <div class="d-flex flex-column ps-1">
-        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">¡Bien hecho!</h6>
-        <span>{{ Session::get('mensaje') }}</span>
-      </div>
-    </div>
-  @endif
+      <!-- Modal Dar de alta -->
+      @include('content.clientes._partials.dar_alta_cliente')
+
+
 @endsection
 
 @section('page-script')
@@ -324,78 +302,55 @@
       $('#mostrar').on('change', function() {
         $(this).closest('form').submit();
       })
-    })
-    /*$(document).ready(function() {
-      $("#filter_bar").on("change", function() {
-        let estado = $(this).val()
-        let token = $('#token').val()
+
+      $('#submit_delete').on('click', function() {
+        var id = $('#id_cliente').val();
 
         $.ajax({
-          url: "",
-          type: "post",
-          data: {'estado' : estado, "_token": token},
-          success: function (data) {
-            console.log(data)
-            /*let clientes = data.clientes
-            let html = ''
-
-            if (clientes.length > 0) {
-              for (let i = 0; i < clientes.length; i++) {
-                html += '<tr>\
-                          <td>' + (i+1) + '</td>\
-                          <td>' + clientes[i]['dui_cliente'] + '</td>'
-                          + ((clientes[i]['tercer_nom_cliente'] == null) ?
-                            '<td>' + clientes[i]['primer_nom_cliente'] + ' ' + clientes[i]['segundo_nom_cliente'] + ' ' + clientes[i]['primer_ape_cliente'] + ' ' + clientes[i]['segundo_ape_cliente'] + '</td>' :
-                            '<td>' + clientes[i]['primer_nom_cliente'] + ' ' + clientes[i]['segundo_nom_cliente'] + ' ' + clientes[i]['tercer_nom_cliente'] + ' ' + clientes[i]['primer_ape_cliente'] + ' ' + clientes[i]['segundo_ape_cliente'] + '</td>')
-                          + '<td>' + clientes[i]['dir_cliente'] + '</td>'
-                          + ((clientes[i]['estado_cliente'] === 'Activo') ?
-                            '<td><span class="badge rounded-pill bg-label-success">' + clientes[i]['estado_cliente'] + '</span></td>' :
-                            '<td><span class="badge rounded-pill bg-label-danger">' + clientes[i]['estado_cliente'] + '</span></td>')
-                          + '<td>\
-                                <div class="dropdown-icon-demo">\
-                                  <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">\
-                                    <i class="bx bx-dots-vertical-rounded"></i>\
-                                  </a>\
-                                <div class="dropdown-menu" style="">\
-                                  <a class="dropdown-item" href="javascript:void(0);">\
-                                    <i class="bx bx-show me-1"></i>\
-                                    Ver</a>\
-                                  <a class="dropdown-item" href="javascript:void(0);">\
-                                    <i class="bx bx-store-alt me-1"></i>\
-                                    Negocios</a>\
-                                  <a class="dropdown-item" href="javascript:void(0);">\
-                                    <i class="bx bx-building me-1"></i>\
-                                    Bienes</a>\
-                                  <a class="dropdown-item" href="javascript:void(0);">\
-                                    <i class="bx bx-user-plus me-1"></i>\
-                                    Referencias</a>\
-                                  <div class="dropdown-divider"></div>\
-                                    <a class="dropdown-item" href="javascript:void(0);">\
-                                    <i class="bx bx-edit-alt me-1"></i>\
-                                      Editar</a>\
-                                  <div class="dropdown-divider"></div>\
-                                  <a class="dropdown-item text-danger" href="javascript:void(0);">\
-                                  <i class="bx bx-trash me-1"></i>\
-                                   Borrar</a>\
-                                </div>\
-                              </div>\
-                          </tr>\
-                          <tr class="noSearch" style="display:none; text-align: center">\
-                            <td colspan="6"></td>\
-                          </tr>'*/
-                //$('#table_div').html('');
-                //$('table_div').html(data)
-
-            //}else {
-              //html += '<tr style="text-align: center">\
-                //        <td colspan="6">No se han encontrado clientes</td>\
-                  //    </tr>'
-            //}
-
-          //  $('#clientes_tbody').html(html)
-          /*}
-        })
+          url: "{{ route('clientes.destroy', '') }}/" + id,
+          type: 'DELETE',
+          data: {
+            id : id,
+            _token: "{{ csrf_token() }}",
+          },
+          success: function(data) {
+            if(data.success) {
+              window.location.href = '{{ route("clientes.index") }}';
+            }
+          }
+        });
       })
-    })*/
+
+      $('#submit_dar_alta').on('click', function (){
+        var id = $('#id_cliente_alta').val();
+
+        $.ajax({
+          url: "{{ route('clientes.update', '') }}/" + id,
+          type: 'PUT',
+          data: {
+            id : id,
+            _token: "{{ csrf_token() }}",
+          },
+          success: function(data) {
+            if(data.success) {
+              window.location.href = '{{ route("clientes.index") }}';
+            }
+          }
+        });
+      });
+
+    })
+
+    function darDeBaja(id, nombre) {
+      $('#id_cliente').val(id);
+      $('#label_nom_cliente').text(nombre);
+      $('#modal-eliminar').modal('show');
+    }
+
+    function darDeAlta(id, nombre) {
+      $('#id_cliente_alta').val(id);
+      $('#label_nom_cliente_alta').text(nombre);
+      $('#modal-dar-alta').modal('show');
+    }
   </script>
 @endsection
