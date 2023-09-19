@@ -25,7 +25,7 @@
             </div>
             <div class="table-responsive">
               <table class="table border-top dtr-column my-3"
-                     id="DataTables_Table_0"
+                     id="tabla-referencias"
                      aria-describedby="DataTables_Table_0_info">
                 <thead>
                 <tr>
@@ -105,11 +105,17 @@
                   <div class="col-md-6 mb-3">
                     <label for="primer_nom_ref" class="form-label">Primer nombre (*)</label>
                     <input type="text" name="primer_nom_ref" id="primer_nom_ref" class="form-control">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="primer_nom_ref_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
                     <label for="segundo_nom_ref" class="form-label">Segundo nombre</label>
                     <input type="text" name="segundo_nom_ref" id="segundo_nom_ref" class="form-control">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="segundo_nom_ref_error"></div>
+                    </div>
                   </div>
                 </div>
 
@@ -117,11 +123,17 @@
                   <div class="col-md-6 mb-3">
                     <label for="tercer_nom_ref" class="form-label">Tercer nombre</label>
                     <input type="text" name="tercer_nom_ref" id="tercer_nom_ref" class="form-control">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="tercer_nom_ref_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
-                    <label for="tercer_nom_ref" class="form-label">Primer apellido (*)</label>
+                    <label for="primer_ape_ref" class="form-label">Primer apellido (*)</label>
                     <input type="text" name="primer_ape_ref" id="primer_ape_ref" class="form-control">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="primer_ape_ref_error"></div>
+                    </div>
                   </div>
                 </div>
 
@@ -129,11 +141,17 @@
                   <div class="col-md-6 mb-3">
                     <label for="segundo_ape_ref" class="form-label">Segundo apellido</label>
                     <input type="text" name="segundo_ape_ref" id="segundo_ape_ref" class="form-control">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="segundo_ape_ref_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
                     <label for="ocupacion_ref" class="form-label">Ocupación (*)</label>
                     <input type="text" name="ocupacion_ref" id="ocupacion_ref" class="form-control">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="ocupacion_ref_error"></div>
+                    </div>
                   </div>
                 </div>
 
@@ -141,11 +159,17 @@
                   <div class="col-md-6 mb-3">
                     <label for="parentesco_ref" class="form-label">Parentesco (*)</label>
                     <input type="text" name="parentesco_ref" id="parentesco_ref" class="form-control">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="parentesco_ref_error"></div>
+                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
                     <label class="form-label" for="dir_ref">Dirección (*)</label>
                     <textarea class="form-control" name="dir_ref" id="dir_ref" rows="2"></textarea>
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="dir_ref_error"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -160,13 +184,17 @@
                 <div class="col-md-12">
                   <label class="form-label" for="tel_ref">Teléfono (*)</label>
                   <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="tel_ref" name="tel_ref" placeholder="00000000" />
+                    <input type="text" class="form-control" id="tel_ref" name="tel_ref" placeholder="00000000"
+                           maxlength="8" onkeypress="return soloNumeros(event)"/>
                     <button type="button" class="btn btn-outline-info" id="btn-agregar-telefono-referencias">
                       <span class="tf-icons bx bx-plus"></span> Agregar
                     </button>
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="tel_ref_error"></div>
+                    </div>
                   </div>
 
-                  <table class="table table-bordered border-top table-hover">
+                  <table class="table table-bordered border-top table-hover" id="tabla-telefonos-referencias">
                     <thead>
                     <tr>
                       <th>#</th>

@@ -41,6 +41,26 @@ class NegocioController extends Controller
   {
 
     if($request->input('opcion') == 'agregar'){
+      $request->validate([
+        'nom_negocio' => 'required',
+        'tiempo_negocio' => 'required',
+        'dir_negocio' => 'required',
+        'buena_venta_negocio' => 'required|numeric',
+        'mala_venta_negocio' => 'required|numeric',
+        'ganancia_diaria_negocio' => 'required|numeric',
+        'inversion_diaria_negocio' => 'required|numeric',
+        'gasto_emp_negocio' => 'required|numeric',
+        'gasto_alquiler_negocio' => 'required|numeric',
+        'gasto_impuesto_negocio' => 'required|numeric',
+        'gasto_credito_negocio' => 'required|numeric',
+        'gasto_otro_negocio' => 'required|numeric'
+      ]);
+
+      // Si es vacio el array de telefonos
+      if(empty($request->session()->get('telefonos_negocio_temporal'))){
+        return ['success' => false, 'message' => 'Debe agregar al menos un teléfono'];
+      }
+
       if($request->input('session') == 'true') {
         $size = 1;
         $array = $request->session()->get('negocios');
@@ -57,15 +77,15 @@ class NegocioController extends Controller
             'nom_negocio' => $request->input('nom_negocio'),
             'tiempo_negocio' => $request->input('tiempo_negocio'),
             'dir_negocio' => $request->input('dir_negocio'),
-            'buena_venta_negocio' => $request->input('buena_venta_negocio'),
-            'mala_venta_negocio' => $request->input('mala_venta_negocio'),
-            'ganancia_diaria_negocio' => $request->input('ganancia_diaria_negocio'),
-            'inversion_diaria_negocio' => $request->input('inversion_diaria_negocio'),
-            'gasto_emp_negocio' => $request->input('gasto_emp_negocio'),
-            'gasto_alquiler_negocio' => $request->input('gasto_alquiler_negocio'),
-            'gasto_impuesto_negocio' => $request->input('gasto_impuesto_negocio'),
-            'gasto_credito_negocio' => $request->input('gasto_credito_negocio'),
-            'gasto_otro_negocio' => $request->input('gasto_otro_negocio'),
+            'buena_venta_negocio' => number_format($request->input('buena_venta_negocio'), 2),
+            'mala_venta_negocio' => number_format($request->input('mala_venta_negocio'), 2),
+            'ganancia_diaria_negocio' => number_format($request->input('ganancia_diaria_negocio'), 2),
+            'inversion_diaria_negocio' => number_format($request->input('inversion_diaria_negocio'), 2),
+            'gasto_emp_negocio' => number_format($request->input('gasto_emp_negocio'), 2),
+            'gasto_alquiler_negocio' => number_format($request->input('gasto_alquiler_negocio'), 2),
+            'gasto_impuesto_negocio' => number_format($request->input('gasto_impuesto_negocio'), 2),
+            'gasto_credito_negocio' => number_format($request->input('gasto_credito_negocio'), 2),
+            'gasto_otro_negocio' => number_format($request->input('gasto_otro_negocio'), 2),
             'telefonos_negocio' => $request->session()->get('telefonos_negocio_temporal')
           ]
         );
@@ -121,6 +141,26 @@ class NegocioController extends Controller
         return Arr::get($array, $request->input('id'));
       }
     }else if($request->input('opcion') == 'actualizar') {
+      $request->validate([
+        'nom_negocio' => 'required',
+        'tiempo_negocio' => 'required',
+        'dir_negocio' => 'required',
+        'buena_venta_negocio' => 'required|numeric',
+        'mala_venta_negocio' => 'required|numeric',
+        'ganancia_diaria_negocio' => 'required|numeric',
+        'inversion_diaria_negocio' => 'required|numeric',
+        'gasto_emp_negocio' => 'required|numeric',
+        'gasto_alquiler_negocio' => 'required|numeric',
+        'gasto_impuesto_negocio' => 'required|numeric',
+        'gasto_credito_negocio' => 'required|numeric',
+        'gasto_otro_negocio' => 'required|numeric'
+      ]);
+
+      // Si es vacio el array de telefonos
+      if(empty($request->session()->get('telefonos_negocio_temporal'))){
+        return ['success' => false, 'message' => 'Debe agregar al menos un teléfono'];
+      }
+
       if ($request->input('session') == 'true') {
         $array = $request->session()->get('negocios');
         /* Actualizar elemento del array session */
