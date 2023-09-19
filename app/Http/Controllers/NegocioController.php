@@ -62,12 +62,20 @@ class NegocioController extends Controller
       }
 
       if($request->input('session') == 'true') {
+
         $size = 1;
         $array = $request->session()->get('negocios');
 
         if ($request->session()->has('negocios')) {
           end($array);
           $size = key($array) + 1;
+
+          /* Verificar si el negocio existe en los session */
+          foreach ($array as $negocio) {
+            if($negocio['nom_negocio'] == $request->input('nom_negocio')){
+              return ['success' => false, 'message' => 'El negocio ya existe', 'input' => 'nom_negocio'];
+            }
+          }
         }
 
         $array = Arr::add($array,
@@ -156,7 +164,6 @@ class NegocioController extends Controller
         'gasto_otro_negocio' => 'required|numeric'
       ]);
 
-
       if ($request->input('session') == 'true') {
         // Si es vacio el array de telefonos
         if(empty($request->session()->get('telefonos_negocio_temporal'))){
@@ -164,6 +171,14 @@ class NegocioController extends Controller
         }
 
         $array = $request->session()->get('negocios');
+
+        /* Verificar si el negocio existe en los session */
+        foreach ($array as $negocio) {
+          if($negocio['nom_negocio'] == $request->input('nom_negocio') && $negocio['id'] != $request->input('id')){
+            return ['success' => false, 'message' => 'El negocio ya existe', 'input' => 'nom_negocio'];
+          }
+        }
+
         /* Actualizar elemento del array session */
         $array[$request->input('id')] = [
           'id' => $request->input('id'),
@@ -185,7 +200,6 @@ class NegocioController extends Controller
         $request->session()->forget('telefonos_negocio_temporal');
         $request->session()->put('negocios', $array);
       }else{
-
         /* Actualizar Negocio de Base de Datos */
         $negocio = Negocio::findOrfail($request->input('id_negocio'));
 

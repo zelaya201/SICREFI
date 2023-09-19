@@ -28,6 +28,16 @@
         </ul>
       </div>
 
+      @if(Session::has('success'))
+        <div class="alert alert-primary d-flex" role="alert">
+          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+          <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
+            <span>{{ Session::get('mensaje') }}</span>
+          </div>
+        </div>
+      @endif
 
       <div class="card mb-4">
         <div class="card-widget-separator-wrapper">
@@ -252,16 +262,7 @@
 
     </div>
 
-  @if(Session::has('mensaje'))
-    <div class="alert alert-primary d-flex" role="alert">
-          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
-              class="bx bx-command fs-6"></i></span>
-      <div class="d-flex flex-column ps-1">
-        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">¡Bien hecho!</h6>
-        <span>{{ Session::get('mensaje') }}</span>
-      </div>
-    </div>
-  @endif
+
 @endsection
 
 @section('page-script')
