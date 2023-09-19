@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Referencia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -144,9 +145,11 @@ class ReferenciaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        //
+      $referencia = Referencia::where('id_cliente', $id)->get();
+      $cliente = Cliente::where('id_cliente', $id)->first();
+      return view('content.clientes.referencias.index', ['cliente' => $cliente], compact('referencia'));
     }
 
     /**
