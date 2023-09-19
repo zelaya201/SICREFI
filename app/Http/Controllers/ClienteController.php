@@ -26,18 +26,8 @@ class ClienteController extends Controller
   {
     Session::forget('estado_filtro');
     Session::forget('mostrar');
+
     $query = Cliente::query();
-
-    /*if ($request->ajax()) {
-      if (empty($request->estado) || $request->estado == 'Todos') {
-        $clientes = $query->orderBy('estado_cliente','ASC')->orderBy('primer_nom_cliente','ASC')->get();
-      }else {
-        $clientes = $query->where(['estado_cliente' => $request->estado])->orderBy('primer_nom_cliente','ASC')->get();
-      }
-
-      //return response()->json(['clientes' => $clientes]);
-      return view('content.clientes.table', compact('clientes'))->render();
-    }*/
 
     if ($request->input('estado') || $request->input('mostrar')) {
       $estado = $request->input('estado');
@@ -55,7 +45,6 @@ class ClienteController extends Controller
       $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
       $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
 
-      //return response()->json(['clientes' => $clientes]);
       return view('content.clientes.index', compact('clientes' , 'contar', 'activos', 'inactivos'));
     }
 
@@ -259,9 +248,15 @@ class ClienteController extends Controller
    * @param int $id
    * @return \Illuminate\Http\Response
    */
-  public function edit($id)
+  public function showEdit($id)
   {
+    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
 
+    return view('content.clientes.edit', compact('cliente'));
+  }
+
+  public function edit(Request $request, $id) {
+    return $id;
   }
 
   /**

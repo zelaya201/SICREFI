@@ -195,7 +195,7 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i>
+                            <a class="dropdown-item" href="{{ route('clientes.showEdit', $cliente->id_cliente) }}"><i class="bx bx-edit-alt me-1"></i>
                               Editar</a>
 
                             <div class="dropdown-divider"></div>
