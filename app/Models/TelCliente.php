@@ -11,6 +11,8 @@ class TelCliente extends Model
 
   protected $table = 'tel_cliente'; // Nombre de la tabla en la base de datos.
 
+  protected $primaryKey = 'id_tel_cliente';
+
     public function cliente() {
       return $this->belongsTo(Cliente::class, 'id_cliente');
     }

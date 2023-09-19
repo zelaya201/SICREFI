@@ -36,6 +36,10 @@ Route::resource('referencias',ReferenciaController::class);
 // Cliente Route
 Route::resource('clientes',ClienteController::class);
 
+Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'showEdit'])->name('clientes.showEdit');
+
+Route::get('/clientes/edit/{cliente}', [ClienteController::class, 'edit'])->name('clientes.edit');
+
 // Bien Route
 Route::resource('bienes',BienController::class);
 
@@ -50,3 +54,7 @@ Route::resource('telsNegocio', TelefonoNegocioController::class);
 
 // Telefono Referencia Route
 Route::resource('telsReferencia', TelefonoReferenciaController::class);
+
+
+
+//Route::post('/clientes/{cliente}/edit/', [ClienteController::class, 'showEdit'])->name('clientes.showEdit');

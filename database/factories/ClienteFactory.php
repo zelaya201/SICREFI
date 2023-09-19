@@ -26,7 +26,7 @@ class ClienteFactory extends Factory
           'dir_cliente' => $this->faker->address(),
           'email_cliente' => $this->faker->email(),
           'estado_civil_cliente' => 'Casado',
-          'tipo_vivienda_cliente' => 'De boladas',
+          'tipo_vivienda_cliente' => 'Propia',
           'ocupacion_cliente' => 'Trabajador',
           'gasto_aliment_cliente' => $this->faker->numberBetween(1,100),
           'gasto_agua_cliente' => $this->faker->numberBetween(1,100),

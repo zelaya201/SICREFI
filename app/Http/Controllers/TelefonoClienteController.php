@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
+use App\Models\TelCliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -81,9 +83,16 @@ class TelefonoClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit()
+    public function edit(Request $request, $id)
     {
-        //
+      $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
+
+      $telefono = new TelCliente();
+      $telefono->tel_cliente = $request->input('tel');
+      $telefono->id_cliente = $cliente->id_cliente;
+      $telefono->save();
+
+      return ['success' => true];
     }
 
     /**
@@ -102,8 +111,11 @@ class TelefonoClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy($id)
     {
-        abort(404);
+      $telefono = TelCliente::query()->where(['id_tel_cliente' => $id])->get()->first();
+      $telefono->delete();
+
+      return ['success' => true];
     }
 }
