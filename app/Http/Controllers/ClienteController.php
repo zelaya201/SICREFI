@@ -288,6 +288,9 @@ class ClienteController extends Controller
    */
   public function destroy($id)
   {
-    //
+    $cliente = Cliente::query()->where(['id_cliente' => $id])->get();
+    dd($cliente);
+
+    return view('content.clientes.index');
   }
 }
