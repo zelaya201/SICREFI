@@ -222,6 +222,8 @@
       </div>
     </div>
 
+    @include('.content.clientes._partials.dar_alta_cliente')
+
     <!-- Modal agregar negocio -->
     <form action="{{ route('negocios.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
           id="form-negocio">

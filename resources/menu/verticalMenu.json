@@ -20,6 +20,21 @@
       "name": "Créditos",
       "icon": "menu-icon tf-icons bx bx-dollar-circle",
       "slug": "creditos.index"
+    },
+    {
+      "menuHeader": "Configuración"
+    },
+    {
+      "url": "#",
+      "name": "Seguridad",
+      "icon": "menu-icon tf-icons bx bx-lock",
+      "slug": "usuarios.index"
+    },
+    {
+      "url": "#",
+      "name": "Ajustes",
+      "icon": "menu-icon tf-icons bx bx-cog",
+      "slug": "configuracion.index"
     }
   ]
 }
