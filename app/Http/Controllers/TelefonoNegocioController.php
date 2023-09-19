@@ -47,6 +47,11 @@ class TelefonoNegocioController extends Controller
 
           $request->session()->put('telefonos_negocio_temporal', $array);
         }else{
+
+          $request->validate([
+            'tel_negocio' => 'required|numeric|digits:8|unique:tel_negocio'
+          ]);
+
           $telefono_negocio = new TelNegocio();
           $telefono_negocio->id_negocio = $request->input('id_negocio');
           $telefono_negocio->tel_negocio = $request->input('tel_negocio');
@@ -65,6 +70,12 @@ class TelefonoNegocioController extends Controller
           $array = Arr::except($array, $request->input('id_tel_negocio'));
           $request->session()->put('telefonos_negocio_temporal', $array);
         }else{
+          $telefonos = TelNegocio::where('id_negocio', $request->input('id_negocio'))->get();
+
+          if(count($telefonos) == 1){
+            return ['success' => false, 'message' => 'No se pueden eliminar todos los teléfonos, debe haber al menos uno.'];
+          }
+
           $telefono_negocio = TelNegocio::where('id_tel_negocio', $request->input('id_tel_negocio'))->delete();
 
           if($telefono_negocio){

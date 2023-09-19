@@ -126,13 +126,6 @@ class ClienteController extends Controller
       return ['success' => false, 'message' => 'Debe agregar al menos un teléfono del cliente', 'tab' => 'cliente'];
     }
 
-    $request->validate([
-      'primer_nom_conyuge' => 'required_if:estado_civil_cliente,Casado',
-      'primer_ape_conyuge' => 'required_if:estado_civil_cliente,Casado',
-      'ocupacion_conyuge' => 'required_if:estado_civil_cliente,Casado',
-            'dir_conyuge' => 'required_if:estado_civil_cliente,Casado',
-    ]);
-
     if($request->estado_civil_cliente == 'Casado') {
       $request->validate([
         'primer_nom_conyuge' => 'required:min:2|max:50|alpha',
@@ -149,12 +142,12 @@ class ClienteController extends Controller
       }
     }
 
-    if(empty($array_referencias) || count($array_referencias) < 2) {
-      return ['success' => false, 'message' => 'Debe agregar al menos tres referencias personales', 'tab' => 'referencia'];
+    if(empty($array_referencias) || count($array_referencias) < 1) {
+      return ['success' => false, 'message' => 'Debe agregar al menos una referencia personal', 'tab' => 'referencia'];
     }
 
     if(empty($array_bienes)) {
-      return ['success' => false, 'message' => 'Debe agregar un bien', 'tab' => 'bien'];
+      return ['success' => false, 'message' => 'Debe agregar al menos un bien', 'tab' => 'bien'];
     }
 
     $cliente = new Cliente();
