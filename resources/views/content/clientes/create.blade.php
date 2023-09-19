@@ -934,10 +934,6 @@
 
           $('#id_bien').val(data.id);
           $('#nom_bien').val(data.nom_bien);
-          $('#dir_bien').val(data.dir_bien);
-          $('#valor_bien').val(data.valor_bien);
-          $('#tipo_bien').val(data.tipo_bien);
-          $('#descripcion_bien').val(data.descripcion_bien);
         },
         error: function (xhr) {
           /* Mensajes de error */
@@ -977,7 +973,6 @@
 
       $('#tabla-bien').html(html);
     }
-
     /** FIN FUNCIONES DE BIEN **/
 
 
