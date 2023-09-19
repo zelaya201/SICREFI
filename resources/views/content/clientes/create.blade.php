@@ -29,8 +29,8 @@
             <li class="list-inline-item fw-semibold">
 
               <button class="nav-link btn btn-primary" type="button" id="btn-guardar-cliente">
-                Continuar
-                <span class="tf-icons bx bx-right-arrow-alt"></span>
+                <span class="tf-icons bx bx-save"></span>
+                Guardar cliente
               </button>
             </li>
             <li class="list-inline-item fw-semibold">
@@ -492,9 +492,19 @@
             data: datos,
             success: function (data) {
               /* Mensaje de exito */
-              $('#modal-bien').modal('hide');
-              $('#form-bien').trigger('reset');
-              mostrarBienes(data);
+              if(data.success === false){
+                $('#nom_bien').addClass('is-invalid');
+                $('#nom_bien_error').html(data.message);
+
+                $('#nom_bien').change(function () {
+                  $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+                });
+              }else{
+                $('#modal-bien').modal('hide');
+                $('#form-bien').trigger('reset');
+                mostrarBienes(data);
+              }
+
             },
             error: function (xhr) {
               /* Mensajes de error */
@@ -584,8 +594,6 @@
             }
           });
         }
-
-
       });
       /** FIN EVENTOS DE BOTONES TELEFONO CONYUGE **/
 
@@ -725,15 +733,15 @@
           $('#nom_negocio').val(data.nom_negocio);
           $('#dir_negocio').val(data.dir_negocio);
           $('#tiempo_negocio').val(data.tiempo_negocio);
-          $('#buena_venta_negocio').val(data.buena_venta_negocio);
-          $('#mala_venta_negocio').val(data.mala_venta_negocio);
-          $('#ganancia_diaria_negocio').val(data.ganancia_diaria_negocio);
-          $('#inversion_diaria_negocio').val(data.inversion_diaria_negocio);
-          $('#gasto_emp_negocio').val(data.gasto_emp_negocio);
-          $('#gasto_alquiler_negocio').val(data.gasto_alquiler_negocio);
-          $('#gasto_impuesto_negocio').val(data.gasto_impuesto_negocio);
-          $('#gasto_credito_negocio').val(data.gasto_credito_negocio);
-          $('#gasto_otro_negocio').val(data.gasto_otro_negocio);
+          $('#buena_venta_negocio').val(parseFloat(data.buena_venta_negocio).toFixed(2));
+          $('#mala_venta_negocio').val(parseFloat(data.mala_venta_negocio).toFixed(2));
+          $('#ganancia_diaria_negocio').val(parseFloat(data.ganancia_diaria_negocio).toFixed(2));
+          $('#inversion_diaria_negocio').val(parseFloat(data.inversion_diaria_negocio).toFixed(2));
+          $('#gasto_emp_negocio').val(parseFloat(data.gasto_emp_negocio).toFixed(2));
+          $('#gasto_alquiler_negocio').val(parseFloat(data.gasto_alquiler_negocio).toFixed(2));
+          $('#gasto_impuesto_negocio').val(parseFloat(data.gasto_impuesto_negocio).toFixed(2));
+          $('#gasto_credito_negocio').val(parseFloat(data.gasto_credito_negocio).toFixed(2));
+          $('#gasto_otro_negocio').val(parseFloat(data.gasto_otro_negocio).toFixed(2));
 
           mostrarTelefonosNegocio(data.telefonos_negocio);
         },
@@ -745,13 +753,14 @@
 
     function mostrarNegocios(data) {
       var html = "";
+      var i = 0;
 
       $.each(data, function (key, value) {
         html += '<tr id="negocio_' + key + '">';
         html += '<td>' + key + '</td>';
         html += '<td>' + value.nom_negocio + '</td>';
         html += '<td>' + value.dir_negocio + '</td>';
-        html += '<td>' + value.tiempo_negocio + '</td>';
+        html += '<td>' + (value.tiempo_negocio / 12).toFixed(0) + ' año(s)</td>';
         html += '<td>';
         html += "<div class='dropdown-icon-demo'> " +
           "<a href='javascript:void(0);' class='btn dropdown-toggle btn-sm hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>" +
@@ -769,6 +778,7 @@
           "</div>"
         html += '</td>';
         html += '</tr>';
+        i++;
       });
 
       if (data.length === 0) {
@@ -777,7 +787,6 @@
 
       $('#tabla-negocios').html(html);
     }
-
     /** FIN FUNCIONES DE NEGOCIO **/
 
 
@@ -877,7 +886,6 @@
 
       $('#tabla-ref').html(html);
     }
-
     /** FIN FUNCIONES DE REFERENCIA **/
 
 
