@@ -24,6 +24,8 @@ class ClienteController extends Controller
    */
   public function index(Request $request)
   {
+    Session::forget('estado_filtro');
+    Session::forget('mostrar');
     $query = Cliente::query();
 
     /*if ($request->ajax()) {

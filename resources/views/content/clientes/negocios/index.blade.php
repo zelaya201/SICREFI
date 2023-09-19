@@ -82,9 +82,20 @@
   </ul>
   {{--  Fin --}}
 
+  @if(Session::has('success'))
+    <div class="alert alert-primary d-flex m-0 mt-3" role="alert">
+          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+      <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
+        <span>{{ Session::get('mensaje') }}</span>
+      </div>
+    </div>
+  @endif
+
   {{-- Contenido de los paneles --}}
   <div class="tab-content p-0">
-    <div class="tab-pane fade pt-3 show active" id="card-datos-negocios" role="tabpanel">
+    <div class="tab-pane fade show active pt-3" id="card-datos-negocios" role="tabpanel">
       <div class="row">
         <div class="col-md-12 mb-4">
           <!-- Negocios -->
