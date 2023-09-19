@@ -8,6 +8,8 @@
 
 @section('content')
 
+
+
   {{--  Header de botones --}}
   <div class="d-flex align-items-center justify-content-between py-3">
     <div class="flex-grow-1">
@@ -171,6 +173,11 @@
                     </tr>
                     @php($i++)
                   @endforeach
+                  @if(count($bienes) <= 0)
+                    <tr>
+                      <td colspan="4">No hay resultados</td>
+                    </tr>
+                  @endif
                   </tbody>
                 </table>
               </div>

@@ -641,7 +641,6 @@
           $('#lista-telefonos-ref tr td:nth-child(3)').addClass('d-none');
           $('#tabla-head-ref tr th:nth-child(3)').addClass('d-none');
 
-
         },
         error: function (xhr) {
           /* Mensajes de error */

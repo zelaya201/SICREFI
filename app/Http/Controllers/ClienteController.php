@@ -223,8 +223,9 @@ class ClienteController extends Controller
         $b->save();
       }
 
-      $request->session()->flash(['success' => true, 'mensaje' => 'Cliente agregado con éxito']);
-
+      /* Mensaje Flash */
+      Session::flash('success', '');
+      Session::flash('mensaje', 'Cliente agregado con éxito');
       return ['success' => true];
     }
 
