@@ -200,22 +200,18 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item text-danger" href="javascript:void(0);" data-bs-toggle="modal"
-                               data-bs-target="#modal-eliminar{{$cliente->id_cliente}}"><i
+                            <a class="dropdown-item text-danger" href="javascript:void(0);" id="btn_dar_baja" onclick="darDeBaja('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}')"><i
                                 class="bx bx-trash me-1"></i> Dar de baja</a>
 
                             @else
-                              <a class="dropdown-item" href="">
+                              <a class="dropdown-item" href="javascript:void(0);" onclick="darDeAlta('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}')">
                                 <i class='bx bxs-upvote' ></i> Dar de alta
                               </a>
-
                             @endif
                           </div>
                         </div>
                       </td>
                     </tr>
-                    <!-- Modal Eliminar -->
-                    @include('content.clientes._partials.eliminar_cliente')
 
                     @php $contador++; @endphp
                   @endforeach
@@ -237,8 +233,11 @@
         </div>
       </form>
 
+      <!-- Modal Eliminar -->
+      @include('content.clientes._partials.eliminar_cliente')
 
-
+      <!-- Modal Dar de alta -->
+      @include('content.clientes._partials.dar_alta_cliente')
 
 
 @endsection
@@ -304,9 +303,54 @@
         $(this).closest('form').submit();
       })
 
-      /*$('#submit_delete').on('click', function() {
-        $('#delete_form').submit()
-      })*/
+      $('#submit_delete').on('click', function() {
+        var id = $('#id_cliente').val();
+
+        $.ajax({
+          url: "{{ route('clientes.destroy', '') }}/" + id,
+          type: 'DELETE',
+          data: {
+            id : id,
+            _token: "{{ csrf_token() }}",
+          },
+          success: function(data) {
+            if(data.success) {
+              window.location.href = '{{ route("clientes.index") }}';
+            }
+          }
+        });
+      })
+
+      $('#submit_dar_alta').on('click', function (){
+        var id = $('#id_cliente_alta').val();
+
+        $.ajax({
+          url: "{{ route('clientes.update', '') }}/" + id,
+          type: 'PUT',
+          data: {
+            id : id,
+            _token: "{{ csrf_token() }}",
+          },
+          success: function(data) {
+            if(data.success) {
+              window.location.href = '{{ route("clientes.index") }}';
+            }
+          }
+        });
+      });
+
     })
+
+    function darDeBaja(id, nombre) {
+      $('#id_cliente').val(id);
+      $('#label_nom_cliente').text(nombre);
+      $('#modal-eliminar').modal('show');
+    }
+
+    function darDeAlta(id, nombre) {
+      $('#id_cliente_alta').val(id);
+      $('#label_nom_cliente_alta').text(nombre);
+      $('#modal-dar-alta').modal('show');
+    }
   </script>
 @endsection
