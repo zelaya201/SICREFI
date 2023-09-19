@@ -26,6 +26,26 @@ class ReferenciaController extends Controller
     public function store(Request $request)
     {
       if($request->input('opcion') == 'agregar'){
+
+        $request->validate([
+          'primer_nom_ref' => 'required|alpha|min:2|max:50',
+          'segundo_nom_ref' => 'nullable|alpha|min:2|max:50',
+          'tercer_nom_ref' => 'nullable|alpha|min:2|max:50',
+          'primer_ape_ref' => 'required|alpha|min:2|max:50',
+          'segundo_ape_ref' => 'nullable|alpha|min:2|max:50',
+          'dir_ref' => 'required',
+          'ocupacion_ref' => 'required',
+          'parentesco_ref' => 'required'
+        ]);
+
+        // Si es vacio el array de telefonos
+        if(empty($request->session()->get('telefonos_referencia_temporal'))){
+          return [
+            'success' => false,
+            'message' => 'Debe agregar al menos un teléfono'
+          ];
+        }
+
         if($request->input('session') == 'true') {
           $size = 1;
           $array = $request->session()->get('referencias');
@@ -75,6 +95,26 @@ class ReferenciaController extends Controller
           return Arr::get($array, $request->input('id'));
         }
       }else if($request->input('opcion') == 'actualizar') {
+
+        $request->validate([
+          'primer_nom_ref' => 'required|alpha|min:2|max:50',
+          'segundo_nom_ref' => 'nullable|alpha|min:2|max:50',
+          'tercer_nom_ref' => 'nullable|alpha|min:2|max:50',
+          'primer_ape_ref' => 'required|alpha|min:2|max:50',
+          'segundo_ape_ref' => 'nullable|alpha|min:2|max:50',
+          'dir_ref' => 'required',
+          'ocupacion_ref' => 'required',
+          'parentesco_ref' => 'required'
+        ]);
+
+        // Si es vacio el array de telefonos
+        if(empty($request->session()->get('telefonos_referencia_temporal'))){
+          return [
+            'success' => false,
+            'message' => 'Debe agregar al menos un teléfono'
+          ];
+        }
+
         if ($request->input('session') == 'true') {
           $array = $request->session()->get('referencias');
           /* Actualizar elemento del array session */

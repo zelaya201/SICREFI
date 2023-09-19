@@ -141,6 +141,26 @@ class NegocioController extends Controller
         return Arr::get($array, $request->input('id'));
       }
     }else if($request->input('opcion') == 'actualizar') {
+      $request->validate([
+        'nom_negocio' => 'required',
+        'tiempo_negocio' => 'required',
+        'dir_negocio' => 'required',
+        'buena_venta_negocio' => 'required|numeric',
+        'mala_venta_negocio' => 'required|numeric',
+        'ganancia_diaria_negocio' => 'required|numeric',
+        'inversion_diaria_negocio' => 'required|numeric',
+        'gasto_emp_negocio' => 'required|numeric',
+        'gasto_alquiler_negocio' => 'required|numeric',
+        'gasto_impuesto_negocio' => 'required|numeric',
+        'gasto_credito_negocio' => 'required|numeric',
+        'gasto_otro_negocio' => 'required|numeric'
+      ]);
+
+      // Si es vacio el array de telefonos
+      if(empty($request->session()->get('telefonos_negocio_temporal'))){
+        return ['success' => false, 'message' => 'Debe agregar al menos un teléfono'];
+      }
+
       if ($request->input('session') == 'true') {
         $array = $request->session()->get('negocios');
         /* Actualizar elemento del array session */

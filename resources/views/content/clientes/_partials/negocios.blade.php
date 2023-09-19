@@ -94,7 +94,7 @@
           <div class="row">
             <div class="col-lg-12 mb-3">
               <div class="pb-0">
-                <span class="fw-bold">Datos del negocio</span>
+                <span class="fw-bold">Datos generales</span>
                 <hr class="my-2">
               </div>
               <div>

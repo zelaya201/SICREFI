@@ -277,7 +277,7 @@
 <form action="{{ route('telsCliente.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
       id="form-telscliente">
 
-  <div class="modal fade" id="telefono-modal-cliente" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="telefono-modal-cliente" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header bg-primary">

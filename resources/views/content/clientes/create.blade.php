@@ -294,7 +294,7 @@
         e.preventDefault();
         $('#titulo-modal-negocio').html('Nuevo Negocio');
         $('#form-negocio').trigger('reset');
-        $('#btn-agregar-negocio').html('Agregar');
+        $('#btn-agregar-negocio').html('<i class="bx bx-save"></i> Guardar');
         $('#lista-telefonos-negocio').html('<tr><td colspan="3">No hay resultados</td></tr>');
 
         $('#tabla-telefonos-negocio').removeClass('border border-danger');
@@ -324,7 +324,7 @@
           datos += '&opcion=actualizar';
           datos += '&id=' + id_negocio;
           datos += '&session=true';
-        }else {
+        } else {
           datos += '&opcion=agregar';
           datos += '&session=true';
         }
@@ -336,11 +336,11 @@
           data: datos,
           success: function (data) {
             /* Mensaje de exito */
-            if(data.success === false){
+            if (data.success === false) {
               $('#tabla-telefonos-negocio').addClass('border border-danger');
               $('#tel_negocio').addClass('is-invalid');
               $('#tel_negocio_error').html(data.message);
-            }else{
+            } else {
               $('#modal-negocio').modal('hide');
               $('#form-negocio').trigger('reset');
               mostrarNegocios(data);
@@ -381,50 +381,56 @@
           datos += '&opcion=actualizar';
           datos += '&id=' + id_ref;
           datos += '&session=true';
-
-          $.ajax({
-            url: '{{ route("referencias.store") }}',
-            type: 'post',
-            dataType: 'json',
-            data: datos,
-            success: function (data) {
-              /* Mensaje de exito */
-              $('#modal-ref').modal('hide');
-              $('#form-ref').trigger('reset');
-
-              mostrarRef(data);
-            },
-            error: function (xhr) {
-              /* Mensajes de error */
-            }
-          });
         } else {
           datos += '&opcion=agregar';
           datos += '&session=true';
+        }
 
-          $.ajax({
-            url: '{{ route("referencias.store") }}',
-            type: 'post',
-            dataType: 'json',
-            data: datos,
-            success: function (data) {
-              /* Mensaje de exito */
+        $.ajax({
+          url: '{{ route("referencias.store") }}',
+          type: 'post',
+          dataType: 'json',
+          data: datos,
+          success: function (data) {
+            /* Mensaje de exito */
+            if (data.success === false) {
+              $('#tabla-telefonos-referencias').addClass('border border-danger');
+              $('#tel_ref').addClass('is-invalid');
+              $('#tel_ref_error').html(data.message);
+            } else {
               $('#modal-ref').modal('hide');
               $('#form-ref').trigger('reset');
               mostrarRef(data);
-            },
-            error: function (xhr) {
-              /* Mensajes de error */
             }
-          });
-        }
+
+          },
+          error: function (xhr) {
+            /* Mensajes de error */
+            var inputs = $('#form-ref').find('input, select, textarea');
+
+            inputs.change(function () {
+              $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+            });
+
+            var data = xhr.responseJSON;
+            if ($.isEmptyObject(data.errors) === false) {
+              $.each(data.errors, function (key, value) {
+                // Mostrar errores en los inputs
+                $('#' + key).addClass('is-invalid');
+                $('#' + key + '_error').html(value); // Agregar el mensaje de error
+              });
+
+            }
+          }
+        });
+
       });
 
       $('#btn-nuevo-ref').click(function (e) {
         e.preventDefault();
         $('#titulo-modal-ref').html('Nueva Referencia');
         $('#form-ref').trigger('reset');
-        $('#btn-agregar-ref').html('Agregar');
+        $('#btn-agregar-ref').html('<i class="bx bx-save"></i> Guardar');
         $('#lista-telefonos-ref').html('<tr><td colspan="3">No hay resultados</td></tr>');
 
         $.ajax({
@@ -505,10 +511,10 @@
 
         var objtel_cliente = $('#tel_cliente');
 
-        if(objtel_cliente.val() === ''){
+        if (objtel_cliente.val() === '') {
           objtel_cliente.addClass('is-invalid');
           $('#mensaje_tel_cliente').html('El campo es obligatorio.');
-        }else{
+        } else {
           let datos = 'tel_cliente=' + objtel_cliente.val();
           datos += '&opcion=agregar';
           datos += '&session=true';
@@ -538,10 +544,10 @@
       $('#btn-agregar-telefono-conyuge').click(function (e) {
         e.preventDefault();
 
-        if($('#tel_conyuge').val() === '') {
+        if ($('#tel_conyuge').val() === '') {
           $('#tel_conyuge').addClass('is-invalid');
           $('#mensaje-telefono-conyuge').html('El campo es obligatorio.');
-        }else{
+        } else {
           var datos = $('#form-telsconyuge').serialize();
           datos += '&opcion=agregar';
           datos += '&session=true';
@@ -574,10 +580,10 @@
         if ($('#tel_negocio').val() === '') {
           $('#tel_negocio').addClass('is-invalid');
           $('#tel_negocio_error').html('El campo es obligatorio.');
-        }else if($('#tel_negocio').val().length < 8){
+        } else if ($('#tel_negocio').val().length < 8) {
           $('#tel_negocio').addClass('is-invalid');
           $('#tel_negocio_error').html('El campo debe tener al menos 8 caracteres.');
-        }else{
+        } else {
           let datos = 'tel_negocio=' + $('#tel_negocio').val();
           datos += '&opcion=agregar';
           datos += '&session=true';
@@ -606,24 +612,34 @@
       $('#btn-agregar-telefono-referencias').click(function (e) {
         e.preventDefault();
 
-        let datos = 'tel_ref=' + $('#tel_ref').val();
-        datos += '&opcion=agregar';
-        datos += '&session=true';
+        if($('#tel_ref').val() === ''){
+          $('#tel_ref').addClass('is-invalid');
+          $('#tel_ref_error').html('El campo es obligatorio.');
+        }else if($('#tel_ref').val().length < 8){
+          $('#tel_ref').addClass('is-invalid');
+          $('#tel_ref_error').html('El campo debe tener al menos 8 caracteres.');
+        }else{
+          let datos = 'tel_ref=' + $('#tel_ref').val();
+          datos += '&opcion=agregar';
+          datos += '&session=true';
 
-        $.ajax({
-          url: '{{ route("telsReferencia.store") }}',
-          type: 'post',
-          dataType: 'json',
-          data: datos,
-          success: function (data) {
-            /* Mensaje de exito */
-            $('#tel_ref').val('');
-            mostrarTelefonosReferencia(data);
-          },
-          error: function (xhr) {
-            /* Mensajes de error */
-          }
-        });
+          $.ajax({
+            url: '{{ route("telsReferencia.store") }}',
+            type: 'post',
+            dataType: 'json',
+            data: datos,
+            success: function (data) {
+              /* Mensaje de exito */
+              $('#tel_ref').val('');
+              mostrarTelefonosReferencia(data);
+            },
+            error: function (xhr) {
+              /* Mensajes de error */
+            }
+          });
+        }
+
+
       });
       /** FIN EVENTOS DE BOTONES TELEFONO REFERENCIA **/
 
@@ -687,7 +703,7 @@
 
           $('#modal-negocio').modal('show');
           $('#form-negocio').trigger('reset');
-          $('#btn-agregar-negocio').html('Modificar');
+          $('#btn-agregar-negocio').html('<i class="bx bx-edit-alt me-1"></i>Modificar');
 
           $('#id_negocio').val(data.id);
           $('#nom_negocio').val(data.nom_negocio);
@@ -790,7 +806,7 @@
 
           $('#modal-ref').modal('show');
           $('#form-ref').trigger('reset');
-          $('#btn-agregar-ref').html('Modificar');
+          $('#btn-agregar-ref').html('<i class="bx bx-edit-alt me-1"></i>Modificar');
 
           $('#id_ref').val(data.id);
           $('#primer_nom_ref').val(data.primer_nom_ref);
@@ -890,7 +906,7 @@
 
           $('#modal-bien').modal('show');
           $('#form-bien').trigger('reset');
-          $('#btn-agregar-bien').html('Modificar');
+          $('#btn-agregar-bien').html('<i class="bx bx-edit-alt me-1"></i>Modificar');
 
           $('#id_bien').val(data.id);
           $('#nom_bien').val(data.nom_bien);
@@ -1133,6 +1149,9 @@
         html += '<tr><td colspan="3">No hay resultados</td></tr>';
       }
 
+      $('#tel_ref_error').html('');
+      $('#tel_ref').removeClass('is-invalid');
+      $('#tabla-telefonos-referencias').removeClass('border border-danger');
       $('#lista-telefonos-ref').html(html);
     }
 
