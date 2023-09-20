@@ -45,7 +45,7 @@
   <ul class="nav nav-pills" role="tablist">
     <li class="nav-item" role="presentation">
       <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="#">
+         href="{{ route('clientes.showEdit', $cliente->id_cliente) }}">
         <i class="bx bx-user"></i> Cliente
       </a>
     </li>

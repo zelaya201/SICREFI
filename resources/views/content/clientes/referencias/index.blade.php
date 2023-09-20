@@ -16,7 +16,6 @@
             <span class="text-muted fw-light">Clientes /</span> Referencias Personales
             <span
               class="text-muted fw-light fw">/ {{ $cliente->dui_cliente }} - {{ $cliente->primer_nom_cliente . ' ' . $cliente->primer_ape_cliente }}</span>
-
           </h4>
         </div>
         <ul
@@ -43,7 +42,7 @@
   <ul class="nav nav-pills" role="tablist">
     <li class="nav-item" role="presentation">
       <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="#">
+         href="{{ route('clientes.showEdit', $cliente->id_cliente) }}">
         <i class="bx bx-user"></i> Cliente
       </a>
     </li>

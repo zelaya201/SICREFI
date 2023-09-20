@@ -84,6 +84,42 @@ class ClienteController extends Controller
   public function store(Request $request)
   {
 
+    if($request->input('modificarCliente') == 'true') {
+      $id = $request->input('id_cliente');
+       $request->validate([
+        'dui_cliente' => 'required|numeric|digits:9|unique:cliente,dui_cliente,' . $id . ',id_cliente',
+        'primer_nom_cliente' => 'required|min:2|max:50|alpha',
+        'segundo_nom_cliente' => 'nullable|min:2|max:50|alpha',
+        'tercer_nom_cliente' => 'nullable|min:2|max:50|alpha',
+        'primer_ape_cliente' => 'required|min:2|max:50|alpha',
+        'segundo_ape_cliente' => 'nullable|min:2|max:50|alpha',
+        'fech_nac_cliente' => 'required|date',
+        'ocupacion_cliente' => 'required|min:3',
+        'tipo_vivienda_cliente' => 'required',
+        'dir_cliente' => 'required',
+        'gasto_aliment_cliente' => 'required|numeric',
+        'gasto_agua_cliente' => 'required|numeric',
+        'gasto_luz_cliente' => 'required|numeric',
+        'gasto_cable_cliente' => 'required|numeric',
+        'gasto_vivienda_cliente' => 'required|numeric',
+        'gasto_otro_cliente' => 'required|numeric',
+        'email_cliente' => 'required|email|unique:cliente,email_cliente,' . $id . ',id_cliente',
+        'estado_civil_cliente' => 'required',
+      ]);
+
+      $cliente = Cliente::where(['id_cliente' => $id])->get()->first();
+      $cliente->fill($request->all());
+
+      if($cliente->save()) {
+        /* Mensaje Flash */
+        Session::flash('success', '');
+        Session::flash('mensaje', 'Cliente modificado con éxito');
+        return ['success' => true];
+      }
+
+      return ['success' => false, 'message' => 'Error al modificar cliente', 'errors' => $cliente->errors()];
+    }
+
     $date = date('Y-m-d', strtotime('-18 years'));
 
     $request->validate([
@@ -257,6 +293,9 @@ class ClienteController extends Controller
   }
 
   public function edit(Request $request, $id) {
+    /* Modificar cliente */
+
+
     return $id;
   }
 

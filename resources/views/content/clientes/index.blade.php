@@ -184,8 +184,7 @@
                           </a>
                           <div class="dropdown-menu" style="">
                             @if($cliente->estado_cliente == 'Activo')
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="verCreditos({ $cliente->id_cliente })"><i class="bx bx-show me-1"></i>
-                              Ver</a>
+
                             <a class="dropdown-item" href="{{ route('negocios.show', $cliente->id_cliente) }}"><i class="bx bx-store-alt me-1"></i>
                               Negocios</a>
                             <a class="dropdown-item" href="{{ route('bienes.show', $cliente->id_cliente) }}"><i class="bx bx-building me-1"></i>

@@ -12,7 +12,7 @@
               <label class="form-label" for="dui_cliente">DUI (*)</label>
 
               <input type="text" class="form-control" name="dui_cliente" id="dui_cliente" placeholder="000000000" value="{{$cliente->dui_cliente}}"
-                     maxlength="9" onkeypress="return soloNumeros(event)" disabled>
+                     maxlength="9" onkeypress="return soloNumeros(event)">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="dui_cliente_error"></div>
