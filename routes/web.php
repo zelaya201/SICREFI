@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\BienController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\ReferenciaController;
 use App\Http\Controllers\TelefonoClienteController;
 use App\Http\Controllers\TelefonoConyugeController;
 use App\Http\Controllers\TelefonoNegocioController;
 use App\Http\Controllers\TelefonoReferenciaController;
+use App\Models\Credito;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,3 +56,5 @@ Route::resource('telsNegocio', TelefonoNegocioController::class);
 
 // Telefono Referencia Route
 Route::resource('telsReferencia', TelefonoReferenciaController::class);
+
+Route::resource('creditos', CreditoController::class);

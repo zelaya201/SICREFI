@@ -6,7 +6,7 @@
 @extends('layouts/contentNavbarLayout')
 @section('title', 'Clientes')
 @section('content')
-    <div class=" flex-grow-1 container-p-y">
+    <div class=" flex-grow-1 py-3">
       <div class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column mb-4">
         <div class="user-profile-info py-1">
           <h4 class="fw-bold m-0"><span class="text-muted fw-light">Clientes /</span> Cartera de clientes</h4>
