@@ -9,6 +9,8 @@ class CreditoBien extends Model
 {
     use HasFactory;
 
+    protected $table = 'credito_bien';
+
     public function credito() {
       return $this->belongsTo(Credito::class, 'id_credito');
     }

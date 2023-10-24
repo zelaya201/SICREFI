@@ -16,12 +16,18 @@ return new class extends Migration
         Schema::create('credito', function (Blueprint $table) {
             $table->id('id_credito');
             $table->double('monto_credito', 8,2);
+            $table->double('desembolso_credito', 8,2);
             $table->date('fecha_emision_credito');
             $table->date('fecha_vencimiento_credito');
             $table->double('tasa_interes_credito',8,2);
             $table->double('monto_neto_credito',8,2);
-            $table->string('estado_credito',70);
+            $table->double('monto_cuota_credito',8,2);
+            $table->integer('n_cuotas_credito');
+            $table->string('frecuencia_credito',30);
+
             $table->string('tipo_credito',30);
+            $table->string('estado_credito',70);
+
             $table->bigInteger('id_cliente')->unsigned();
             $table->foreign('id_cliente')
               ->references('id_cliente')

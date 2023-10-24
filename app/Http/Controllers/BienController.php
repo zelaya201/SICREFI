@@ -187,4 +187,16 @@ class BienController extends Controller
     {
         abort(404);
     }
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function get($id)
+  {
+    $bienes = Bien::query()->where(['id_cliente' => $id])->get();
+    return response($bienes);
+  }
 }
