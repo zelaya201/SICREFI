@@ -6,7 +6,6 @@
         <hr class="my-2">
       </div>
       <div class="card-body">
-
         <div class="row">
           <div class="col-md mb-3 text-center">
             <label class="form-label d-block" for="">Tipo de crédito</label>
@@ -79,8 +78,8 @@
     </div>
   </div>
 
-  <div class="col-lg-6">
-    <div class="card mb-4">
+  <div class="col-lg-6 mb-4">
+    <div class="card h-100">
       <div class="card-header pb-0">
         <span class="fw-bold">Datos del crédito</span>
         <hr class="my-2">
@@ -186,55 +185,44 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header pb-0">
+        <span class="fw-bold">Plan de pagos</span>
+        <hr class="my-2">
+      </div>
+
+      <div class="card-body">
         <div class="row">
-          <div class="col-md-12 mb-3 text-center">
-            <button type="button" class="btn btn-outline-info w-50" id="btn_calcular_cuotas">
-              <span class="tf-icons bx bx-calculator"></span> Calcular cuotas
-            </button>
+          <div class="col-md-12 mb-3">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle text-center" id="tabla_cuotas">
+                <thead class="table-light">
+                <tr>
+                  <th scope="col">N°</th>
+                  <th scope="col">Fecha de pago</th>
+                  <th scope="col">Capital</th>
+                  <th scope="col">Interés</th>
+                  <th scope="col">Total</th>
+                </tr>
+                </thead>
+                <tbody id="datos_cuotas">
+                <tr>
+                  <td colspan="5">No hay cuotas disponibles</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
     </div>
   </div>
 </div>
 
 
-<!-- Modal agregar telefono cliente -->
-<div class="modal fade" id="modal_cuotas" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-primary">
-        <h5 class="modal-title text-white text-center">Plan de pagos</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body">
-        <div class="row">
-          <table class="table table-bordered border-top table-hover" id="tabla-telefonos-cliente">
-            <thead>
-            <tr>
-              <th>#</th>
-              <th>Interés</th>
-              <th>Monto</th>
-              <th>Total</th>
-              <th>Fecha</th>
-            </tr>
-            </thead>
-            <tbody id="lista_cuotas">
-            <tr>
-              <td colspan="5">No hay resultados</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="col-12 text-center">
-          <button type="button" class="btn btn-label-secondary mt-3" data-bs-dismiss="modal"
-                  aria-label="Close">Cerrar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

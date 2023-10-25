@@ -9,6 +9,10 @@ class Cuota extends Model
 {
     use HasFactory;
 
+    protected $table = 'cuota';
+
+    protected $primaryKey = 'id_cuota';
+
     public function credito(){
       return $this->belongsTo(Credito::class, 'id_credito');
     }

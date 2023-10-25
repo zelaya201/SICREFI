@@ -86,12 +86,11 @@
 
     var form_credito = $('#form-credito');
 
-    var tabla_cuotas = $('#lista_cuotas');
+    var tabla_cuotas = $('#datos_cuotas');
 
     var modal_cuotas = $('#modal_cuotas');
 
     var btn_guardar_credito = $('#btn_guardar_credito');
-    var btn_calcular_cuotas = $('#btn_calcular_cuotas');
 
     var select_id_cliente = new Selectr('#id_cliente', {
       searchable: true,
@@ -129,7 +128,7 @@
         }
       });
 
-      btn_guardar_credito.on('click', function (){
+      btn_guardar_credito.on('click', function () {
         // Registrar credito
         $.ajax({
           url: '{{ route("creditos.store") }}',
@@ -137,31 +136,35 @@
           dataType: 'json',
           data: form_credito.serialize() + '&bienes=' + select_bienes.getValue(),
           success: function (data) {
-            if(data.success){
+            if (data.success) {
               window.location.href = '{{ route("creditos.index") }}';
             }
           }
         });
       });
 
-      btn_calcular_cuotas.on('click', function () {
-        calcularPlanPagos();
-      });
-
       input_monto.on('input', function () {
         calcularMontonPagar();
+        calcularPlanPagos()
       });
 
       input_tasa_interes.on('input', function () {
         calcularMontonPagar();
+        calcularPlanPagos();
       });
 
       input_n_cuotas.on('input', function () {
         calcularMontonPagar();
+        calcularPlanPagos();
       });
 
       select_frecuencia_pago.on('change', function () {
         calcularMontonPagar();
+        calcularPlanPagos();
+      });
+
+      input_fecha_primer_cuota.on('change', function () {
+        calcularPlanPagos();
       });
     });
 
@@ -170,34 +173,38 @@
       if (id_cliente_selected !== '') {
         cargarBienesSelect(id_cliente_selected);
 
-        if(check_nuevo.checked === false){
+        if (check_nuevo.is(':checked') !== true) {
           cargarCreditosSelect(id_cliente_selected);
         }
+
       }
     });
 
-    function cargarCreditosSelect(id_cliente_selected){
+    function cargarCreditosSelect(id_cliente_selected) {
       $.ajax({
-        url: "{{ route('creditos.get' , ':id')}}" .replace(':id', id_cliente_selected),
+        url: "{{ route('creditos.get' , ':id')}}".replace(':id', id_cliente_selected),
         type: 'GET',
         data: {
           id: id_cliente_selected
         },
         success: function (data) {
+          console.log(data);
           select_id_credito.removeAll();
-          data.forEach(function (element) {
-            select_id_credito.add({
-              value: element.id_credito,
-              text: element.tipo_credito + ' - ' + element.monto_credito
-            });
+
+          select_id_credito.add({
+            value: data.id_credito,
+            text: 'N° de Crédito: ' + data.id_credito + ' Monto total: $' + data.monto_credito.toFixed(2) + ' Deuda total: $' + data.deuda_credito.toFixed(2) + ' Estado: ' + data.estado_credito
           });
+
+          input_deuda.val(data.deuda_credito.toFixed(2));
+
         }
       });
     }
 
-    function cargarBienesSelect(id_credito_selected){
+    function cargarBienesSelect(id_credito_selected) {
       $.ajax({
-        url: "{{ route('bienes.get' , ':id')}}" .replace(':id', id_credito_selected),
+        url: "{{ route('bienes.get' , ':id')}}".replace(':id', id_credito_selected),
         type: 'GET',
         data: {
           id: id_credito_selected
@@ -214,7 +221,7 @@
       });
     }
 
-    function calcularMontonPagar(){
+    function calcularMontonPagar() {
       let monto_credito = input_monto.val();
       let tasa_interes = input_tasa_interes.val();
       let n_cuotas = input_n_cuotas.val();
@@ -235,59 +242,97 @@
       }
     }
 
-    function calcularPlanPagos(){
+    function calcularPlanPagos() {
       let monto_credito = input_monto.val();
       let tasa_interes = input_tasa_interes.val();
       let n_cuotas = input_n_cuotas.val();
       let fecha_primer_cuota = input_fecha_primer_cuota.val();
       let frecuencia_pago = select_frecuencia_pago.val();
 
+      if (monto_credito === '' || tasa_interes === '' || n_cuotas === '' || fecha_primer_cuota === '' || frecuencia_pago === '') {
+        limpiarTablaCuotas();
+        return;
+      }
+
       let monto_interes = monto_credito * tasa_interes / n_cuotas;
       let monto_cuota = parseFloat(monto_credito) / n_cuotas;
       let monto_total = monto_cuota + monto_interes;
 
-      tabla_cuotas.empty();
+      $.ajax({
+        url: "{{ route('creditos.calcularFechasCuotas') }}",
+        type: 'GET',
+        dataType: 'json',
+        data: {
+          n_cuotas_credito: n_cuotas,
+          fech_primer_cuota: fecha_primer_cuota,
+          frecuencia_credito: frecuencia_pago
+        },
+        success: function (data) {
+          console.log(data);
+          tabla_cuotas.empty();
+          let i = 1;
+          data.forEach(function (element) {
+            tabla_cuotas.append(
+              '<tr>' +
+              '<td>' + i + '</td>' +
+              '<td>' + parseDate(new Date(element.date)) + '</td>' +
+              '<td>$' + monto_cuota.toFixed(2) + '</td>' +
+              '<td>$' + monto_interes.toFixed(2) + '</td>' +
+              '<td>$' + monto_total.toFixed(2) + '</td>' +
+              '</tr>'
+            );
 
-      for (let i = 0; i < n_cuotas; i++) {
-
-        let fecha_cuota = changeTimezone(new Date(fecha_primer_cuota));
-
-        // if(frecuencia_pago === 'Diario') {
-        //   fecha_cuota.setDate(fecha_cuota.getDate() + i);
-        // } else if (frecuencia_pago === 'Semanal') {
-        //   fecha_cuota.setDate(fecha_cuota.getDate() + (i * 7));
-        // } else if (frecuencia_pago === 'Quincenal') {
-        //   fecha_cuota.setDate(fecha_cuota.getDate() + (i * 15));
-        // } else if (frecuencia_pago === 'Mensual') {
-        //   fecha_cuota.setMonth(fecha_cuota.getMonth() + i);
-        // }
-
-        let row = '<tr>' +
-          '<td>' + (i + 1) + '</td>' +
-          '<td>' + fecha_cuota + '</td>' +
-          '<td>' + monto_cuota.toFixed(2) + '</td>' +
-          '<td>' + monto_interes.toFixed(2) + '</td>' +
-          '<td>' + monto_total.toFixed(2) + '</td>' +
-          '</tr>';
-
-        tabla_cuotas.append(row);
-      }
-
-      modal_cuotas.modal('show');
+            i++;
+          });
+        }
+      });
     }
 
-    function parseDate(date){
+    function parseDate(date) {
       let d = new Date(date);
       let day = d.getDate();
-      let month = d.getMonth() + 1;
+      let month = parseMonth(d.getMonth() + 1);
       let year = d.getFullYear();
-      return day + '/' + month + '/' + year;
+      return day + ' de ' + month + ' de ' + year;
     }
 
-    function changeTimezone(fecha) {
-      let formatter = new Intl.DateTimeFormat('es-SV', {timeZone: 'America/El_Salvador'});
-      return formatter.format(fecha);
+    function parseMonth(month) {
+      switch (month) {
+        case 1:
+          return 'Enero';
+        case 2:
+          return 'Febrero';
+        case 3:
+          return 'Marzo';
+        case 4:
+          return 'Abril';
+        case 5:
+          return 'Mayo';
+        case 6:
+          return 'Junio';
+        case 7:
+          return 'Julio';
+        case 8:
+          return 'Agosto';
+        case 9:
+          return 'Septiembre';
+        case 10:
+          return 'Octubre';
+        case 11:
+          return 'Noviembre';
+        case 12:
+          return 'Diciembre';
+      }
     }
+
+    function limpiarTablaCuotas() {
+      tabla_cuotas.empty();
+      tabla_cuotas.append('<tr>' +
+        '<td colspan="5" class="text-center">No hay cuotas disponibles</td>' +
+        '</tr>');
+    }
+
+
   </script>
 
 @endsection

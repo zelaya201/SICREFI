@@ -20,7 +20,6 @@ class Credito extends Model
       'fecha_vencimiento_credito',
       'tasa_interes_credito',
       'monto_neto_credito',
-      'monto_cuota_credito',
       'n_cuotas_credito',
       'frecuencia_credito',
       'tipo_credito',

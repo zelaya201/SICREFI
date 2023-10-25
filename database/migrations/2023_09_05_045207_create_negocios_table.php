@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('id_negocio');
             $table->string('nom_negocio',150);
             $table->string('tiempo_negocio',75);
-            $table->string('dir_negocio',175);
+            $table->string('dir_negocio');
             $table->double('buena_venta_negocio',8,2);
             $table->double('mala_venta_negocio',8,2);
             $table->double('ganancia_diaria_negocio',8,2);

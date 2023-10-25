@@ -37,9 +37,7 @@ Route::resource('referencias',ReferenciaController::class);
 
 // Cliente Route
 Route::resource('clientes',ClienteController::class);
-
 Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'showEdit'])->name('clientes.showEdit');
-
 Route::get('/clientes/edit/{cliente}', [ClienteController::class, 'edit'])->name('clientes.edit');
 
 // Bien Route
@@ -59,8 +57,8 @@ Route::resource('telsNegocio', TelefonoNegocioController::class);
 Route::resource('telsReferencia', TelefonoReferenciaController::class);
 
 // Credito Route
+Route::get('/creditos/calcularFechasCuotas', [CreditoController::class, 'calcularFechasCuotas'])->name('creditos.calcularFechasCuotas');
 Route::get('/creditos/{credito}/get', [CreditoController::class, 'get'])->name('creditos.get');
-
 Route::resource('creditos', CreditoController::class);
 
 

@@ -22,7 +22,7 @@ return new class extends Migration
           $table->string('primer_ape_cliente', 50);
           $table->string('segundo_ape_cliente', 50)->nullable();
           $table->date('fech_nac_cliente');
-          $table->string('dir_cliente', 150);
+          $table->string('dir_cliente');
           $table->string('email_cliente', 200)->unique();
           $table->string('estado_civil_cliente', 150);
           $table->string('tipo_vivienda_cliente', 75);
