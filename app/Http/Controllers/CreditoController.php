@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bien;
 use App\Models\Cliente;
 use App\Models\Credito;
 use App\Models\CreditoBien;
 use App\Models\Cuota;
+use App\Models\Negocio;
+use App\Models\Referencia;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -30,9 +33,87 @@ class CreditoController extends Controller
      */
     public function create()
     {
-      $clientes = Cliente::query()->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente', 'asc')->get();
+      $clientes = Cliente::query()
+        ->select('dui_cliente','primer_nom_cliente', 'segundo_nom_cliente', 'tercer_nom_cliente', 'primer_ape_cliente', 'segundo_ape_cliente', 'id_cliente', 'estado_cliente')
+        ->where(['estado_cliente' => 'Activo'])
+        ->orderBy('primer_nom_cliente', 'ASC')
+        ->get();
+
       $clientes = $clientes->map(function ($cliente) {
         $cliente->nombre_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente .' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
+        $bienes = Bien::query()
+          ->select('id_bien', 'nom_bien')
+          ->where(['id_cliente' => $cliente->id_cliente])
+          ->where('estado_bien', 'Activo')
+          ->get();
+
+        $credito = Credito::query()
+          ->select('id_credito', 'monto_neto_credito', 'tasa_interes_credito', 'n_cuotas_credito', 'frecuencia_credito', 'tipo_credito', 'monto_credito', 'estado_credito')
+          ->where(['id_cliente' => $cliente->id_cliente, 'estado_credito' => 'Vigente'])
+          ->first();
+
+        $cliente->credito = null;
+
+        if($credito){
+          $deudaCredito = Cuota::query()
+            ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])
+            ->sum('total_cuota');
+
+          $cuotasMora = Cuota::query()
+            ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])
+            ->where('fecha_pago_cuota', '<', date('Y-m-d'))
+            ->sum('total_cuota');
+
+          if ($cuotasMora > 0) {
+            $deudaCredito += ($cuotasMora * 0.05);
+            $credito->estado_credito = 'Mora';
+          }
+
+          $cuotasPagadas = Cuota::query()
+            ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pagada'])
+            ->sum('total_cuota');
+
+          $porcentajePagado = ($cuotasPagadas * 100) / $credito->monto_credito;
+
+          $credito->renovacion = false;
+
+          if($porcentajePagado >= 60){
+            $credito->renovacion = true;
+
+            if($credito->estado_credito == 'Mora'){
+              $credito->renovacion = false;
+            }
+          }
+
+          $credito->porcentaje_pagado = $porcentajePagado;
+
+          $credito->deuda_credito = $deudaCredito;
+          $bienesCredito = CreditoBien::query()
+            ->select('id_bien')
+            ->where(['id_credito' => $credito->id_credito])
+            ->get();
+
+          $credito->bienes = $bienesCredito;
+
+          $cliente->credito = $credito;
+        }
+
+        $referencias = Referencia::query()
+          ->select('primer_nom_ref', 'segundo_nom_ref', 'primer_ape_ref', 'segundo_ape_ref', 'id_ref')
+          ->where(['id_cliente' => $cliente->id_cliente])
+          ->where('estado_ref', 'Activo')
+          ->get();
+
+        $negocios = Negocio::query()
+          ->select('nom_negocio', 'id_negocio')
+          ->where(['id_cliente' => $cliente->id_cliente])
+          ->where('estado_negocio', 'Activo')
+          ->get();
+
+        $cliente->referencias = $referencias;
+        $cliente->negocios = $negocios;
+        $cliente->bienes = $bienes;
+
         return $cliente;
       });
       return response(view('content.creditos.create', compact('clientes')));
@@ -48,6 +129,29 @@ class CreditoController extends Controller
     public function store(Request $request)
     {
 
+      if($request->input('tipo_credito') != 'Nuevo'){
+        $credito = Credito::query()->where(
+          ['id_cliente' => $request->input('id_cliente'), 'estado_credito' => 'Vigente']
+        )->first();
+
+        $credito->estado_credito = 'Renovado';
+
+        if($request->input('tipo_credito') == 'Refinanciamiento'){
+          $credito->estado_credito = 'Refinanciado';
+        }
+
+        $credito->save();
+
+        $cuotas = Cuota::query()->where(['id_credito' => $credito->id_credito])
+          ->where('estado_cuota', 'Pendiente')
+          ->get();
+
+        foreach ($cuotas as $cuota) {
+          $cuota->estado_cuota = 'Pagada';
+          $cuota->save();
+        }
+      }
+
       $credito = new Credito();
       $credito->fecha_emision_credito = date('Y-m-d');
       $credito->estado_credito = 'Vigente';
@@ -59,7 +163,6 @@ class CreditoController extends Controller
         $request->input('fech_primer_cuota'),
         $credito->n_cuotas_credito
       );
-
 
       $credito->fecha_vencimiento_credito = $cuotas[count($cuotas) - 1]->format('Y-m-d');
 
@@ -75,7 +178,7 @@ class CreditoController extends Controller
         }
 
         $capital_cuota = $request->input('monto_neto_credito') / $request->input('n_cuotas_credito');
-        $interes_cuota = ($request->input('monto_neto_credito') * $request->input('tasa_interes_credito')) / $request->input('n_cuotas_credito');
+        $interes_cuota = ($request->input('monto_neto_credito') * ($request->input('tasa_interes_credito') / 100)) / $request->input('n_cuotas_credito');
 
         foreach ($cuotas as $cuota) {
           $credito_cuota = new Cuota();
@@ -142,20 +245,6 @@ class CreditoController extends Controller
     {
         //
     }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  int  $id
-   * @return Response
-   */
-  public function get($id)
-  {
-    $credito = Credito::query()->where(['id_cliente' => $id, 'estado_credito' => 'Vigente'])->first();
-    $deudaCredito = Cuota::query()->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])->sum('total_cuota');
-    $credito->deuda_credito = $deudaCredito;
-    return response($credito);
-  }
 
   /**
    * Remove the specified resource from storage.
