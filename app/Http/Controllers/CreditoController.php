@@ -116,6 +116,7 @@ class CreditoController extends Controller
 
         return $cliente;
       });
+
       return response(view('content.creditos.create', compact('clientes')));
     }
 

@@ -11,7 +11,7 @@
           <div class="col-md-12 mb-3">
             <label class="form-label" for="id_cliente">Cliente (*)</label>
             <select class="" id="id_cliente">
-              <option disabled selected> Seleccione un cliente</option>
+                <option disabled selected> Seleccione un cliente</option>
               @foreach($clientes as $cliente)
                 <option value="{{ json_encode($cliente) }}">
                   {{ $cliente->dui_cliente }} - {{ $cliente->nombre_completo }}
@@ -59,7 +59,7 @@
           <div class="row">
             <div class="col-md-12 mb-3">
               <label class="form-label" for="id_bien">Bienes muebles (*)</label>
-              <select class="form-select" name="id_bien" id="id_bien">
+              <select class="form-select" id="id_bien">
                 <option disabled> No hay bienes disponibles</option>
               </select>
 

@@ -24,6 +24,7 @@ class Credito extends Model
       'frecuencia_credito',
       'tipo_credito',
       'estado_credito',
+      'id_negocio',
       'id_cliente',
       'id_coop'
     ];
@@ -34,5 +35,9 @@ class Credito extends Model
 
     public function cooperativa() {
       return $this->belongsTo(Cooperativa::class, 'id_coop');
+    }
+
+    public function negocio(){
+      return $this->belongsTo(Negocio::class, 'id_negocio');
     }
 }

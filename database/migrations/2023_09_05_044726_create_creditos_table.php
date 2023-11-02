@@ -27,6 +27,12 @@ return new class extends Migration
             $table->string('tipo_credito',30);
             $table->string('estado_credito',70);
 
+            $table->bigInteger('id_negocio')->unsigned();
+            $table->foreign('id_negocio')
+              ->references('id_negocio')
+              ->on('negocio')
+              ->onDelete('cascade');
+
             $table->bigInteger('id_cliente')->unsigned();
             $table->foreign('id_cliente')
               ->references('id_cliente')
