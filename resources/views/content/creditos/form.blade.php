@@ -25,7 +25,6 @@
           </div>
         </div>
 
-
           <div class="row" id="section_tipo_credito">
             <div class="col-md mb-3 text-center">
               <label class="form-label d-block" for="">Tipo de crédito</label>
@@ -73,7 +72,7 @@
           <div class="col-md-6 mb-3">
             <label class="form-label" for="id_ref">Referencias (*)</label>
             <select class="form-select" id="id_ref">
-              <option disabled selected> Seleccione una referencia</option>
+              <option disabled> Seleccione una referencia</option>
             </select>
 
             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
@@ -142,7 +141,7 @@
           </div>
 
           <div class="col-md-6 mb-3">
-            <label class="form-label" for="n_cuotas_credito">N° de cuotas (*)</label>
+            <label class="form-label" for="n_cuotas_credito">Plazo (*)</label>
             <input type="number" class="form-control" name="n_cuotas_credito" id="n_cuotas_credito"
                    placeholder="0" min="1" value="1">
 

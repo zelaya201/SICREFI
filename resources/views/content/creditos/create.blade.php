@@ -90,7 +90,10 @@
           url: '{{ route("creditos.store") }}',
           type: 'post',
           dataType: 'json',
-          data: form_credito.serialize() + '&bienes=' + select_bienes.getValue() + '&id_cliente=' + cliente_selected.id_cliente,
+          data: form_credito.serialize()
+            + '&bienes=' + select_bienes.getValue()
+            + '&referencias=' + select_ref.getValue()
+            + '&id_cliente=' + cliente_selected.id_cliente,
           success: function (data) {
             if (data.success) {
               window.location.href = '{{ route("creditos.index") }}';
@@ -127,7 +130,7 @@
           frecuencia_credito: frecuencia_pago
         },
         success: function (data) {
-          console.log(data);
+
           tabla_cuotas.empty();
           let i = 1;
           data.forEach(function (element) {

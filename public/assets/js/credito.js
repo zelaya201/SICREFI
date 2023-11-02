@@ -11,6 +11,7 @@ var input_deuda = $('.deuda_credito');
 var input_monto_cuota = $('.monto_cuota_credito');
 var input_fecha_primer_cuota = $('#fech_primer_cuota');
 var input_credito = $('#input_credito');
+var input_id_credito = $('#id_credito');
 
 var select_frecuencia_pago = $('#frecuencia_credito');
 
@@ -133,11 +134,13 @@ $(document).ready(function () {
         check_renovacion.prop('checked', true);
         check_refinan.prop('disabled', true);
       }else{
+        input_monto.prop('readonly', true);
         check_refinan.prop('checked', true);
         check_refinan.prop('disabled', false);
       }
 
     }else{
+      input_monto.prop('readonly', false);
       check_nuevo.prop('checked', true).prop('disabled', false)
       check_refinan.prop('disabled', true);
       check_renovacion.prop('disabled', true);
@@ -161,6 +164,7 @@ $(document).ready(function () {
       cargarNegocioSelect();
     }
 
+    calcularPlanPagos();
     calcularMontonPagar();
   });
 });
@@ -193,6 +197,7 @@ function cargarCredito() {
     }
 
     input_credito.html(html);
+    input_id_credito.val(credito_seleccionado.id_credito);
 
     cargarDatosCredito();
     calcularMontonPagar();
@@ -239,11 +244,11 @@ function cargarReferenciasSelect() {
     });
   });
 
-  // if(credito_seleccionado !== null){
-  //   credito_seleccionado.referencias.forEach(function (element) {
-  //     select_ref.setValue(element.id_ref);
-  //   });
-  // }
+  if(credito_seleccionado !== null){
+    credito_seleccionado.referencias.forEach(function (element) {
+      select_ref.setValue(element.id_ref);
+    });
+  }
 }
 
 function cargarNegocioSelect() {
@@ -255,9 +260,9 @@ function cargarNegocioSelect() {
     });
   });
 
-  // if(credito_seleccionado !== null){
-  //   select_negocio.setValue(credito_seleccionado.id_negocio);
-  // }
+  if(credito_seleccionado !== null){
+    select_negocio.setValue(credito_seleccionado.id_negocio);
+  }
 }
 
 function calcularMontonPagar() {

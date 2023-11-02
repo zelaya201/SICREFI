@@ -6,6 +6,7 @@ use App\Models\Bien;
 use App\Models\Cliente;
 use App\Models\Credito;
 use App\Models\CreditoBien;
+use App\Models\CreditoReferencia;
 use App\Models\Cuota;
 use App\Models\Negocio;
 use App\Models\Referencia;
@@ -48,7 +49,7 @@ class CreditoController extends Controller
           ->get();
 
         $credito = Credito::query()
-          ->select('id_credito', 'monto_neto_credito', 'tasa_interes_credito', 'n_cuotas_credito', 'frecuencia_credito', 'tipo_credito', 'monto_credito', 'estado_credito')
+          ->select('id_credito', 'monto_neto_credito', 'tasa_interes_credito', 'n_cuotas_credito', 'frecuencia_credito', 'tipo_credito', 'monto_credito', 'estado_credito', 'id_negocio')
           ->where(['id_cliente' => $cliente->id_cliente, 'estado_credito' => 'Vigente'])
           ->first();
 
@@ -77,7 +78,7 @@ class CreditoController extends Controller
 
           $credito->renovacion = false;
 
-          if($porcentajePagado >= 60){
+          if($porcentajePagado >= 20){
             $credito->renovacion = true;
 
             if($credito->estado_credito == 'Mora'){
@@ -88,12 +89,20 @@ class CreditoController extends Controller
           $credito->porcentaje_pagado = $porcentajePagado;
 
           $credito->deuda_credito = $deudaCredito;
+
           $bienesCredito = CreditoBien::query()
             ->select('id_bien')
             ->where(['id_credito' => $credito->id_credito])
             ->get();
 
           $credito->bienes = $bienesCredito;
+
+          $refCredito = CreditoReferencia::query()
+            ->select('id_ref')
+            ->where(['id_credito' => $credito->id_credito])
+            ->get();
+
+          $credito->referencias = $refCredito;
 
           $cliente->credito = $credito;
         }
@@ -129,30 +138,33 @@ class CreditoController extends Controller
    */
     public function store(Request $request)
     {
-
+      /* Si el crédito es renovació o refinanciamiento */
       if($request->input('tipo_credito') != 'Nuevo'){
         $credito = Credito::query()->where(
           ['id_cliente' => $request->input('id_cliente'), 'estado_credito' => 'Vigente']
         )->first();
 
-        $credito->estado_credito = 'Renovado';
+        if($credito) {
+          $credito->estado_credito = 'Renovado';
 
-        if($request->input('tipo_credito') == 'Refinanciamiento'){
-          $credito->estado_credito = 'Refinanciado';
-        }
+          if ($request->input('tipo_credito') == 'Refinanciamiento') {
+            $credito->estado_credito = 'Refinanciado';
+          }
 
-        $credito->save();
+          if ($credito->save()) {
+            $cuotas = Cuota::query()->where(['id_credito' => $credito->id_credito])
+              ->where('estado_cuota', 'Pendiente')
+              ->get();
 
-        $cuotas = Cuota::query()->where(['id_credito' => $credito->id_credito])
-          ->where('estado_cuota', 'Pendiente')
-          ->get();
-
-        foreach ($cuotas as $cuota) {
-          $cuota->estado_cuota = 'Pagada';
-          $cuota->save();
+            foreach ($cuotas as $cuota) {
+              $cuota->estado_cuota = 'Pagada';
+              $cuota->save();
+            }
+          }
         }
       }
 
+      /* Registro del nuevo crédito */
       $credito = new Credito();
       $credito->fecha_emision_credito = date('Y-m-d');
       $credito->estado_credito = 'Vigente';
@@ -176,6 +188,16 @@ class CreditoController extends Controller
           $credito_bien->id_credito = $credito->id_credito;
           $credito_bien->id_bien = $id_bien;
           $credito_bien->save();
+        }
+
+        $referencias = $request->input('referencias');
+        $referencias = explode(',', $referencias);
+
+        foreach ($referencias as $id_ref) {
+          $credito_ref = new CreditoReferencia();
+          $credito_ref->id_credito = $credito->id_credito;
+          $credito_ref->id_ref = $id_ref;
+          $credito_ref->save();
         }
 
         $capital_cuota = $request->input('monto_neto_credito') / $request->input('n_cuotas_credito');
@@ -273,25 +295,35 @@ class CreditoController extends Controller
   {
     $fechas_cuotas = [];
 
-    for($i = 0; $i < $n_cuotas; $i++){
-      $fecha_cuota = new DateTime(date(
-        'd-m-Y',
-        strtotime(
-          $fecha_primer_pago . ' + ' . $i . ' ' . $this->obtenerFrecuencia($frecuencia_pago)
-        )
-      ));
+    $i = 0;
+    while ($i < $n_cuotas){
+      $fecha = new DateTime($fecha_primer_pago);
 
-      if($fecha_cuota->format('N') == 6){
-        $fecha_cuota->modify('+2 day');
-        $n_cuotas = $n_cuotas + 2;
-        $i = $i + 2;
-      }else if($fecha_cuota->format('N') == 7){
-        $fecha_cuota->modify('+1 day');
-        $n_cuotas = $n_cuotas + 1;
-        $i = $i + 1;
+      if($frecuencia_pago == 'Quincenal'){
+        $dias = 14 * $i;
+        $fecha->modify('+' . $dias . ' day');
+      }else{
+        $fecha->modify('+' . $i . ' ' . $this->obtenerFrecuencia($frecuencia_pago));
       }
 
-      $fechas_cuotas[] = $fecha_cuota;
+      if($fecha->format('N') == 6){
+        if($frecuencia_pago == 'Diario'){
+          $n_cuotas += 2;
+          $i += 2;
+        }
+
+        $fecha->modify('+2 day');
+      }else if($fecha->format('N') == 7){
+        if($frecuencia_pago == 'Diario'){
+          $n_cuotas++;
+          $i++;
+        }
+
+        $fecha->modify('+1 day');
+      }
+
+      $fechas_cuotas[] = $fecha;
+      $i++;
     }
 
     return $fechas_cuotas;
