@@ -16,6 +16,8 @@ class Bien extends Model
   protected $fillable = [
     'id_cliente',
     'nom_bien',
+    'descrip_bien',
+    'valor_bien',
     'estado_bien'
   ];
 

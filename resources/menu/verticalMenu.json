@@ -16,7 +16,7 @@
       "slug": "clientes.index"
     },
     {
-      "url": "#",
+      "url": "/creditos",
       "name": "Créditos",
       "icon": "menu-icon tf-icons bx bx-dollar-circle",
       "slug": "creditos.index"

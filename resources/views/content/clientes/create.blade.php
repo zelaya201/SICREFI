@@ -468,11 +468,7 @@
       $('#btn-agregar-bien').click(function (e) {
         e.preventDefault();
 
-        if ($('#nom_bien').val() === '') {
-          $('#nom_bien').addClass('is-invalid');
-          $('#nom_bien_error').html('El campo es obligatorio.');
-
-        } else {
+        if($('#nom_bien').val() !== '' && $('#descrip_bien').val() !== '' && $('#valor_bien').val() !== ''){
           var datos = $('#form-bien').serialize();
           let id_bien = $('#id_bien').val();
 
@@ -510,6 +506,33 @@
               /* Mensajes de error */
             }
           });
+        }else{
+          if($('#nom_bien').val() === '') {
+            $('#nom_bien').addClass('is-invalid');
+            $('#nom_bien_error').html('El campo nombre es obligatorio');
+
+            $('#nom_bien').change(function () {
+              $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+            });
+          }
+
+          if($('#descrip_bien').val() === '') {
+            $('#descrip_bien').addClass('is-invalid');
+            $('#descrip_bien_error').html('El campo descripción es obligatorio');
+
+            $('#descrip_bien').change(function () {
+              $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+            });
+          }
+
+          if($('#valor_bien').val() === '') {
+            $('#valor_bien').addClass('is-invalid');
+            $('#valor_bien_error').html('El campo valor es obligatorio');
+
+            $('#valor_bien').change(function () {
+              $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+            });
+          }
         }
 
       });
@@ -934,6 +957,8 @@
 
           $('#id_bien').val(data.id);
           $('#nom_bien').val(data.nom_bien);
+          $('#descrip_bien').val(data.descrip_bien);
+          $('#valor_bien').val(parseFloat(data.valor_bien).toFixed(2));
         },
         error: function (xhr) {
           /* Mensajes de error */
@@ -948,6 +973,7 @@
         html += '<tr id="ref_' + key + '">';
         html += '<td>' + key + '</td>';
         html += '<td>' + value.nom_bien + '</td>';
+        html += '<td>$ ' + parseFloat(value.valor_bien).toFixed(2) + '</td>';
         html += '<td>';
         html += "<div class='dropdown-icon-demo'> " +
           "<a href='javascript:void(0);' class='btn dropdown-toggle btn-sm hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>" +

@@ -47,7 +47,7 @@
   <ul class="nav nav-pills" role="tablist">
     <li class="nav-item" role="presentation">
       <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="#">
+         href="{{ route('clientes.showEdit', $cliente->id_cliente) }}">
         <i class="bx bx-user"></i> Cliente
       </a>
     </li>
@@ -94,6 +94,17 @@
     </div>
   @endif
 
+  @if(Session::has('error'))
+    <div class="alert alert-danger d-flex m-0 mt-3" role="alert">
+          <span class="badge badge-center rounded-pill bg-danger border-label-danger p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+      <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Acción no permitida</h6>
+        <span>{{ Session::get('mensaje') }}</span>
+      </div>
+    </div>
+  @endif
+
   <div class="tab-pane show fade pt-3" id="card-bienes" role="tabpanel">
     <div class="row">
       <div class="col-md-12 mb-4">
@@ -125,6 +136,7 @@
                   <tr>
                     <th>#</th>
                     <th>Nombre</th>
+                    <th>Valor</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                   </tr>
@@ -135,6 +147,7 @@
                     <tr>
                       <td>{{ $i }}</td>
                       <td>{{ $bien->nom_bien }}</td>
+                      <td>${{ number_format($bien->valor_bien, 2)  }}</td>
                       <td>
                         <span
                           class="badge rounded-pill {{ ($bien->estado_bien == 'Activo') ? 'bg-label-success' : 'bg-label-danger' }} ">
@@ -175,7 +188,7 @@
                   @endforeach
                   @if(count($bienes) <= 0)
                     <tr>
-                      <td colspan="4">No hay resultados</td>
+                      <td colspan="5">No hay resultados</td>
                     </tr>
                   @endif
                   </tbody>
@@ -235,13 +248,40 @@
                 <div class="row">
                   <div class="col-md-12 mb-3">
                     <label for="nom_bien" class="form-label">Nombre (*)</label>
-                    <textarea name="nom_bien" id="nom_bien" class="form-control" rows="3"
-                              placeholder="Descripción"></textarea>
+                    <input type="text" name="nom_bien" id="nom_bien" class="form-control">
                     <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                       <div data-field="name" data-validator="notEmpty" id="nom_bien_error"></div>
                     </div>
                   </div>
                 </div>
+
+                <div class="row">
+                  <div class="col-md-12 mb-3">
+                    <label for="descrip_bien" class="form-label">Descripción (*)</label>
+                    <textarea name="descrip_bien" id="descrip_bien" class="form-control" rows="3"
+                              placeholder="Módelo / Marca / Color / N° de Serie"></textarea>
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="descrip_bien_error"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <label for="valor_bien" class="form-label">Valor $ (*)</label>
+                    <input type="text" name="valor_bien" id="valor_bien" class="form-control"
+                           placeholder="0.00">
+                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                      <div data-field="name" data-validator="notEmpty" id="valor_bien_error"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                Los campos marcados con <span class="text-danger">(*)</span> son obligatorios
               </div>
             </div>
 
@@ -277,6 +317,7 @@
 
       $('#btn-nuevo-bien').click(function (e) {
         e.preventDefault();
+        resetFormularioBien();
         $('#titulo-modal-bien').html('Nuevo Bien');
         $('#form-bien').trigger('reset');
         $('#nom_bien').removeClass('is-invalid');
@@ -286,10 +327,7 @@
       $('#btn-agregar-bien').click(function (e) {
         e.preventDefault();
 
-        if ($('#nom_bien').val() === '') {
-          $('#nom_bien').addClass('is-invalid');
-          $('#nom_bien_error').html('El campo es obligatorio.');
-        } else {
+        if($('#nom_bien').val() !== '' && $('#descrip_bien').val() !== '' && $('#valor_bien').val() !== ''){
 
           var datos = $('#form-bien').serialize();
           let id_bien = $('#id_bien').val();
@@ -326,6 +364,33 @@
               /* Mensajes de error */
             }
           });
+        }else{
+          if($('#nom_bien').val() === '') {
+            $('#nom_bien').addClass('is-invalid');
+            $('#nom_bien_error').html('El campo nombre es obligatorio');
+
+            $('#nom_bien').change(function () {
+              $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+            });
+          }
+
+          if($('#descrip_bien').val() === '') {
+            $('#descrip_bien').addClass('is-invalid');
+            $('#descrip_bien_error').html('El campo descripción es obligatorio');
+
+            $('#descrip_bien').change(function () {
+              $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+            });
+          }
+
+          if($('#valor_bien').val() === '') {
+            $('#valor_bien').addClass('is-invalid');
+            $('#valor_bien_error').html('El campo valor es obligatorio');
+
+            $('#valor_bien').change(function () {
+              $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+            });
+          }
         }
 
       });
@@ -363,6 +428,8 @@
         dataType: 'json',
         data: datos,
         success: function (data) {
+          resetFormularioBien();
+
           /* Mensaje de exito */
           $('#titulo-modal-bien').html('Editar Bien');
 
@@ -372,6 +439,8 @@
 
           $('#id_bien').val(data.id_bien);
           $('#nom_bien').val(data.nom_bien);
+          $('#descrip_bien').val(data.descrip_bien);
+          $('#valor_bien').val(data.valor_bien.toFixed(2));
         },
         error: function (xhr) {
           /* Mensajes de error */
@@ -396,6 +465,47 @@
           /* Mensajes de error */
         }
       });
+    }
+
+    function verBien(id_cliente) {
+      $.ajax({
+        url: '{{ route("bienes.edit", ":id_cliente") }}'.replace(':id_cliente', id_cliente),
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+          resetFormularioBien();
+
+          console.log(data);
+
+          /* Mensaje de exito */
+          $('#titulo-modal-ref').html('Ver Bien');
+
+          $('#modal-bien').modal('show');
+          $('#form-bien').trigger('reset');
+          $('#btn-agregar-bien').addClass('d-none');
+
+          $('#form-bien input').attr('disabled', 'disabled');
+          $('#form-bien textarea').attr('disabled', 'disabled');
+
+          mostrarBien(data);
+        },
+        error: function (xhr) {
+          /* Mensajes de error */
+        }
+      });
+    }
+
+    function mostrarBien(data){
+      $('#id_bien').val(data.bien.id_bien);
+      $('#nom_bien').val(data.bien.nom_bien);
+      $('#descrip_bien').val(data.bien.descrip_bien);
+      $('#valor_bien').val(parseFloat(data.bien.valor_bien).toFixed(2));
+    }
+
+    function resetFormularioBien(){
+      $('#form-bien input').removeAttr('disabled');
+      $('#form-bien textarea').removeAttr('disabled');
+      $('#btn-agregar-bien').removeClass('d-none');
     }
   </script>
 @endsection

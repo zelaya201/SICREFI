@@ -30,8 +30,8 @@
             </li>
             <li class="list-inline-item fw-semibold">
 
-              <button class="nav-link btn btn-primary" type="button" id="btn-guardar-cliente">
-                <span class="tf-icons bx bx-save me-1"></span>Guardar
+              <button class="nav-link btn btn-primary" type="button" id="btn-modificar-cliente">
+                <span class="tf-icons bx bx-edit-alt me-1"></span> Modificar
               </button>
             </li>
             <li class="list-inline-item fw-semibold">
@@ -45,69 +45,41 @@
 
     {{-- Navegación de Formulario --}}
     {{--  <ul class="nav nav-pills nav-align-left nav-card-header-pills align-items-center" role="tablist">--}}
-    <ul class="nav nav-pills nav-align-left nav-card-header-pills align-items-center" role="tablist">
+    <ul class="nav nav-pills" role="tablist">
       <li class="nav-item" role="presentation">
-        <button type="button" class="btn nav-link active" role="tab" data-bs-toggle="tab" id="item-cliente"
-                data-bs-target="#card-cliente" aria-controls="card-cliente" aria-selected="true">
-
+        <a class="nav-link active" type="button" aria-selected="false" tabindex="-1"
+           href="{{ route('clientes.showEdit', $cliente->id_cliente) }}">
           <i class="bx bx-user"></i> Cliente
-          <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger ms-1 d-none"
-                id="cant-errores-cliente"></span>
-        </button>
+        </a>
       </li>
-      <li>
-        <div class="line d-none d-md-inline-block align-items-baseline">
-          <i class="bx bx-chevron-right"></i>
-        </div>
-      </li>
+
       <li class="nav-item" role="presentation">
-        <button type="button" class="btn nav-link disabled" role="tab" data-bs-toggle="tab"
-                id="item-conyuge"
-                data-bs-target="#card-conyuge"
-                aria-controls="card-conyuge" aria-selected="false">
-          <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger ms-1 d-none"
-                id="cant-errores-conyuge"></span>
+        <a class="nav-link {{ ($cliente->estado_civil_cliente != 'Casado') ? 'disabled' : '' }}" type="button"
+           aria-selected="false" tabindex="-1"
+           href="#">
           <i class="bx bx-user-check"></i> Conyuge
-        </button>
+        </a>
       </li>
-      <li>
-        <div class="line d-none d-md-inline-block align-items-baseline">
-          <i class="bx bx-chevron-right"></i>
-        </div>
-      </li>
+
       <li class="nav-item" role="presentation">
-        <button type="button" class="btn nav-link" role="tab" data-bs-toggle="tab"
-                data-bs-target="#card-negocios"
-                id="item-negocios"
-                aria-controls="card-negocios" aria-selected="false">
-          <i class="tf-icons bx bx-store-alt"></i> Negocios
-        </button>
+        <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
+           href="{{ route('negocios.show', $cliente->id_cliente) }}">
+          <i class="tf-icons bx bx-store-alt"></i> Negocio
+        </a>
       </li>
-      <li>
-        <div class="line d-none d-md-inline-block align-items-baseline">
-          <i class="bx bx-chevron-right"></i>
-        </div>
-      </li>
+
       <li class="nav-item" role="presentation">
-        <button type="button" class="btn nav-link" role="tab" data-bs-toggle="tab"
-                data-bs-target="#card-referencia"
-                id="item-referencia"
-                aria-controls="card-referencia" aria-selected="false">
+        <a class="nav-link" type="button" aria-selected="false" tabindex="-1" data-bs-target="#card-referencia"
+           href="{{ route('referencias.show', $cliente->id_cliente) }}">
           <i class="bx bx-user-plus"></i> Referencias
-        </button>
+        </a>
       </li>
-      <li>
-        <div class="line d-none d-md-inline-block align-items-baseline">
-          <i class="bx bx-chevron-right"></i>
-        </div>
-      </li>
+
       <li class="nav-item" role="presentation">
-        <button type="button" class="btn nav-link" role="tab" data-bs-toggle="tab"
-                data-bs-target="#card-bienes"
-                id="item-bienes"
-                aria-controls="card-bienes" aria-selected="false">
-          <i class="bx bx-buildings"></i> Bienes
-        </button>
+        <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
+           href="{{ route('bienes.show', $cliente->id_cliente) }}">
+          <i class="bx bx-building"></i> Bienes
+        </a>
       </li>
     </ul>
 
@@ -163,6 +135,30 @@
         }
       });
 
+      $('#btn-modificar-cliente').on('click', function (){
+        $.ajax({
+          url : '{{ route("clientes.store") }}',
+          type : 'POST',
+          dataType : 'json',
+          data : $('#form-cliente').serialize() + '&modificarCliente=true&id_cliente=' + {{ $cliente->id_cliente }},
+          success : function (data) {
+            if (data.success) {
+              window.location.href = '{{ route('clientes.index') }}';
+            }
+          },
+          error : function (xhr){
+            var data = xhr.responseJSON;
+            if ($.isEmptyObject(data.errors) === false) {
+              $.each(data.errors, function (key, value) {
+                // Mostrar errores en los inputs
+                $('#' + key).addClass('is-invalid');
+                $('#' + key + '_error').html(value); // Agregar el mensaje de error
+              });
+            }
+          }
+        });
+      });
+
       /**
        * VALIDACIONES DE FORMULARIO
        * Y EVENTOS DE BOTONES
@@ -194,7 +190,8 @@
           },
           success: function(data) {
             if(data.success) {
-              location.reload()
+              // Reedireccionar a la página de clientes
+              location.reload();
             }
           }
         });
@@ -212,6 +209,7 @@
           },
           success: function(data) {
             if(data.success) {
+              // Reedireccionar a la página de clientes
               location.reload()
             }
           }

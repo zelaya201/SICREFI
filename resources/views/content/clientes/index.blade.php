@@ -6,7 +6,7 @@
 @extends('layouts/contentNavbarLayout')
 @section('title', 'Clientes')
 @section('content')
-    <div class=" flex-grow-1 container-p-y">
+    <div class=" flex-grow-1 py-3">
       <div class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column mb-4">
         <div class="user-profile-info py-1">
           <h4 class="fw-bold m-0"><span class="text-muted fw-light">Clientes /</span> Cartera de clientes</h4>
@@ -34,6 +34,17 @@
               class="bx bx-user fs-6"></i></span>
           <div class="d-flex flex-column ps-1">
             <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
+            <span>{{ Session::get('mensaje') }}</span>
+          </div>
+        </div>
+      @endif
+
+      @if(Session::has('error'))
+        <div class="alert alert-danger d-flex" role="alert">
+          <span class="badge badge-center rounded-pill bg-danger border-label-danger p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+          <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Acción no permitida</h6>
             <span>{{ Session::get('mensaje') }}</span>
           </div>
         </div>
@@ -184,8 +195,7 @@
                           </a>
                           <div class="dropdown-menu" style="">
                             @if($cliente->estado_cliente == 'Activo')
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="verCreditos({ $cliente->id_cliente })"><i class="bx bx-show me-1"></i>
-                              Ver</a>
+
                             <a class="dropdown-item" href="{{ route('negocios.show', $cliente->id_cliente) }}"><i class="bx bx-store-alt me-1"></i>
                               Negocios</a>
                             <a class="dropdown-item" href="{{ route('bienes.show', $cliente->id_cliente) }}"><i class="bx bx-building me-1"></i>

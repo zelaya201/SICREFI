@@ -16,7 +16,6 @@
             <span class="text-muted fw-light">Clientes /</span> Referencias Personales
             <span
               class="text-muted fw-light fw">/ {{ $cliente->dui_cliente }} - {{ $cliente->primer_nom_cliente . ' ' . $cliente->primer_ape_cliente }}</span>
-
           </h4>
         </div>
         <ul
@@ -43,7 +42,7 @@
   <ul class="nav nav-pills" role="tablist">
     <li class="nav-item" role="presentation">
       <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="#">
+         href="{{ route('clientes.showEdit', $cliente->id_cliente) }}">
         <i class="bx bx-user"></i> Cliente
       </a>
     </li>
@@ -85,6 +84,17 @@
               class="bx bx-user fs-6"></i></span>
       <div class="d-flex flex-column ps-1">
         <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
+        <span>{{ Session::get('mensaje') }}</span>
+      </div>
+    </div>
+  @endif
+
+  @if(Session::has('error'))
+    <div class="alert alert-danger d-flex m-0 mt-3" role="alert">
+          <span class="badge badge-center rounded-pill bg-danger border-label-danger p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+      <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Acción no permitida</h6>
         <span>{{ Session::get('mensaje') }}</span>
       </div>
     </div>
@@ -352,6 +362,12 @@
                     </table>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 mb-3 text-end">
+                Los campos marcados con <span class="text-danger">(*)</span> son obligatorios
               </div>
             </div>
 

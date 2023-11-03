@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('cuota', function (Blueprint $table) {
             $table->id('id_cuota');
             $table->date('fecha_pago_cuota');
-            $table->double('capital_cuota',8,2);
-            $table->double('interes_cuota',8,2);
-            $table->double('mora_cuota',8,2)->nullable();
+            $table->double('capital_cuota');
+            $table->double('interes_cuota');
+            $table->double('total_cuota');
+            $table->double('mora_cuota')->nullable();
             $table->string('estado_cuota',10);
             $table->bigInteger('id_credito')->unsigned();
             $table->foreign('id_credito')

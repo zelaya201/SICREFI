@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Credito;
 use App\Models\Referencia;
 use App\Models\TelReferencia;
 use Illuminate\Http\Request;
@@ -111,6 +112,22 @@ class ReferenciaController extends Controller
         }else{
           /* Eliminar Negocio de Base de Datos */
           $referencia = Referencia::findOrfail($request->input('id_ref'));
+
+          $credito = Credito::query()
+            ->join('credito_referencia', 'credito_referencia.id_credito', '=', 'credito.id_credito')
+            ->where('credito_referencia.id_ref', $referencia->id_ref)
+             ->where('estado_credito', 'Vigente')->first();
+
+          if($credito){
+            $request->session()->flash('error');
+            $request->session()->flash(
+              'mensaje',
+              'No se puede eliminar la referencia porque esta asociado al crédito #' . $credito->id_credito
+            );
+
+            return ['success' => false];
+          }
+
           $referencia->estado_ref = 'Inactivo';
 
           if($referencia->save()) {

@@ -213,6 +213,12 @@
             </div>
           </div>
 
+          <div class="row">
+            <div class="col-md-12 mb-3 text-end">
+              Los campos marcados con <span class="text-danger">(*)</span> son obligatorios
+            </div>
+          </div>
+
         </div>
 
         <div class="modal-footer">

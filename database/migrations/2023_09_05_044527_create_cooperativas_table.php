@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('cooperativa', function (Blueprint $table) {
             $table->id('id_coop');
             $table->string('nom_coop',100)->nullable();
-            $table->string('dir_coop',200)->nullable();
+            $table->string('dir_coop')->nullable();
             $table->string('tel_coop',8)->nullable();
             $table->timestamps();
         });

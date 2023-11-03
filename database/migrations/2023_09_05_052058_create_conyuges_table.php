@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('tercer_nom_conyuge',50)->nullable();
             $table->string('primer_ape_conyuge',50);
             $table->string('segundo_ape_conyuge',50)->nullable();
-            $table->string('dir_conyuge',175);
+            $table->string('dir_conyuge');
             $table->string('ocupacion_conyuge',75);
             $table->bigInteger('id_cliente')->unsigned();
             $table->foreign('id_cliente')

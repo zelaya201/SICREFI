@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('tercer_nom_ref',50)->nullable();
             $table->string('primer_ape_ref',50);
             $table->string('segundo_ape_ref',50)->nullable();
-            $table->string('dir_ref',175);
+            $table->string('dir_ref');
             $table->string('ocupacion_ref',75);
             $table->string('parentesco_ref',75);
             $table->string('estado_ref',75);
