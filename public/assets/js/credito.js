@@ -12,6 +12,12 @@ var input_monto_cuota = $('.monto_cuota_credito');
 var input_fecha_primer_cuota = $('#fech_primer_cuota');
 var input_credito = $('#input_credito');
 var input_id_credito = $('#id_credito');
+var input_valor_bienes = $('#valor_bienes');
+
+var id_cliente_error = $('#id_cliente_error');
+var bienes_error = $('#bienes_error');
+var ref_error = $('#referencias_error');
+var id_negocio_error = $('#id_negocio_error');
 
 var select_frecuencia_pago = $('#frecuencia_credito');
 
@@ -30,8 +36,6 @@ var select_id_cliente = new Selectr('#id_cliente', {
     noOptions: 'No hay clientes disponibles'
   }
 });
-
-var select_id_cliente_label = $('#id_cliente_label');
 
 var select_bienes = new Selectr('#bienes', {
   searchable: true,
@@ -76,6 +80,11 @@ var credito_seleccionado = null;
 var cliente_selected = null;
 
 $(document).ready(function () {
+  var label_id_cliente = $('#id_cliente_label');
+  var label_bienes = $('#bienes_label');
+  var label_ref = $('#referencias_label');
+  var label_id_negocio = $('#id_negocio_label');
+
   var inputs = form_credito.find('input, select, textarea, checkbox');
 
   inputs.change(function () {
@@ -83,19 +92,24 @@ $(document).ready(function () {
   });
 
   select_id_cliente.on('selectr.change', function () {
-    $('#id_cliente_error').html('');
+     id_cliente_error.html('');
+     label_id_cliente.removeClass('border').removeClass('border-danger');
   });
 
   select_bienes.on('selectr.change', function () {
-    $('#bienes_error').html('');
+    bienes_error.html('');
+    label_bienes.removeClass('border').removeClass('border-danger');
+    input_valor_bienes.val(calcularValorBienes().toFixed(2));
   });
 
   select_ref.on('selectr.change', function () {
-    $('#referencias_error').html('');
+    ref_error.html('');
+    label_ref.removeClass('border').removeClass('border-danger');
   });
 
   select_negocio.on('selectr.change', function () {
-    $('#id_negocio_error').html('');
+    id_negocio_error.html('');
+    label_id_negocio.removeClass('border').removeClass('border-danger');
   });
 
   input_monto.on('input', function () {
@@ -194,6 +208,7 @@ $(document).ready(function () {
     calcularMontonPagar();
   });
 });
+
 
 function cargarCredito() {
   if (cliente_selected !== null){
@@ -321,6 +336,24 @@ function calcularMontonPagar() {
   }
 }
 
+function calcularValorBienes() {
+  let valor_bienes = 0;
+
+  let valores = select_bienes.getValue();
+
+  if(valores !== ''){
+    valores.forEach(function (element) {
+      cliente_selected.bienes.forEach(function (bien) {
+        if(parseInt(bien.id_bien) === parseInt(element)){
+          valor_bienes += parseFloat(bien.valor_bien);
+        }
+      });
+    });
+  }
+
+  return valor_bienes;
+}
+
 function parseDate(date) {
   let d = new Date(date);
   let day = d.getDate();
@@ -363,4 +396,34 @@ function limpiarTablaCuotas() {
   tabla_cuotas.append('<tr>' +
     '<td colspan="5" class="text-center">No hay cuotas disponibles</td>' +
     '</tr>');
+}
+
+
+function filterFloatPercent(evt,input){
+  var key = window.Event ? evt.which : evt.keyCode;
+  var chark = String.fromCharCode(key);
+  var tempValue = input.value+chark;
+
+  if(key >= 48 && key <= 57){
+    if(patternFloatPercent(tempValue)=== false){
+      return false;
+    }else{
+      return true;
+    }
+  }else{
+    if(key == 8 || key == 13 || key == 46 || key == 0) {
+      return true;
+    }else{
+      return false;
+    }
+  }
+}
+
+function patternFloatPercent(__val__){
+  var preg = /^([0-9]+\.?[0-9]{0,4})$/;
+  if(preg.test(__val__) === true){
+    return true;
+  }else{
+    return false;
+  }
 }

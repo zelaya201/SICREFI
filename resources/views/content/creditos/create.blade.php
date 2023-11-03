@@ -108,9 +108,7 @@
                 // Mostrar errores en los inputs
                 $('#' + key).addClass('is-invalid');
                 $('#' + key + '_error').html(value); // Agregar el mensaje de error
-                if(key === 'id_cliente') {
-                  $('#id_cliente-label').addClass('border border-danger rounded');
-                }
+                $('#' + key + '_label').addClass('border border-danger rounded')
               });
             }
           }

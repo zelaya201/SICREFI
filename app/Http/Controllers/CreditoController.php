@@ -42,11 +42,6 @@ class CreditoController extends Controller
 
       $clientes = $clientes->map(function ($cliente) {
         $cliente->nombre_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente .' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
-        $bienes = Bien::query()
-          ->select('id_bien', 'nom_bien')
-          ->where(['id_cliente' => $cliente->id_cliente])
-          ->where('estado_bien', 'Activo')
-          ->get();
 
         $credito = Credito::query()
           ->select('id_credito', 'monto_neto_credito', 'tasa_interes_credito', 'n_cuotas_credito', 'frecuencia_credito', 'tipo_credito', 'monto_credito', 'estado_credito', 'id_negocio')
@@ -56,6 +51,7 @@ class CreditoController extends Controller
         $cliente->credito = null;
 
         if($credito){
+          /* CALCULAR DEUDA Y PORCENTAJE PAGADO */
           $deudaCredito = Cuota::query()
             ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])
             ->sum('total_cuota');
@@ -81,15 +77,15 @@ class CreditoController extends Controller
           if($porcentajePagado >= 75){ // Si el cliente ha pagado al menos el 75% del crédito
             $credito->renovacion = true;
 
-            if($credito->estado_credito == 'Mora'){
+            if($credito->estado_credito == 'Mora'){ // Si el crédito está en mora no aplica renovación
               $credito->renovacion = false;
             }
           }
 
           $credito->porcentaje_pagado = $porcentajePagado;
-
           $credito->deuda_credito = $deudaCredito;
 
+          /* CARGAR BIENES DEL CREDITO */
           $bienesCredito = CreditoBien::query()
             ->select('id_bien')
             ->where(['id_credito' => $credito->id_credito])
@@ -97,6 +93,7 @@ class CreditoController extends Controller
 
           $credito->bienes = $bienesCredito;
 
+          /* CARGAR REFERENCIAS DEL CREDITO */
           $refCredito = CreditoReferencia::query()
             ->select('id_ref')
             ->where(['id_credito' => $credito->id_credito])
@@ -107,6 +104,7 @@ class CreditoController extends Controller
           $cliente->credito = $credito;
         }
 
+        /* CARGAR REFERENCIAS, NEGOCIOS Y BIENES DEL CLIENTE */
         $referencias = Referencia::query()
           ->select('primer_nom_ref', 'segundo_nom_ref', 'primer_ape_ref', 'segundo_ape_ref', 'id_ref')
           ->where(['id_cliente' => $cliente->id_cliente])
@@ -117,6 +115,12 @@ class CreditoController extends Controller
           ->select('nom_negocio', 'id_negocio')
           ->where(['id_cliente' => $cliente->id_cliente])
           ->where('estado_negocio', 'Activo')
+          ->get();
+
+        $bienes = Bien::query()
+          ->select('id_bien', 'nom_bien', 'valor_bien')
+          ->where(['id_cliente' => $cliente->id_cliente])
+          ->where('estado_bien', 'Activo')
           ->get();
 
         $cliente->referencias = $referencias;
@@ -141,6 +145,20 @@ class CreditoController extends Controller
       /* Validaciones */
       /* Enviar validaciones como JSON */
       $this->validate($request, Credito::$rules, Credito::$messages);
+
+      /* Validación del monto neto y el valor de los bienes */
+      $montoNeto = $request->input('monto_neto_credito');
+      $valorBienes = $request->input('valor_bienes');
+
+      if($montoNeto > $valorBienes){
+        return response([
+          'errors' => [
+            'monto_neto_credito' => ['El monto neto del crédito no puede ser mayor al valor de los bienes']
+          ]
+        ],
+          500
+        );
+      }
 
       /* Si el crédito es renovació o refinanciamiento */
       if($request->input('tipo_credito') != 'Nuevo'){
