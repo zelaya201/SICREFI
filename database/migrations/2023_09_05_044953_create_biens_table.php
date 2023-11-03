@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('bien', function (Blueprint $table) {
             $table->id('id_bien');
             $table->string('nom_bien',75);
+            $table->string('descrip_bien');
+            $table->double('valor_bien', 8, 2);
+
             $table->string('estado_bien',75);
             $table->bigInteger('id_cliente')->unsigned();
             $table->foreign('id_cliente')

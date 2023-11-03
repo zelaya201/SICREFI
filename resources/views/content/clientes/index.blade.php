@@ -39,6 +39,17 @@
         </div>
       @endif
 
+      @if(Session::has('error'))
+        <div class="alert alert-danger d-flex" role="alert">
+          <span class="badge badge-center rounded-pill bg-danger border-label-danger p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+          <div class="d-flex flex-column ps-1">
+            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Acción no permitida</h6>
+            <span>{{ Session::get('mensaje') }}</span>
+          </div>
+        </div>
+      @endif
+
       <div class="card mb-4">
         <div class="card-widget-separator-wrapper">
           <div class="card-body card-widget-separator">

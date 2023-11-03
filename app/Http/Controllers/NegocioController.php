@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Credito;
 use App\Models\Negocio;
 use App\Models\TelNegocio;
 use Illuminate\Http\Request;
@@ -144,6 +145,21 @@ class NegocioController extends Controller
       }else{
         /* Eliminar Negocio de Base de Datos */
         $negocio = Negocio::findOrfail($request->input('id_negocio'));
+
+        $credito = Credito::query()
+          ->where('id_negocio', $negocio->id_negocio)
+          ->where('estado_credito', 'Vigente')->first();
+
+        if($credito){
+          session()->flash('error');
+          session()->flash(
+            'mensaje',
+            'No se puede eliminar el negocio porque esta asociado al crédito #' . $credito->id_credito
+          );
+
+          return ['success' => false];
+        }
+
         $negocio->estado_negocio = 'Inactivo';
 
         if($negocio->save()) {

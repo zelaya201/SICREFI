@@ -86,6 +86,7 @@
       /* ############################################ */
       btn_guardar_credito.on('click', function () {
         // REGISTRAR CRÉDITO
+
         $.ajax({
           url: '{{ route("creditos.store") }}',
           type: 'post',
@@ -93,10 +94,24 @@
           data: form_credito.serialize()
             + '&bienes=' + select_bienes.getValue()
             + '&referencias=' + select_ref.getValue()
-            + '&id_cliente=' + cliente_selected.id_cliente,
+            + '&id_cliente=' + (cliente_selected === null ? '' : cliente_selected.id_cliente),
           success: function (data) {
             if (data.success) {
               window.location.href = '{{ route("creditos.index") }}';
+            }
+          },
+          error: function (xhr) {
+            var data = xhr.responseJSON;
+
+            if ($.isEmptyObject(data.errors) === false) {
+              $.each(data.errors, function (key, value) {
+                // Mostrar errores en los inputs
+                $('#' + key).addClass('is-invalid');
+                $('#' + key + '_error').html(value); // Agregar el mensaje de error
+                if(key === 'id_cliente') {
+                  $('#id_cliente-label').addClass('border border-danger rounded');
+                }
+              });
             }
           }
         });

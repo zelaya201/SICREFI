@@ -18,6 +18,7 @@ class Cliente extends Model
       'dui_cliente',
       'primer_nom_cliente',
       'segundo_nom_cliente',
+      'tercer_nom_cliente',
       'primer_ape_cliente',
       'segundo_ape_cliente',
       'fech_nac_cliente',

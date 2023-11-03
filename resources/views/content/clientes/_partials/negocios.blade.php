@@ -99,6 +99,7 @@
               </div>
               <div>
                 <input type="text" name="id_negocio" id="id_negocio" class="visually-hidden"/>
+
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="nom_negocio" class="form-label">Nombre (*)</label>
@@ -263,6 +264,12 @@
                   </table>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 mb-3 text-end">
+              Los campos marcados con <span class="text-danger">(*)</span> son obligatorios
             </div>
           </div>
         </div>

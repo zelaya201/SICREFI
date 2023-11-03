@@ -150,7 +150,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_aliment_cliente">Alimentación (*)</label>
               <input type="text" class="form-control" name="gasto_aliment_cliente" id="gasto_aliment_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{$cliente->gasto_aliment_cliente}}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_aliment_cliente, 2) }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_aliment_cliente_error"></div>
@@ -160,7 +160,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_vivienda_cliente">Vivienda (*)</label>
               <input type="text" class="form-control" name="gasto_vivienda_cliente" id="gasto_vivienda_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{$cliente->gasto_vivienda_cliente}}"/>
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_vivienda_cliente,2) }}"/>
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_vivienda_cliente_error"></div>
@@ -172,7 +172,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_luz_cliente">Luz (*)</label>
               <input type="text" class="form-control" name="gasto_luz_cliente" id="gasto_luz_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{$cliente->gasto_luz_cliente}}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_luz_cliente,2) }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_luz_cliente_error"></div>
@@ -182,7 +182,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_agua_cliente">Agua (*)</label>
               <input type="text" class="form-control" name="gasto_agua_cliente" id="gasto_agua_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{$cliente->gasto_agua_cliente}}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_agua_cliente,2) }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_agua_cliente_error"></div>
@@ -194,7 +194,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_cable_cliente">Cable (*)</label>
               <input type="text" class="form-control" name="gasto_cable_cliente" id="gasto_cable_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{$cliente->gasto_cable_cliente}}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_cable_cliente,2) }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_cable_cliente_error"></div>
@@ -204,7 +204,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_otro_cliente">Otros gastos (*)</label>
               <input type="text" class="form-control" name="gasto_otro_cliente" id="gasto_otro_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{$cliente->gasto_otro_cliente}}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_otro_cliente,2) }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_otro_cliente_error"></div>

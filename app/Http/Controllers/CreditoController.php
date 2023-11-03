@@ -78,7 +78,7 @@ class CreditoController extends Controller
 
           $credito->renovacion = false;
 
-          if($porcentajePagado >= 20){
+          if($porcentajePagado >= 75){ // Si el cliente ha pagado al menos el 75% del crédito
             $credito->renovacion = true;
 
             if($credito->estado_credito == 'Mora'){
@@ -138,6 +138,10 @@ class CreditoController extends Controller
    */
     public function store(Request $request)
     {
+      /* Validaciones */
+      /* Enviar validaciones como JSON */
+      $this->validate($request, Credito::$rules, Credito::$messages);
+
       /* Si el crédito es renovació o refinanciamiento */
       if($request->input('tipo_credito') != 'Nuevo'){
         $credito = Credito::query()->where(

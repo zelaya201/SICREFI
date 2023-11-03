@@ -29,12 +29,13 @@
                 <tr>
                   <th>#</th>
                   <th>Nombre</th>
+                  <th>Valor</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody id="tabla-bien">
                 <tr>
-                  <td colspan="3">No hay resultados</td>
+                  <td colspan="4">No hay resultados</td>
                 </tr>
                 </tbody>
               </table>
@@ -93,13 +94,40 @@
               <div class="row">
                 <div class="col-md-12 mb-3">
                   <label for="nom_bien" class="form-label">Nombre (*)</label>
-                  <textarea name="nom_bien" id="nom_bien" class="form-control" rows="3"
-                            placeholder="Descripción"></textarea>
+                  <input type="text" name="nom_bien" id="nom_bien" class="form-control">
                   <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                     <div data-field="name" data-validator="notEmpty" id="nom_bien_error"></div>
                   </div>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <label for="descrip_bien" class="form-label">Descripción (*)</label>
+                  <textarea name="descrip_bien" id="descrip_bien" class="form-control" rows="3"
+                            placeholder="Módelo / Marca / Color / N° de Serie"></textarea>
+                  <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                    <div data-field="name" data-validator="notEmpty" id="descrip_bien_error"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <label for="valor_bien" class="form-label">Valor $ (*)</label>
+                  <input type="text" name="valor_bien" id="valor_bien" class="form-control"
+                         placeholder="0.00">
+                  <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                    <div data-field="name" data-validator="notEmpty" id="valor_bien_error"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              Los campos marcados con <span class="text-danger">(*)</span> son obligatorios
             </div>
           </div>
         </div>

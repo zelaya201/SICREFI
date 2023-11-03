@@ -57,26 +57,26 @@
 
           <div class="row">
             <div class="col-md-12 mb-3">
-              <label class="form-label" for="id_bien">Bienes muebles (*)</label>
-              <select class="form-select" id="id_bien">
+              <label class="form-label" for="bienes">Bienes muebles (*)</label>
+              <select class="form-select" id="bienes">
                 <option disabled> No hay bienes disponibles</option>
               </select>
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                <div data-field="name" data-validator="notEmpty" id="id_bien_error"></div>
+                <div data-field="name" data-validator="notEmpty" id="bienes_error"></div>
               </div>
             </div>
           </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label" for="id_ref">Referencias (*)</label>
-            <select class="form-select" id="id_ref">
+            <label class="form-label" for="referencias">Referencias (*)</label>
+            <select class="form-select" id="referencias">
               <option disabled> Seleccione una referencia</option>
             </select>
 
             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-              <div data-field="name" data-validator="notEmpty" id="id_bien_error"></div>
+              <div data-field="name" data-validator="notEmpty" id="referencias_error"></div>
             </div>
           </div>
 
@@ -86,7 +86,7 @@
             </select>
 
             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-              <div data-field="name" data-validator="notEmpty" id="id_bien_error"></div>
+              <div data-field="name" data-validator="notEmpty" id="id_negocio_error"></div>
             </div>
           </div>
         </div>

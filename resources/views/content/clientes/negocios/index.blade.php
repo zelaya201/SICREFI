@@ -91,6 +91,17 @@
     </div>
   @endif
 
+  @if(Session::has('error'))
+    <div class="alert alert-danger d-flex m-0 mt-3" role="alert">
+          <span class="badge badge-center rounded-pill bg-danger border-label-danger p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+      <div class="d-flex flex-column ps-1">
+        <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Acción no permitida</h6>
+        <span>{{ Session::get('mensaje') }}</span>
+      </div>
+    </div>
+  @endif
+
   {{-- Contenido de los paneles --}}
   <div class="tab-content p-0">
     <div class="tab-pane fade show active pt-3" id="card-datos-negocios" role="tabpanel">
@@ -411,6 +422,12 @@
                       </table>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12 mb-3 text-end">
+                  Los campos marcados con <span class="text-danger">(*)</span> son obligatorios
                 </div>
               </div>
             </div>

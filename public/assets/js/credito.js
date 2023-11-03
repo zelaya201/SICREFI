@@ -21,22 +21,24 @@ var tabla_cuotas = $('#datos_cuotas');
 
 var btn_guardar_credito = $('#btn_guardar_credito');
 
-var mensaje_error = $('#mensaje_error');
-
 var select_id_cliente = new Selectr('#id_cliente', {
   searchable: true,
   placeholder: 'Seleccione un cliente',
+  customClass: 'is-invalid',
   messages: {
     noResults: 'No se encontraron resultados',
     noOptions: 'No hay clientes disponibles'
   }
 });
 
-var select_bienes = new Selectr('#id_bien', {
+var select_id_cliente_label = $('#id_cliente_label');
+
+var select_bienes = new Selectr('#bienes', {
   searchable: true,
   multiple: true,
   serialize: true,
   getValue: true,
+  customClass: 'is-invalid',
   placeholder: 'Seleccione los bienes',
   messages: {
     noResults: 'No se encontraron resultados',
@@ -44,11 +46,12 @@ var select_bienes = new Selectr('#id_bien', {
   }
 });
 
-var select_ref = new Selectr('#id_ref', {
+var select_ref = new Selectr('#referencias', {
   searchable: true,
   multiple: true,
   serialize: true,
   getValue: true,
+  customClass: 'is-invalid',
   placeholder: 'Seleccione las referencias',
   messages: {
     noResults: 'No se encontraron resultados',
@@ -59,6 +62,7 @@ var select_ref = new Selectr('#id_ref', {
 var select_negocio = new Selectr('#id_negocio', {
   searchable: true,
   placeholder: 'Seleccione un negocio',
+  customClass: 'is-invalid',
   messages: {
     noResults: 'No se encontraron resultados',
     noOptions: 'No hay negocios disponibles'
@@ -72,6 +76,28 @@ var credito_seleccionado = null;
 var cliente_selected = null;
 
 $(document).ready(function () {
+  var inputs = form_credito.find('input, select, textarea, checkbox');
+
+  inputs.change(function () {
+    $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+  });
+
+  select_id_cliente.on('selectr.change', function () {
+    $('#id_cliente_error').html('');
+  });
+
+  select_bienes.on('selectr.change', function () {
+    $('#bienes_error').html('');
+  });
+
+  select_ref.on('selectr.change', function () {
+    $('#referencias_error').html('');
+  });
+
+  select_negocio.on('selectr.change', function () {
+    $('#id_negocio_error').html('');
+  });
+
   input_monto.on('input', function () {
     if(check_refinan.is(':checked') === true){
       check_renovacion.prop('checked', true);

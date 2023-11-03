@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bien;
 use App\Models\Cliente;
+use App\Models\Credito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -39,7 +40,7 @@ class BienController extends Controller
             // Verificar si existe el bien existe en session
             foreach ($array as $negocio) {
               if($negocio['nom_bien'] == $request->input('nom_bien')){
-                return ['success' => false, 'message' => 'El bien ya existe', 'input' => 'nom_bien'];
+                return ['success' => false, 'message' => 'El bien mueble ya existe', 'input' => 'nom_bien'];
               }
             }
 
@@ -49,7 +50,9 @@ class BienController extends Controller
             $size,
             [
               'id' => $size,
-              'nom_bien' => $request->input('nom_bien')
+              'nom_bien' => $request->input('nom_bien'),
+              'descrip_bien' => $request->input('descrip_bien'),
+              'valor_bien' => $request->input('valor_bien')
             ]
           );
 
@@ -61,7 +64,7 @@ class BienController extends Controller
             ->first();
 
           if($bien){
-            return ['success' => false, 'message' => 'El bien ya existe.'];
+            return ['success' => false, 'message' => 'El bien mueble ya existe.'];
           }
 
           // Guardar bien en base de datos
@@ -83,6 +86,20 @@ class BienController extends Controller
         }else{
           // Eliminar bien en base de datos
           $bien = Bien::where('id_bien', $request->input('id'))->first();
+
+          $credito = Credito::query()
+            ->join('credito_bien', 'credito_bien.id_credito', '=', 'credito.id_credito')
+            ->where('credito_bien.id_bien', $bien->id_bien)
+            ->where(['estado_credito' => 'Vigente'])->first();
+
+          if($credito){
+            $request->session()->flash('error');
+            $request->session()->flash(
+              'mensaje',
+              'El bien mueble no puede darse de baja porque está asociado al crédito #' . $credito->id_credito);
+            return ['success' => false];
+          }
+
           $bien->estado_bien = 'Inactivo';
           if($bien->save()){
             $request->session()->flash('success');
@@ -106,14 +123,16 @@ class BienController extends Controller
           // Verificar si existe el bien existe en session
           foreach ($array as $negocio) {
             if($negocio['nom_bien'] == $request->input('nom_bien') && $negocio['id'] != $request->input('id')){
-              return ['success' => false, 'message' => 'El bien ya existe.', 'input' => 'nom_bien'];
+              return ['success' => false, 'message' => 'El bien mueble ya existe.', 'input' => 'nom_bien'];
             }
           }
 
           /* Actualizar elemento del array session */
           $array[$request->input('id')] = [
             'id' => $request->input('id'),
-            'nom_bien' => $request->input('nom_bien')
+            'nom_bien' => $request->input('nom_bien'),
+            'descrip_bien' => $request->input('descrip_bien'),
+            'valor_bien' => $request->input('valor_bien')
           ];
 
           $request->session()->put('bienes', $array);
@@ -136,7 +155,7 @@ class BienController extends Controller
 
         if($bien->save()) {
           $request->session()->flash('success');
-          $request->session()->flash('mensaje', 'Negocio restaurado correctamente');
+          $request->session()->flash('mensaje', 'Bien mueble restaurado correctamente');
           return ['success' => true];
         }
       }
@@ -161,10 +180,12 @@ class BienController extends Controller
      * Show the form for editing the resource.
      *
      * @return \Illuminate\Http\Response
+     * @param int $id
      */
-    public function edit()
+    public function edit(int $id)
     {
-        //
+      $bien = Bien::where('id_bien', $id)->first();
+      return ['bien' => $bien];
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bien;
 use App\Models\Cliente;
 use App\Models\Conyuge;
+use App\Models\Credito;
 use App\Models\Negocio;
 use App\Models\Referencia;
 use App\Models\TelCliente;
@@ -255,6 +256,8 @@ class ClienteController extends Controller
         $b = new Bien();
         $b->nom_bien = $bien['nom_bien'];
         $b->estado_bien = 'Activo';
+        $b->descrip_bien = $bien['descrip_bien'];
+        $b->valor_bien = $bien['valor_bien'];
         $b->id_cliente = $identificador;
         $b->save();
       }
@@ -331,6 +334,15 @@ class ClienteController extends Controller
   public function destroy($id)
   {
     $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
+
+    $credito = Credito::query()->where(['id_cliente' => $id, 'estado_credito' => 'Vigente'])->get()->first();
+
+    if($credito) {
+      Session::flash('error', '');
+      Session::flash('mensaje', 'No se puede eliminar el cliente porque tiene un crédito activo');
+      return ['success' => true];
+    }
+
     $cliente->fill(['estado_cliente' => 'Inactivo']);
 
     if($cliente->save()) {
