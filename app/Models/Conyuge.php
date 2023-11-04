@@ -21,6 +21,21 @@ class Conyuge extends Model
     'segundo_ape_conyuge',
     'dir_conyuge',
     'ocupacion_conyuge',
+    'id_cliente',
+  ];
+
+  public static $rules = [
+    'primer_nom_conyuge' => 'required',
+    'primer_ape_conyuge' => 'required',
+    'dir_conyuge' => 'required',
+    'ocupacion_conyuge' => 'required',
+  ];
+
+  public static $messages = [
+    'primer_nom_conyuge.required' => 'El primer nombre del conyuge es requerido',
+    'primer_ape_conyuge.required' => 'El primer apellido del conyuge es requerido',
+    'dir_conyuge.required' => 'La dirección del conyuge es requerida',
+    'ocupacion_conyuge.required' => 'La ocupación del conyuge es requerida',
   ];
 
     public function cliente()

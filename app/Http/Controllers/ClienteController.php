@@ -42,20 +42,55 @@ class ClienteController extends Controller
         $clientes = $query->where(['estado_cliente' => $estado])->orderBy('primer_nom_cliente','ASC')->paginate($mostrar);
       }
 
+      $clientes->map(function ($cliente) {
+        $cliente->conyuge = false;
+
+        if($cliente->estado_civil_cliente == 'Casado') {
+          $cliente->conyuge = true;
+        }
+
+        return $cliente;
+      });
+
       $contar = count(Cliente::all());
       $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
       $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
 
-      return view('content.clientes.index', compact('clientes' , 'contar', 'activos', 'inactivos'));
+      return response()->view(
+        'content.clientes.index',
+        [
+          'clientes' => $clientes,
+          'contar' => $contar,
+          'activos' => $activos,
+          'inactivos' => $inactivos
+        ]
+      );
     }
-
 
     $clientes = $query->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente','ASC')->paginate(10);
     $contar = count(Cliente::all());
     $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
     $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
 
-    return view('content.clientes.index', compact('clientes' , 'contar', 'activos', 'inactivos'));
+    $clientes->map(function ($cliente) {
+      $cliente->conyuge = false;
+
+      if($cliente->estado_civil_cliente == 'Casado') {
+        $cliente->conyuge = true;
+      }
+
+      return $cliente;
+    });
+
+    return response()->view(
+      'content.clientes.index',
+      [
+        'clientes' => $clientes,
+        'contar' => $contar,
+        'activos' => $activos,
+        'inactivos' => $inactivos
+      ]
+    );
   }
 
   /**

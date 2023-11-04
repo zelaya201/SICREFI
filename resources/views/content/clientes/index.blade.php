@@ -72,7 +72,7 @@
                 <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
                   <div>
                     <h3 class="mb-1">0</h3>
-                    <p class="mb-0">Clientes con préstamos</p>
+                    <p class="mb-0">Clientes con Crédito</p>
                   </div>
                   <div class="avatar me-lg-4">
               <span class="avatar-initial rounded bg-label-secondary">
@@ -195,13 +195,23 @@
                           </a>
                           <div class="dropdown-menu" style="">
                             @if($cliente->estado_cliente == 'Activo')
-
+                              @if($cliente->conyuge)
+                                <a class="dropdown-item" href="{{ route('conyuge.edit', $cliente->id_cliente) }}"><i class="bx bx-user-check me-1"></i>
+                                  Cónyuge</a>
+                              @endif
                             <a class="dropdown-item" href="{{ route('negocios.show', $cliente->id_cliente) }}"><i class="bx bx-store-alt me-1"></i>
                               Negocios</a>
                             <a class="dropdown-item" href="{{ route('bienes.show', $cliente->id_cliente) }}"><i class="bx bx-building me-1"></i>
                               Bienes</a>
                             <a class="dropdown-item" href="{{ route('referencias.show', $cliente->id_cliente) }}"><i class="bx bx-user-plus me-1"></i>
                               Referencias</a>
+
+
+
+                            <script>
+                              console.log({{ $cliente->conyuge }});
+                            </script>
+
 
                             <div class="dropdown-divider"></div>
 

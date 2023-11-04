@@ -55,8 +55,8 @@
     <li class="nav-item" role="presentation">
       <a class="nav-link {{ ($cliente->estado_civil_cliente != 'Casado') ? 'disabled' : '' }}" type="button"
          aria-selected="false" tabindex="-1"
-         href="#">
-        <i class="bx bx-user-check"></i> Conyuge
+         href="{{ route('conyuge.edit', $cliente->id_cliente) }}">
+        <i class="bx bx-user-check"></i> Cónyuge
       </a>
     </li>
 

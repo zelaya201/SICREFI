@@ -40,8 +40,6 @@
       </div>
   @endif
 
-
-
 @endsection
 
 @section('page-script')

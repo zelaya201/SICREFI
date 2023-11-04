@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BienController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ConyugeController;
 use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\ReferenciaController;
@@ -40,6 +41,9 @@ Route::resource('clientes',ClienteController::class);
 Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'showEdit'])->name('clientes.showEdit');
 Route::get('/clientes/edit/{cliente}', [ClienteController::class, 'edit'])->name('clientes.edit');
 
+// Conyuge Route
+Route::resource('conyuge', ConyugeController::class);
+
 // Bien Route
 Route::get('/bienes/{bien}/get', [BienController::class, 'get'])->name('bienes.get');
 Route::resource('bienes',BienController::class);
@@ -47,7 +51,7 @@ Route::resource('bienes',BienController::class);
 // Telefono Cliente Route
 Route::resource('telsCliente', TelefonoClienteController::class);
 
-// Telefono Conyuge Route
+// Telefono conyuge Route
 Route::resource('telsConyuge', TelefonoConyugeController::class);
 
 // Telefono Negocio Route
