@@ -40,7 +40,129 @@
       </div>
   @endif
 
+    <div class="card mb-4">
+      <div class="card-widget-separator-wrapper">
+        <div class="card-body card-widget-separator">
+          <div class="row gy-4 gy-sm-1">
+            <div class="col-sm-6 col-lg-3">
+              <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
+                <div>
+                  <h3 class="mb-1"></h3>
+                  <p class="mb-0">Clientes</p>
+                </div>
+                <div class="avatar me-sm-4">
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class="bx bx-user bx-sm"></i>
+              </span>
+                </div>
+              </div>
+              <hr class="d-none d-sm-block d-lg-none me-4">
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
+                <div>
+                  <h3 class="mb-1"></h3>
+                  <p class="mb-0">Clientes con préstamos</p>
+                </div>
+                <div class="avatar me-lg-4">
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class="bx bx-file bx-sm"></i>
+              </span>
+                </div>
+              </div>
+              <hr class="d-none d-sm-block d-lg-none">
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
+                <div>
+                  <h3 class="mb-1"></h3>
+                  <p class="mb-0">Clientes Activos</p>
+                </div>
+                <div class="avatar me-sm-4">
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class='bx bx-user-check bx-sm'></i>
+              </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h3 class="mb-1"></h3>
+                  <p class="mb-0">Clientes Inactivos</p>
+                </div>
+                <div class="avatar">
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class='bx bx-user-minus bx-sm'></i>
+              </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+
+    <form action="" method="GET">
+      <div class="card p-3">
+        <div class="card-datatable">
+          <div class="dataTables_wrapper dt-bootstrap5 no-footer">
+            <div class="row my-3">
+              <div class="col-md-6">
+                <div class="col-md-6">
+                  <label>
+                    <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." aria-controls="DataTables_Table_0" onkeyup="search()">
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
+                <div class="invoice_status mb-3 mb-md-0">
+                  <select id="estado" name="estado" class="form-select">
+                    <option value="Activo" {{ session('estado_filtro') === 'Activo' ? 'selected' : '' }} class="text-capitalize">Activos</option>
+                    <option value="Inactivo" {{ session('estado_filtro') === 'Inactivo' ? 'selected' : '' }} class="text-capitalize">Inactivos</option>
+                    <option value="Todos" {{ session('estado_filtro') === 'Todos' ? 'selected' : '' }}>Todos</option>
+                  </select>
+                </div>
+                <div class="dataTables_length" ><label>
+                    <select id="mostrar" name="mostrar" class="form-select">
+                      <option value="">Mostrar</option>
+                      <option value="10" {{ session('mostrar') == 10 ? 'selected' : '' }}>10</option>
+                      <option value="25" {{ session('mostrar') == 25 ? 'selected' : '' }}>25</option>
+                      <option value="50" {{ session('mostrar') == 50 ? 'selected' : '' }}>50</option>
+                    </select></label></div>
+              </div>
+            </div>
+
+            <div id="table_div">
+              <table id="clientes_table" class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Cliente</th>
+                  <th>Monto</th>
+                  <th>Fecha de Emisión</th>
+                  <th>Fecha de Vencimiento</th>
+                  <th>Interes</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody id="clientes_tbody">
+                </tbody>
+              </table>
+
+              <div class="row">
+                <div class="col-sm-12 col-md-6"></div>
+                <div class="col-sm-12 col-md-6 d-flex justify-content-end">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
 
 @endsection
 
