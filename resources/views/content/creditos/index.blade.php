@@ -142,14 +142,45 @@
                   <th>#</th>
                   <th>Cliente</th>
                   <th>Monto</th>
-                  <th>Fecha de Emisión</th>
-                  <th>Fecha de Vencimiento</th>
-                  <th>Interes</th>
+                  <th>Porcentaje de pago</th>
+                  <th>fecha de vencimiento</th>
                   <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody id="clientes_tbody">
+                @php
+                $registrosPerPage = 10;
+                $contador = ($creditos->currentPage() - 1) * $registrosPerPage + 1;
+                @endphp
+                @foreach($creditos as $credito)
+                  <tr>
+                    <td>{{$contador}}</td>
+                    <!--Filtro para Nombre-->
+                    @if($credito->segundo_nom_cliente == null or $credito->segundo_nom_cliente == null && $credito->tercer_nom_cliente == null)
+                      <td>{{$credito->primer_nom_cliente.' '.$credito->primer_ape_cliente.' '.$credito->segundo_ape_cliente}}</td>
+                    @elseif($credito->segundo_nom_cliente == null && $credito->segundo_ape_cliente == null or $credito->segundo_nom_cliente == null && $credito->tercer_nom_cliente == null && $credito->segundo_ape_cliente = null)
+                      <td>{{$credito->primer_nom_cliente.' '.$credito->primer_ape_cliente}}</td>
+                    @elseif($credito->tercer_nom_cliente == null)
+                      <td>{{$credito->primer_nom_cliente.' '.$credito->segundo_nom_cliente.' '.$credito->primer_ape_cliente.' '.$credito->segundo_ape_cliente}}</td>
+                    @elseif($credito->tercer_nom_cliente == null && $credito->segundo_ape_cliente = null )
+                      <td>{{$credito->primer_nom_cliente.' '.$credito->segundo_nom_cliente.' '.$credito->primer_ape_cliente}}</td>
+                    @elseif($credito->segundo_ape_cliente == null)
+                      <td>{{$credito->primer_nom_cliente.' '.$credito->segundo_nom_cliente.' '.$credito->tercer_nom_cliente.' '.$credito->primer_ape_cliente}}</td>
+                    @else
+                      <td>{{$credito->primer_nom_cliente.' '.$credito->segundo_nom_cliente.' '.$credito->tercer_nom_cliente.' '.$credito->primer_ape_cliente.' '.$credito->segundo_ape_cliente}}</td>
+                    @endif
+                    <td>{{$credito->monto}}</td>
+                    <td>{{$credito->porcentaje_pago}}</td>
+                    <td>{{$credito->fecha_vencimiento}}</td>
+                    <!--Filtro para Estado -->
+                    @if($credito->estado == 'Activo')
+                      <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
+                    @elseif($credito->estado == 'Inactivo')
+                      <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
+                    @endif
+                  </tr>
+                @endforeach
                 </tbody>
               </table>
 

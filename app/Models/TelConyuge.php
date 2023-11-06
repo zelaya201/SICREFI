@@ -11,6 +11,8 @@ class TelConyuge extends Model
 
     protected $table = 'tel_conyuge'; // Nombre de la tabla en la base de datos.
 
+    protected $primaryKey = 'id_conyuge';
+
     public function conyuge() {
       return $this->belongsTo(Conyuge::class, 'id_conyuge');
     }

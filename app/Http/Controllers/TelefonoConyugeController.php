@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Conyuge;
+use App\Models\TelConyuge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
@@ -71,10 +73,20 @@ class TelefonoConyugeController extends Controller
      * Show the form for editing the resource.
      *
      * @return \Illuminate\Http\Response
+     * @param  int  $id
+     *
      */
-    public function edit()
+    public function edit(Request $request, $id)
     {
-        //
+        $telefono = new TelConyuge();
+        $telefono->id_conyuge = $id;
+        $telefono->tel_conyuge = $request->input('tel');
+
+        if($telefono->save()) {
+          return response(['success' => true]);
+        }
+
+        return response(['success' => false]);
     }
 
     /**
@@ -93,8 +105,13 @@ class TelefonoConyugeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy($id)
     {
-        abort(404);
+        $telefono = TelConyuge::query()->where('id_conyuge', request()->input('id'))->get()->first();
+        if($telefono->delete()) {
+          return response(['success' => true]);
+        }
+
+        return response(['success' => false]);
     }
 }

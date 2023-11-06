@@ -22,9 +22,58 @@ class CreditoController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response(view('content.creditos.index'));
+      Session::forget('estado_filtro');
+      Session::forget('mostrar');
+
+      $query = Credito::query()->select('monto_credito', 'tasa_interes_credito', 'fecha_vencimiento_credito', 'estado_credito',)->get();
+
+      if ($request->input('estado') || $request->input('mostrar')) {
+        $estado = $request->input('estado');
+        $mostrar = $request->input('mostrar', 10);
+
+        session(['estado_filtro' => $estado, 'mostrar' => $mostrar]);
+
+        if ($estado == 'Todos'){
+          $creditos = $query->orderBy('estado_credito', 'ASC')->orderBy('primer_nom_cliente', 'ASC')->paginate($mostrar);
+        }else{
+          $creditos = $query->where(['estado_credito' => $estado])->orderBy('primer_nom_cliente', 'ASC')->paginate($mostrar);
+        }
+
+        $creditos = $query->map(function ($credito){
+          $cliente = Cliente::query()->select('primer_nom_cliente', 'segundo_nom_cliente', 'primer_ape_cliente', 'segundo_ape_cliente')->where(['id_cliente' => $credito->id_cliente])->first();
+        });
+
+        $contar = count(Credito::all());
+        $activos = count(Credito::where('estado_credito', 'Activo')->get());
+        $inactivos = count(Credito::where('estado_credito', 'Inactivo')->get());
+
+        return response()->view(
+          'content.creditos.index',
+          [
+            'creditos' => $creditos,
+            'contar' => $contar,
+            'activos' => $activos,
+            'inactivos' => $inactivos
+          ]
+        );
+      }
+
+      $creditos = $query->where('estado_credito', 'Activo')->paginate(10);
+      $contar = count(Credito::all());
+      $activos = count(Credito::where('estado_credito', 'Activo')->get());
+      $inactivos = count(Credito::where('estado_credito', 'Inactivo')->get());
+
+        return response()->view(
+          'content.creditos.index',
+          [
+            'creditos' => $creditos,
+            'contar' => $contar,
+            'activos' => $activos,
+            'inactivos' => $inactivos
+          ]
+        );
     }
 
     /**

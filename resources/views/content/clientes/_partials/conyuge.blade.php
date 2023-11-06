@@ -4,7 +4,7 @@
         <!-- Datos del conyugue -->
         <div class="card">
           <div class="card-header pb-0">
-            <span class="fw-bold">Datos del conyuge</span>
+            <span class="fw-bold">Datos del cónyuge</span>
             <hr class="my-2">
           </div>
           <div class="card-body">
