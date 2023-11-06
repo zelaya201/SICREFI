@@ -301,7 +301,7 @@ function cargarNegocioSelect() {
     });
   });
 
-  if(credito_seleccionado !== null){
+  if(credito_seleccionado !== null && credito_seleccionado.id_negocio !== null){
     select_negocio.setValue(credito_seleccionado.id_negocio);
   }
 }
