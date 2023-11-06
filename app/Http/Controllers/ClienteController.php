@@ -6,6 +6,7 @@ use App\Models\Bien;
 use App\Models\Cliente;
 use App\Models\Conyuge;
 use App\Models\Credito;
+use App\Models\Cuota;
 use App\Models\Negocio;
 use App\Models\Referencia;
 use App\Models\TelCliente;
@@ -55,6 +56,7 @@ class ClienteController extends Controller
       $contar = count(Cliente::all());
       $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
       $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
+      $clientes_creditos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
 
       return response()->view(
         'content.clientes.index',
@@ -62,7 +64,8 @@ class ClienteController extends Controller
           'clientes' => $clientes,
           'contar' => $contar,
           'activos' => $activos,
-          'inactivos' => $inactivos
+          'inactivos' => $inactivos,
+          'clientes_creditos' => $clientes_creditos
         ]
       );
     }
@@ -71,6 +74,7 @@ class ClienteController extends Controller
     $contar = count(Cliente::all());
     $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
     $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
+    $clientes_creditos = count(Credito::query()->where(['estado_credito' => 'Vigente'])->get());
 
     $clientes->map(function ($cliente) {
       $cliente->conyuge = false;
@@ -88,7 +92,8 @@ class ClienteController extends Controller
         'clientes' => $clientes,
         'contar' => $contar,
         'activos' => $activos,
-        'inactivos' => $inactivos
+        'inactivos' => $inactivos,
+        'clientes_creditos' => $clientes_creditos
       ]
     );
   }
@@ -314,7 +319,57 @@ class ClienteController extends Controller
    */
   public function show($id)
   {
-    //
+    /* Mostrar información del cliente y su historial crediticio */
+
+    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
+    $cliente->nombre_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
+
+    $creditos = Credito::query()->where(['id_cliente' => $id])->orderBy('id_credito', 'DESC')->get();
+    $creditos = $creditos->map(function ($credito){
+      $cuotas_mora = Cuota::query()
+        ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])
+        ->where('fecha_pago_cuota', '<', date('Y-m-d'))->get();
+
+      $credito->cuotas_mora = 0;
+
+      if (count($cuotas_mora)> 0) {
+        $credito->estado_credito = 'Mora';
+        $credito->cuotas_mora = count($cuotas_mora);
+      }
+
+      return $credito;
+    });
+
+    $total_desembolsos = 0;
+    $total_creditos = 0;
+    $cuotas_mora = 0;
+    $refinanciamientos = 0;
+
+    if($creditos){
+      foreach ($creditos as $credito){
+        $total_desembolsos += $credito->desembolso_credito;
+
+        if($credito->estado_credito == 'Refinanciado'){
+          $refinanciamientos++;
+        }
+
+        $cuotas_mora += $credito->cuotas_mora;
+      }
+
+      $total_creditos = count($creditos);
+    }
+
+    return response()->view(
+      'content.clientes.show',
+      [
+        'cliente' => $cliente,
+        'creditos' => $creditos,
+        'total_creditos' => $total_creditos,
+        'total_desembolsos' => $total_desembolsos,
+        'cuotas_mora' => $cuotas_mora,
+        'refinanciamientos' => $refinanciamientos
+      ]
+    );
   }
 
   /**

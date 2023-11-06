@@ -167,7 +167,7 @@
             <label class="form-label" for="fech_primer_cuota">Fecha de primer cuota (*)</label>
             <input type="date" class="form-control" name="fech_primer_cuota" id="fech_primer_cuota"
                    pattern="\d{2}-\d{2}-\d{4}" placeholder="dd-mm-yyyy"
-                   min="{{ date('Y-m-d') }}">
+                   min="{{ date('Y-m-d', strtotime('+1 day')) }}" max="{{ date('Y-m-d', strtotime('+1 month')) }}">
 
             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
               <div data-field="name" data-validator="notEmpty" id="fech_primer_cuota_error"></div>
