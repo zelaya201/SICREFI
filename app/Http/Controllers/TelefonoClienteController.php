@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\TelCliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
 
 class TelefonoClienteController extends Controller
 {
@@ -90,7 +91,12 @@ class TelefonoClienteController extends Controller
       $telefono = new TelCliente();
       $telefono->tel_cliente = $request->input('tel');
       $telefono->id_cliente = $cliente->id_cliente;
-      $telefono->save();
+
+      if($telefono->save()) {
+        Session::flash('message', 'Teléfono agregado correctamente');
+        Session::flash('success', 'success');
+        return response(['success' => true]);
+      }
 
       return ['success' => true];
     }
@@ -113,9 +119,11 @@ class TelefonoClienteController extends Controller
      */
     public function destroy($id)
     {
-      $telefono = TelCliente::query()->where(['id_tel_cliente' => $id])->get()->first();
-      $telefono->delete();
+      if(!empty($id)) {
+        Session::flash('message', 'Teléfono eliminado correctamente');
+        Session::flash('success', 'success');
+      }
 
-      return ['success' => true];
+      return response(['success' => TelCliente::query()->where(['id_tel_cliente' => $id])->delete()]);
     }
 }

@@ -91,8 +91,8 @@ class ConyugeController extends Controller
         $existe = false;
 
         if($conyuge == null){
-            $conyuge = new Conyuge();
-            $existe = true;
+          $conyuge = new Conyuge();
+          $existe = true;
         }
 
         $cliente = Cliente::query()->select('id_cliente','dui_cliente', 'primer_nom_cliente', 'primer_ape_cliente')
@@ -120,8 +120,6 @@ class ConyugeController extends Controller
     public function update(Request $request, $id)
     {
 
-
-
     }
 
     /**
@@ -132,6 +130,6 @@ class ConyugeController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 }

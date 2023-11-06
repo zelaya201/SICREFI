@@ -223,25 +223,25 @@
                   </thead>
                   <tbody id="lista-telefonos-conyuge">
 
-                    @if($telefonos == null)
+                    @if(empty($telefonos) || count($telefonos) == 0)
                       <tr>
-                        <td colspan="3" class="text-center">No hay resultados</td>
+                        <td colspan="3">No hay resultados</td>
                       </tr>
+                    @else
+                      @foreach($telefonos as $telefono)
+                        <tr>
+                          <td>{{ $loop->iteration }}</td>
+                          <td>{{ $telefono->tel_conyuge }}</td>
+                          <td>
+                            <input type="hidden" name="id_tel" id="id_tel" value="{{$telefono->id_tel_conyuge}}">
+                            <button type='button' class='btn btn-outline-danger btn-sm'
+                            onclick="eliminarTelefono('{{ $telefono->id_tel_conyuge }}', event)">
+                              <i class='tf-icons bx bx-trash'></i>
+                            </button>
+                          </td>
+                        </tr>
+                      @endforeach
                     @endif
-
-                    @foreach($telefonos as $telefono)
-                      <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $telefono->tel_conyuge }}</td>
-                        <td>
-                          <input type="hidden" name="id_tel" id="id_tel" value="{{$telefono->id_tel_conyuge}}">
-                          <button type='button' class='btn btn-outline-danger btn-sm' id="eliminar_telefono">
-                            <i class='tf-icons bx bx-trash'></i>
-                          </button>
-                        </td>
-                      </tr>
-                    @endforeach
-
                   </tbody>
                 </table>
               </div>
@@ -311,7 +311,6 @@
             if (data.success) {
               window.location.href = '{{ route("conyuge.edit", $cliente->id_cliente) }}';
             }
-            console.log(data);
           },
           error: function (xhr) {
             var data = xhr.responseJSON;
@@ -322,52 +321,61 @@
                 $('#' + key + '_error').html(value); // Agregar el mensaje de error
               });
             }
-
-            console.log(xhr);
           }
         });
       });
 
       /* ALMACENAR TELEFONO */
       $('#btn-agregar-telefono-conyuge').on('click', function (){
-        let id = {{ $conyuge->id_conyuge }};
-        let tel = $('#tel_conyuge').val();
+        let id = "{{ (!empty($conyuge)) ? $conyuge->id_conyuge : 0 }}";
+        let tel = $('#tel_conyuge');
+        if (tel.val() === '') {
+          tel.addClass('is-invalid');
+          $('#mensaje-telefono-conyuge').html('El campo es obligatorio.');
 
-        $.ajax({
-          url: '{{ route("telsConyuge.edit", ":id_conyuge") }}'.replace(':id_conyuge', id),
-          type: 'get',
-          data: {
-            id : id,
-            tel: tel,
-          },
-          success: function(data) {
-            if(data.success) {
-              // Reedireccionar a la página de clientes
-              location.reload();
+        } else if (tel.val().length < 8) {
+          tel.addClass('is-invalid');
+          $('#mensaje-telefono-conyuge').html('El campo debe tener al menos 8 caracteres.');
+        }else{
+          $.ajax({
+            url: '{{ route("telsConyuge.edit", ":id_conyuge") }}'.replace(':id_conyuge', id),
+            type: 'get',
+            data: {
+              id : id,
+              tel: tel.val(),
+            },
+            success: function(data) {
+              if(data.success) {
+                // Reedireccionar a la página de clientes
+                location.reload();
+              }
             }
-          }
-        });
-      });
+          });
+        }
 
-      /* ELIMINAR TELEFONO */
-      $('#eliminar_telefono').on('click', function (){
-        let id = $('#id_tel').val();
-
-        $.ajax({
-          url: '{{ route("telsConyuge.destroy", ":id_tel") }}'.replace(':id_tel', id),
-          type: 'delete',
-          data: {
-            id : id,
-          },
-          success: function(data) {
-            if(data.success) {
-              // Reedireccionar a la página de clientes
-              location.reload()
-            }
-          }
-        });
       });
     });
+
+    /* ELIMINAR TELEFONO */
+    function eliminarTelefono(id, event) {
+      // Deshabilitar btn de eliminar que hizo la petición
+      $(event.target).prop('disabled', true);
+
+      $.ajax({
+        url: "{{ route('telsConyuge.destroy', ':id') }}".replace(':id', id),
+        type: 'DELETE',
+        data: {
+          id: id,
+          _token: "{{ csrf_token() }}",
+        },
+        success: function(data) {
+          if(data.success) {
+            // Reedireccionar a la página de clientes
+            location.reload();
+          }
+        }
+      });
+    }
 
   </script>
 @endsection

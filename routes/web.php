@@ -5,6 +5,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ConyugeController;
 use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\NegocioController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ReferenciaController;
 use App\Http\Controllers\TelefonoClienteController;
 use App\Http\Controllers\TelefonoConyugeController;
@@ -29,6 +30,8 @@ $controller_path = 'App\Http\Controllers';
 Route::get('/', function () {
     return view('content.index');
 })->name('inicio');
+
+Route::get('generate-declaracion', [PDFController::class, 'generateDeclaracion']);
 
 // Negocio Route
 Route::resource('negocios', NegocioController::class);

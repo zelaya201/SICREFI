@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Conyuge;
 use App\Models\TelConyuge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
 
 class TelefonoConyugeController extends Controller
 {
@@ -16,7 +16,7 @@ class TelefonoConyugeController extends Controller
      */
     public function create()
     {
-        abort(404);
+
     }
 
     /**
@@ -83,6 +83,8 @@ class TelefonoConyugeController extends Controller
         $telefono->tel_conyuge = $request->input('tel');
 
         if($telefono->save()) {
+          Session::flash('message', 'Teléfono agregado correctamente');
+          Session::flash('success', 'success');
           return response(['success' => true]);
         }
 
@@ -101,17 +103,17 @@ class TelefonoConyugeController extends Controller
     }
 
     /**
-     * Remove the resource from storage.
-     *
+     * Remove the resource from storage
      * @return \Illuminate\Http\Response
+     * @param  int  $id
      */
     public function destroy($id)
     {
-        $telefono = TelConyuge::query()->where('id_conyuge', request()->input('id'))->get()->first();
-        if($telefono->delete()) {
-          return response(['success' => true]);
-        }
-
-        return response(['success' => false]);
+      if(!empty($id)) {
+        Session::flash('message', 'Teléfono eliminado correctamente');
+        Session::flash('success', 'success');
+      }
+      /* Eliminar telefono conyuge */
+      return response(['success' => TelConyuge::query()->where(['id_tel_conyuge' => $id])->delete()]);
     }
 }

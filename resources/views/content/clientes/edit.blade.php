@@ -83,14 +83,16 @@
       </li>
     </ul>
 
-    <div class="alert alert-danger d-none m-0 mt-3" role="alert" id="alerta-error">
-      <span class="badge badge-center rounded-pill bg-danger border-label-danger p-3 me-2" id="label-error"><i
-          class="bx bx-error fs-6"></i></span>
-      <div class="d-flex flex-column">
-        <h6 class="alert-heading d-flex align-items-center mb-1">Mensaje de alerta</h6>
-        <span id="mensaje-error">¡Debe agregar al menos un teléfono al cliente!</span>
+    @if(Session::has('success'))
+      <div class="alert alert-primary d-flex m-0 mt-3" role="alert">
+          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+        <div class="d-flex flex-column ps-1">
+          <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
+          <span>{{ Session::get('message') }}</span>
+        </div>
       </div>
-    </div>
+    @endif
 
     <div class="tab-content p-0">
       @include('content.clientes._partials-edit.info-edit') {{-- Información del cliente --}}
@@ -136,11 +138,17 @@
       });
 
       $('#btn-modificar-cliente').on('click', function (){
+        $('#btn-modificar-cliente').prop('disabled', true);
+        $('#btn-modificar-cliente').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Modificando...');
+
         $.ajax({
           url : '{{ route("clientes.store") }}',
           type : 'POST',
           dataType : 'json',
           data : $('#form-cliente').serialize() + '&modificarCliente=true&id_cliente=' + {{ $cliente->id_cliente }},
+          progress : function (){
+            $('#btn-modificar-cliente').prop('disabled', true);
+          },
           success : function (data) {
             if (data.success) {
               window.location.href = '{{ route('clientes.index') }}';
@@ -153,90 +161,48 @@
                 // Mostrar errores en los inputs
                 $('#' + key).addClass('is-invalid');
                 $('#' + key + '_error').html(value); // Agregar el mensaje de error
+
+                $('#btn-modificar-cliente').prop('disabled', false);
+                $('#btn-modificar-cliente').html('<span class="tf-icon bx bx-edit-alt me-1"></span> Modificar');
               });
             }
           }
         });
       });
 
-      /* ALMACENAR TELEFONO */
-      $('#submit_tel_cliente').on('click', function (){
-        let id = $('#id_cliente').val();
-        let tel = $('#tel_cliente').val();
-
-        $.ajax({
-          url: '{{ route("telsCliente.edit", ":id_cliente") }}'.replace(':id_cliente', id),
-          type: 'get',
-          data: {
-            id : id,
-            tel: tel,
-          },
-          success: function(data) {
-            if(data.success) {
-              // Reedireccionar a la página de clientes
-              location.reload();
-            }
-          }
-        });
-      });
-
-      /* ELIMINAR TELEFONO */
-      $('#eliminar_telefono').on('click', function (){
-        let id = $('#id_tel').val();
-
-        $.ajax({
-          url: '{{ route("telsCliente.destroy", ":id_tel") }}'.replace(':id_tel', id),
-          type: 'delete',
-          data: {
-            id : id,
-          },
-          success: function(data) {
-            if(data.success) {
-              // Reedireccionar a la página de clientes
-              location.reload()
-            }
-          }
-        });
-      });
-
-      /** FIN EVENTOS DE BOTONES CLIENTE **/
-
-
       /** EVENTOS DE BOTONES TELEFONO CLIENTE **/
-      $('#btn-agregar-telefono-cliente').click(function (e) {
+      $('#submit_tel_cliente').click(function (e) {
         e.preventDefault();
+        $(e.target).prop('disabled', true);
 
+        let id = $('#id_cliente').val();
         var objtel_cliente = $('#tel_cliente');
 
         if (objtel_cliente.val() === '') {
           objtel_cliente.addClass('is-invalid');
           $('#mensaje_tel_cliente').html('El campo es obligatorio.');
+          $(e.target).prop('disabled', false);
+
         } else if (objtel_cliente.val().length < 8) {
           objtel_cliente.addClass('is-invalid');
           $('#mensaje_tel_cliente').html('El campo debe tener al menos 8 caracteres.');
+          $(e.target).prop('disabled', false);
         } else {
-          let datos = 'tel_cliente=' + objtel_cliente.val();
-          datos += '&opcion=agregar';
-          datos += '&session=true';
+
 
           $.ajax({
-            url: '{{ route("telsCliente.store") }}',
-            type: 'post',
+            url: '{{ route("telsCliente.edit", ":id_cliente") }}'.replace(':id_cliente', id),
+            type: 'get',
             dataType: 'json',
-            data: datos,
+            data: {
+              id : id,
+              tel: objtel_cliente.val(),
+            },
             success: function (data) {
               /* Mensaje de exito */
-              if (data.success === false) {
-                objtel_cliente.addClass('is-invalid');
-                $('#mensaje_tel_cliente').html(data.message);
-
-                objtel_cliente.change(function () {
-                  $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
-                });
-              } else {
-                $('#telefono-modal-cliente').modal('hide');
-                $('#tel_cliente').val('');
-                mostrarTelefonosCliente(data);
+              if(data.success) {
+                // Reedireccionar a la página de clientes
+                location.reload();
               }
 
             },
@@ -249,6 +215,26 @@
       /** FIN EVENTOS DE BOTONES TELEFONO CLIENTE **/
     });
 
+    /* Función para mostrar los teléfonos del cliente */
+    function eliminarTelefono(id, event) {
+      // Deshabilitar btn de eliminar que hizo la petición
+      $(event.target).prop('disabled', true);
+
+      $.ajax({
+        url: "{{ route('telsCliente.destroy', ':id') }}".replace(':id', id),
+        type: 'DELETE',
+        data: {
+          id: id,
+          _token: "{{ csrf_token() }}",
+        },
+        success: function(data) {
+          if(data.success) {
+            // Reedireccionar a la página de clientes
+            location.reload();
+          }
+        }
+      });
+    }
 
   </script>
 @endsection

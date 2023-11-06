@@ -22,7 +22,7 @@
             </button>
           </li>
           <li class="list-inline-item fw-semibold">
-            <a class="nav-link btn btn-primary" type="button" href="{{ route('clientes.create') }}"><span
+            <a class="nav-link btn btn-primary load" type="button" href="{{ route('clientes.create') }}"><span
                 class="tf-icons bx bx-plus"></span> <span class="d-none d-sm-inline-block"> Nuevo cliente</span> </a>
           </li>
         </ul>
@@ -71,7 +71,7 @@
               <div class="col-sm-6 col-lg-3">
                 <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
                   <div>
-                    <h3 class="mb-1">0</h3>
+                    <h3 class="mb-1">{{ $clientes_creditos }}</h3>
                     <p class="mb-0">Clientes con Crédito</p>
                   </div>
                   <div class="avatar me-lg-4">
@@ -193,8 +193,11 @@
                              data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </a>
-                          <div class="dropdown-menu" style="">
-                            @if($cliente->estado_cliente == 'Activo')
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ route('clientes.show', $cliente->id_cliente) }}"><i class="bx bx-file me-1"></i> Historial crediticio</a>
+
+                            <div class="dropdown-divider"></div>
+                          @if($cliente->estado_cliente == 'Activo')
                               @if($cliente->conyuge)
                                 <a class="dropdown-item" href="{{ route('conyuge.edit', $cliente->id_cliente) }}"><i class="bx bx-user-check me-1"></i>
                                   Cónyuge</a>
@@ -205,13 +208,6 @@
                               Bienes</a>
                             <a class="dropdown-item" href="{{ route('referencias.show', $cliente->id_cliente) }}"><i class="bx bx-user-plus me-1"></i>
                               Referencias</a>
-
-
-
-                            <script>
-                              console.log({{ $cliente->conyuge }});
-                            </script>
-
 
                             <div class="dropdown-divider"></div>
 
