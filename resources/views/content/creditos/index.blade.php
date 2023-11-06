@@ -23,7 +23,7 @@
           </button>
         </li>
         <li class="list-inline-item fw-semibold">
-          <a class="nav-link btn btn-primary" type="button" href="{{ route('creditos.create') }}"><span
+          <a class="nav-link btn btn-primary load" type="button" href="{{ route('creditos.create') }}"><span
               class="tf-icons bx bx-plus"></span> <span class="d-none d-sm-inline-block"> Nuevo crédito</span> </a>
         </li>
       </ul>

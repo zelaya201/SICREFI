@@ -28,12 +28,12 @@
             </li>
             <li class="list-inline-item fw-semibold">
 
-              <button class="nav-link btn btn-primary" type="button" id="btn-guardar-cliente">
+              <button class="nav-link btn btn-primary load" type="button" id="btn-guardar-cliente">
                 <span class="tf-icons bx bx-save"></span>
                 Guardar cliente
               </button>
             </li>
-            <li class="list-inline-item fw-semibold">
+            <li class="list-inline-item fw-semibold load">
               <a class="nav-link btn btn-secondary" type="button" href="{{ route('clientes.index') }}"> Cancelar
               </a>
             </li>
@@ -228,6 +228,9 @@
               $('#alerta-error').removeClass('d-none').addClass('d-flex');
               $('#mensaje-error').html(data.message);
 
+              $('#btn-guardar-cliente').html('<span class="tf-icons bx bx-save"></span> Guardar cliente').prop('disabled', false);
+
+
             }
           },
           error: function (xhr) {
@@ -277,6 +280,8 @@
                 $('#mensaje-error').html('Por favor, complete los campos marcados en rojo.');
                 $('#cant-errores-conyuge').html(i).removeClass('d-none');
               }
+
+              $('#btn-guardar-cliente').html('<span class="tf-icons bx bx-save"></span> Guardar cliente').removeClass('disabled').prop('disabled', false);
             }
           }
         });

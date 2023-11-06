@@ -39,13 +39,13 @@
             </li>
             <li class="list-inline-item fw-semibold">
 
-              <button class="nav-link btn btn-primary" type="button" id="btn_guardar_credito">
+              <button class="nav-link btn btn-primary load" type="button" id="btn_guardar_credito">
                 <span class="tf-icons bx bx-save"></span>
                 Realizar crédito
               </button>
             </li>
             <li class="list-inline-item fw-semibold">
-              <a class="nav-link btn btn-secondary" type="button" href="{{ route('creditos.index') }}"> Cancelar
+              <a class="nav-link btn btn-secondary load" type="button" href="{{ route('creditos.index') }}"> Cancelar
               </a>
             </li>
           </ul>
@@ -111,6 +111,10 @@
                 $('#' + key + '_label').addClass('border border-danger rounded')
               });
             }
+
+            btn_guardar_credito.removeClass('disabled');
+            btn_guardar_credito.prop('disabled', false);
+            btn_guardar_credito.html('<span class="tf-icons bx bx-save"></span> Realizar crédito');
           }
         });
       });

@@ -22,7 +22,7 @@
             </button>
           </li>
           <li class="list-inline-item fw-semibold">
-            <a class="nav-link btn btn-primary" type="button" href="{{ route('clientes.create') }}"><span
+            <a class="nav-link btn btn-primary load" type="button" href="{{ route('clientes.create') }}"><span
                 class="tf-icons bx bx-plus"></span> <span class="d-none d-sm-inline-block"> Nuevo cliente</span> </a>
           </li>
         </ul>
@@ -193,7 +193,7 @@
                              data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </a>
-                          <div class="dropdown-menu" style="">
+                          <div class="dropdown-menu">
                             @if($cliente->estado_cliente == 'Activo')
                               @if($cliente->conyuge)
                                 <a class="dropdown-item" href="{{ route('conyuge.edit', $cliente->id_cliente) }}"><i class="bx bx-user-check me-1"></i>
@@ -206,12 +206,7 @@
                             <a class="dropdown-item" href="{{ route('referencias.show', $cliente->id_cliente) }}"><i class="bx bx-user-plus me-1"></i>
                               Referencias</a>
 
-
-
-                            <script>
-                              console.log({{ $cliente->conyuge }});
-                            </script>
-
+                            <a class="dropdown-item" href="{{ route('clientes.show', $cliente->id_cliente) }}"><i class="bx bx-show me-1"></i> Historial</a>
 
                             <div class="dropdown-divider"></div>
 

@@ -262,8 +262,8 @@
                       <td>{{$loop->iteration}}</td>
                       <td>+503 {{$telefono->tel_cliente}}</td>
                       <td>
-                        <input type="hidden" name="id_tel" id="id_tel" value="{{$telefono->id_tel_cliente}}">
-                        <button type='button' class='btn btn-outline-danger btn-sm' id="eliminar_telefono">
+                        <button type='button' class='btn btn-outline-danger btn-sm'
+                        onclick="eliminarTelefono('{{ $telefono->id_tel_cliente }}', event)">
                           <i class='tf-icons bx bx-trash'></i>
                         </button>
                       </td>
