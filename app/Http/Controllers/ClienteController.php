@@ -297,7 +297,7 @@ class ClienteController extends Controller
         $b->nom_bien = $bien['nom_bien'];
         $b->estado_bien = 'Activo';
         $b->descrip_bien = $bien['descrip_bien'];
-        $b->valor_bien = $bien['valor_bien'];
+        $b->valor_bien = doubleval($bien['valor_bien']);
         $b->id_cliente = $identificador;
         $b->save();
       }

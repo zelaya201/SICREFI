@@ -82,6 +82,9 @@ Route::get('/creditos/calcularFechasCuotas', [CreditoController::class, 'calcula
   ->name('creditos.calcularFechasCuotas');
 Route::get('/creditos/asignarIncobrable/{credito}', [CreditoController::class, 'asignarIncobrable'])
   ->name('creditos.asignarIncobrable');
+
+Route::get('/creditos/reactivarCredito/{credito}', [CreditoController::class, 'reactivarCredito'])
+  ->name('creditos.reactivarCredito');
 Route::resource('creditos', CreditoController::class);
 
 

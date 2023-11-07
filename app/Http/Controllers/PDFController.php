@@ -233,7 +233,7 @@ class PDFController extends Controller
       ];
 
       $pdf = PDF::loadView('content.pdf.ticket', $data);
-      $pdf->setPaper(array(0,0,250,600));
+      $pdf->setPaper(array(0,0,250,450));
 
       return $pdf->stream('ticket.pdf');
     }

@@ -348,7 +348,27 @@ class CreditoController extends Controller
       }
 
       Session::flash('success', '');
-      Session::flash('mensaje', 'Crédito asignado como incobrable');
+      Session::flash('mensaje', 'Crédito puesto en estado incobrable');
+      return response(['success' => true]);
+    }
+
+    return response(['success' => false], 500);
+  }
+
+  public function reactivarCredito(int $id_credito){
+    $credito = Credito::query()->where('id_credito', $id_credito)->first();
+    $credito->estado_credito = 'Vigente';
+
+    if($credito->save()){
+      $cuotas = Cuota::query()->where('id_credito', $id_credito)->get();
+
+      foreach ($cuotas as $cuota){
+        $cuota->estado_cuota = 'Pendiente';
+        $cuota->save();
+      }
+
+      Session::flash('success', '');
+      Session::flash('mensaje', 'Crédito reactivado');
       return response(['success' => true]);
     }
 

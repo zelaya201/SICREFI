@@ -196,7 +196,7 @@
                 @elseif($credito->estado_credito == 'Refinanciado' || $credito->estado_credito == 'Renovado' || $credito->estado_credito == 'Finalizado')
                   <span class="badge rounded-pill bg-label-success">Finalizado</span>
                 @else
-                  <span class="badge rounded-pill bg-label-danger">Mora</span>
+                  <span class="badge rounded-pill bg-label-danger">{{ $credito->estado_credito }}</span>
                 @endif
               </td>
               <td>

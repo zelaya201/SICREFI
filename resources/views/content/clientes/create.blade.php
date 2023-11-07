@@ -202,6 +202,7 @@
             } else {
               $('#cant-errores-cliente').addClass('d-none');
               $('#cant-errores-conyuge').addClass('d-none');
+
               switch (data.tab) {
                 case 'cliente':
                   cambiarTab('cliente');
@@ -227,10 +228,6 @@
 
               $('#alerta-error').removeClass('d-none').addClass('d-flex');
               $('#mensaje-error').html(data.message);
-
-              $('#btn-guardar-cliente').html('<span class="tf-icons bx bx-save"></span> Guardar cliente').prop('disabled', false);
-
-
             }
           },
           error: function (xhr) {
@@ -281,10 +278,12 @@
                 $('#cant-errores-conyuge').html(i).removeClass('d-none');
               }
 
-              $('#btn-guardar-cliente').html('<span class="tf-icons bx bx-save"></span> Guardar cliente').removeClass('disabled').prop('disabled', false);
             }
           }
         });
+
+        $('#btn-guardar-cliente').html('<span class="tf-icons bx bx-save"></span> Guardar cliente').prop('disabled', false).removeClass('disabled');
+
       });
       /** FIN EVENTOS DE BOTONES CLIENTE **/
 
