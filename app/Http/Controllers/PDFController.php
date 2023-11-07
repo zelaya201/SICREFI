@@ -151,11 +151,17 @@ class PDFController extends Controller
           ->cliente->tercer_nom_cliente;
         $this->cliente->apellido = $this->cliente->primer_ape_cliente . ' ' . $this->cliente->segundo_ape_cliente;
 
+        $cuota = Cuota::query()
+          ->where(['id_credito' => $id])
+          ->orderBy('id_cuota', 'desc')
+          ->first();
+
         $data = [
           'title' => 'RECIBO DE PAGO',
           'fecha' => strftime("%d de %B de %Y", strtotime(date('Y-m-d'))),
           'cliente' => $this->cliente,
-          'credito' => $this->credito
+          'credito' => $this->credito,
+          'cuota' => $cuota
           ];
 
         $pdf = PDF::loadView('content.pdf.recibo', $data);
@@ -209,31 +215,45 @@ class PDFController extends Controller
 
     public function generarTicket(int $id){
 
-      $this->__invoke($id);
+      $cuota = Cuota::query()
+        ->where(['id_cuota' => $id])->first();
 
-      $this->cliente->nombre = $this
-        ->cliente
-        ->primer_nom_cliente . ' ' . $this
-        ->cliente->segundo_nom_cliente . ' ' . $this
-        ->cliente->tercer_nom_cliente;
-      $this->cliente->apellido = $this->cliente->primer_ape_cliente . ' ' . $this->cliente->segundo_ape_cliente;
+      $credito = Credito::query()
+        ->where(['id_credito' => $cuota->id_credito])
+        ->first();
 
+      $cliente = Cliente::query()
+        ->where(['id_cliente' => $credito->id_cliente])
+        ->first();
+
+      $cliente->nombre = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente;
+      $cliente->apellido = $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
+
+      // Obtener numero de cuota
       $cuotas = Cuota::query()
-        ->where(['id_credito' => $id])
+        ->where(['id_credito' => $credito->id_credito])
         ->get();
 
+      foreach ($cuotas as $key => $value) {
+        if ($value->id_cuota == $id) {
+          $cuota->num_cuota = $key + 1;
+        }
+      }
+
+      setlocale(LC_TIME, 'spanish');
+
       $data = [
-        'title' => 'TICKET DE PAGO',
+        'title' => 'COMPROBANTE DE PAGO',
         'date' => date('m/d/Y'),
-        'cliente' => $this->cliente,
+        'cliente' => $cliente,
         'fecha' => strftime("%d de %B de %Y", strtotime(date('Y-m-d'))),
-        'credito' => $this->credito,
-        'cuotas' => $cuotas,
+        'credito' => $credito,
+        'cuota' => $cuota,
         'cooperativa' => $this->coperativa
       ];
 
       $pdf = PDF::loadView('content.pdf.ticket', $data);
-      $pdf->setPaper(array(0,0,250,450));
+      $pdf->setPaper(array(0,0,240,410));
 
       return $pdf->stream('ticket.pdf');
     }
