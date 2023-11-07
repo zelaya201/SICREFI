@@ -156,7 +156,7 @@
                       <td>{{ $credito->monto_neto_credito }}</td>
                       <td>0.0000%</td>
                       <td>dd-mm-YYYY</td>
-                      <td>{{ $credito->estado_credito }}</td>
+                      <td>Activo</td>
                       <td>
                         <div class="dropdown-icon-demo">
                           <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm hide-arrow"
@@ -168,7 +168,7 @@
                                 Cuotas</a>
                               <div class="dropdown-divider"></div>
 
-                              <a class="dropdown-item text-danger" href="{{ route('creditos.asignarIncobrable', $credito->id_credito) }}"><i
+                              <a class="dropdown-item text-danger" href="javascript:void(0);"><i
                                   class="bx bx-trash me-1"></i>Incobrable</a>
 
                           </div>
