@@ -240,15 +240,9 @@
                   <a href="{{ route('generar-ticket', $cuota->id_cuota) }}" target="_blank" class="btn btn-sm m-0">
                     <i class="bx bx-file"></i>
                   </a>
-                  <a href="{{ route('generar-ticket', $cuota->id_cuota) }}" target="_blank" class="btn btn-sm m-0">
-                    <i class="bx bx-download"></i>
-                  </a>
                 @else
                   <a href="#" class="btn btn-sm disabled">
                     <i class="bx bx-file"></i>
-                  </a>
-                  <a href="#" class="btn btn-sm disabled">
-                    <i class="bx bx-download"></i>
                   </a>
                 @endif
               </td>
