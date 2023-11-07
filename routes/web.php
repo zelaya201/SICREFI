@@ -42,6 +42,8 @@ Route::get('generar-ticket/{credito}', [PDFController::class, 'generarTicket'])-
 // Cuota Route
 Route::get('/cuotas/pagarCredito/{credito}', [CuotaController::class, 'pagarCredito'])
   ->name('cuotas.pagarCredito');
+Route::get('/cuotas/pagarCuota/{cuota}', [CuotaController::class, 'pagarCuota'])->name('cuotas.pagarCuota');
+Route::get('/cuotas/posponerCuota/{cuota}', [CuotaController::class, 'posponerCuota'])->name('cuotas.posponerCuota');
 Route::resource('cuotas', CuotaController::class);
 
 
@@ -78,6 +80,8 @@ Route::resource('telsReferencia', TelefonoReferenciaController::class);
 // Credito Route
 Route::get('/creditos/calcularFechasCuotas', [CreditoController::class, 'calcularFechasCuotas'])
   ->name('creditos.calcularFechasCuotas');
+Route::get('/creditos/asignarIncobrable/{credito}', [CreditoController::class, 'asignarIncobrable'])
+  ->name('creditos.asignarIncobrable');
 Route::resource('creditos', CreditoController::class);
 
 

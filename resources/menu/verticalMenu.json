@@ -22,6 +22,12 @@
       "slug": "creditos.index"
     },
     {
+      "url": "/cuotas",
+      "name": "Pagos rápidos",
+      "icon": "menu-icon tf-icons bx bx-coin",
+      "slug": "cuotas.index"
+    },
+    {
       "menuHeader": "Configuración"
     },
     {

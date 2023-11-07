@@ -10,7 +10,7 @@
     <div
       class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column mb-1">
       <div class="user-profile-info py-1">
-        <h4 class="fw-bold m-0"><span class="text-muted fw-light">Créditos /</span> Pago de cuotas</h4>
+        <h4 class="fw-bold m-0"><span class="text-muted fw-light">Créditos /</span> @if($cuotaAPagar->id_cuota > 0) Pago de cuotas @else Resumen de pagos @endif </h4>
       </div>
       <ul
         class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
@@ -183,7 +183,7 @@
 
             <div class="row">
               <div class="col-md-12 text-center">
-                <button type="button" class="btn btn-outline-primary mt-sm-0 mt-4 load" id="btn_pagar_cuota">
+                <button type="submit" class="btn btn-outline-primary mt-sm-0 mt-4" id="btn_pagar_cuota">
                   <i class="bx bx-coin me-1"></i>
                   Realizar pago
                 </button>
@@ -289,7 +289,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn" data-bs-dismiss="modal">Cancelar</button>
-            <button id="btn_pagar_credito" type="button" class="btn btn-info load">Si, pagar crédito</button>
+            <button id="btn_pagar_credito" type="submit" class="btn btn-info">Si, pagar crédito</button>
           </div>
         </div>
       </div>

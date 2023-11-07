@@ -70,6 +70,7 @@
           <div class="col-md-6 mb-3">
             <label class="form-label" for="valor_bienes">Valor de bienes $ (*)</label>
             <input type="text" class="form-control" name="valor_bienes" id="valor_bienes"
+                   readonly
                    placeholder="0.00" onkeypress="return filterFloat(event,this);">
 
             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
