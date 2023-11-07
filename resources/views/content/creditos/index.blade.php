@@ -193,28 +193,32 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </a>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item" href="javascript:void(0);"><i
-                                class="bx bx-detail me-1"></i> Detalles</a>
+                            @if($credito->estado_credito != 'Incobrable')
+                              <a class="dropdown-item" href="javascript:void(0);"><i
+                                  class="bx bx-detail me-1"></i> Detalles</a>
 
-                            <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
-                              Cuotas</a>
+                              <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
+                                Cuotas</a>
 
 
-                            <a class="dropdown-item" target="_blank" href="{{ route('generar-declaracion', $credito->id_credito) }}">
-                              <i class="bx bx-file me-1"></i>
-                              Declaración Jurada</a>
-                            <a class="dropdown-item" target="_blank" href="{{ route('generar-pagare', $credito->id_credito) }}"><i
-                                class="bx bx-credit-card me-1"></i>
-                              Pagaré</a>
-                            <a class="dropdown-item" target="_blank" href="{{ route('generar-tarjeta', $credito->id_credito) }}"><i
-                                class="bx bx-list-ul me-1"></i>Tarjeta de Pagos</a>
-                            <a class="dropdown-item" target="_blank" href="{{ route('generar-recibo', $credito->id_credito) }}"><i
-                                class="bx bx-receipt me-1"></i>Recibo de Crédito</a>
+                              <a class="dropdown-item" target="_blank" href="{{ route('generar-declaracion', $credito->id_credito) }}">
+                                <i class="bx bx-file me-1"></i>
+                                Declaración Jurada</a>
+                              <a class="dropdown-item" target="_blank" href="{{ route('generar-pagare', $credito->id_credito) }}"><i
+                                  class="bx bx-credit-card me-1"></i>
+                                Pagaré</a>
+                              <a class="dropdown-item" target="_blank" href="{{ route('generar-tarjeta', $credito->id_credito) }}"><i
+                                  class="bx bx-list-ul me-1"></i>Tarjeta de Pagos</a>
+                              <a class="dropdown-item" target="_blank" href="{{ route('generar-recibo', $credito->id_credito) }}"><i
+                                  class="bx bx-receipt me-1"></i>Recibo de Crédito</a>
 
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="{{ route('creditos.asignarIncobrable', $credito->id_credito) }}"><i
-                                class="bx bx-trash me-1"></i>Incobrable</a>
-
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item text-danger" onclick="incobrableCredito('{{ $credito->id_credito }}')"><i
+                                  class="bx bx-trash me-1"></i>Incobrable</a>
+                            @else
+                              <a class="dropdown-item text-success" onclick="reactivarCredito('{{ $credito->id_credito }}')"><i
+                                  class="bx bx-check me-1"></i>Reactivar</a>
+                            @endif
                           </div>
                         </div>
                       </td>
@@ -239,6 +243,34 @@
       </div>
     </form>
 
+    <!-- Modal reactivar -->
+    <div class="modal fade" id="modal_credito" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" style="width: 550px;">
+        <div class="modal-content">
+          <div class="modal-body mt-2">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-1">
+                    <h1 id="icono">
+
+                    </h1>
+                  </div>
+                  <div class="col-md-10 ms-4 mt-2">
+                    <h4><b><span id="titulo"></span></b></h4>
+                    <h6 class="text-secondary fw-normal mt-3" id="descripcion"></h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button id="btn_accion" type="button" class="btn btn-info">Dar de alta</button>
+          </div>
+        </div>
+      </div>
+    </div>
     @endsection
 
     @section('page-script')
@@ -268,6 +300,26 @@
               }
             });
           })
+
+          btn_accion.on('click', function() {
+            let ruta = '';
+
+            if(accion === 'reactivar') {
+              ruta = '{{ route('creditos.reactivarCredito', ':id_credito') }}'.replace(':id_credito', id_credito_val);
+            } else if(accion === 'incobrable') {
+              ruta = '{{ route('creditos.asignarIncobrable', ':id_credito') }}'.replace(':id_credito', id_credito_val);
+            }
+
+            $.ajax({
+              type: 'get',
+              url: ruta,
+              success: function (data) {
+                if(data.success) {
+                  location.reload();
+                }
+              }
+            });
+          })
         });
 
         /* Filtro de estado y paginacion */
@@ -278,6 +330,43 @@
         $('#mostrar').on('change', function() {
           $(this).closest('#filter_index').submit();
         })
+
+        let accion = '';
+        const modal_credito = $('#modal_credito');
+        let id_credito_val = 0
+        const btn_accion = $('#btn_accion');
+
+        const titulo = $('#titulo');
+        const descripcion = $('#descripcion');
+        const icono = $('#icono');
+
+        /* Modal reactivar */
+        function reactivarCredito(id_credito) {
+          accion = 'reactivar';
+          titulo.html('<b>Reactivar crédito</b>');
+          descripcion.html('¿Estás seguro que deseas reactivar el crédito ' + id_credito + '?');
+          btn_accion.html('Si, reactivar');
+          btn_accion.removeClass('btn-danger');
+          btn_accion.addClass('btn-info');
+          icono.html('<i class="bx bx-info-circle bx-lg text-info"></i>');
+
+          modal_credito .modal('show');
+          id_credito_val = id_credito;
+        }
+
+        function incobrableCredito(id_credito) {
+          accion = 'incobrable';
+
+          titulo.html('<b>Marcar como incobrable</b>');
+          descripcion.html('¿Estás seguro que deseas marcar como incobrable al crédito ' + id_credito + '?');
+          btn_accion.html('Si, marcar como incobrable');
+          btn_accion.removeClass('btn-info');
+          btn_accion.addClass('btn-danger');
+          icono.html('<i class="bx bx-info-circle bx-lg text-danger"></i>');
+
+          modal_credito.modal('show');
+          id_credito_val = id_credito;
+        }
 
       </script>
 @endsection

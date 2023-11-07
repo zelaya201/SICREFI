@@ -20,7 +20,7 @@
   </header>
 
    <p >Recibí de:<b> Juana Dinora Barahona Quezada</b>, la cantidad de: <strong>${{ number_format($credito->monto_neto_credito,2) }}</strong> de los Estados Unidos de América
-     en concepto de otorgamiento de un crédito, el cual pagaré en <strong> {{$credito->n_cuotas_credito}} </strong> cuotas de <strong>${{ number_format($credito->cuota_credito,2) }}</strong>  de forma
+     en concepto de otorgamiento de un crédito, el cual pagaré en <strong> {{$credito->n_cuotas_credito}} </strong> cuotas de <strong>${{ number_format($cuota->total_cuota,2) }}</strong>  de forma
      constante y sucesivamente de lunes a viernes contadas a partir de ésta fecha.</p>
 
   <p style="line-height: 2;">Detalle:</p>

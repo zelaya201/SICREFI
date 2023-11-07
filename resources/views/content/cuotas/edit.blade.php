@@ -237,10 +237,10 @@
               </td>
               <td>
                 @if($cuota->estado_cuota == 'Pagada')
-                  <a href="{{ route('generar-ticket', $credito->id_credito) }}" target="_blank" class="btn btn-sm m-0">
+                  <a href="{{ route('generar-ticket', $cuota->id_cuota) }}" target="_blank" class="btn btn-sm m-0">
                     <i class="bx bx-file"></i>
                   </a>
-                  <a href="{{ route('generar-ticket', $credito->id_credito) }}" target="_blank" class="btn btn-sm m-0">
+                  <a href="{{ route('generar-ticket', $cuota->id_cuota) }}" target="_blank" class="btn btn-sm m-0">
                     <i class="bx bx-download"></i>
                   </a>
                 @else
