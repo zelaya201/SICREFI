@@ -36,6 +36,7 @@ Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDecla
 Route::get('generar-pagare/{credito}', [PDFController::class, 'generarPagare']);
 Route::get('generar-recibo/{credito}', [PDFController::class, 'generarRecibo']);
 Route::get('generar-tarjeta/{credito}', [PDFController::class, 'generarTarjeta']);
+Route::get('generar-ticket/{credito}', [PDFController::class, 'generarTicket']);
 
 // Negocio Route
 Route::resource('negocios', NegocioController::class);
