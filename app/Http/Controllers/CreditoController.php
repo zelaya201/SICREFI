@@ -38,7 +38,7 @@ class CreditoController extends Controller
         session(['estado_filtro' => $estado, 'mostrar' => $mostrar]);
 
         if ($estado == 'Todos') {
-          $creditos = $query->orderBy('estado_credito','ASC')->orderBy('fecha_vencimiento_credito', 'ASC')->paginate($mostrar);
+          $creditos = $query->orderBy('estado_credito','DESC')->orderBy('fecha_vencimiento_credito', 'ASC')->paginate($mostrar);
         }else {
           $creditos = $query->where(['estado_credito' => $estado])->orderBy('fecha_vencimiento_credito', 'ASC')->paginate($mostrar);
         }
@@ -517,80 +517,6 @@ class CreditoController extends Controller
         $cliente->nombre_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
         $credito->cliente = $cliente;
 
-        $output.=
-          '<tr style="text-align: center;">'.
-          '<td>' . $contador . '</td>' .
-          '<td>'. $credito->cliente->nombre_completo . '</td>' .
-          '<td>$ '. number_format($credito->monto_neto_credito,2) .'</td>'.
-          '<td>'. number_format($credito->tasa_interes_credito,2) .' %</td>'.
-          '<td>$ '. number_format($credito->monto_credito,2) .'</td>'.
-          '<td>'. date('d/m/Y', strtotime($credito->fecha_vencimiento_credito)) .'</td>';
-
-        if($credito->estado_credito == 'Vigente') {
-          $output.= '<td><span class="badge rounded-pill bg-label-success">Vigente</span></td>';
-        }else if($credito->estado_credito == 'En mora') {
-          $output.= '<td><span class="badge rounded-pill bg-label-danger">En mora</span></td>';
-        }else if($credito->estado_credito == 'Renovado') {
-          $output.= '<td><span class="badge rounded-pill bg-label-secondary">Renovado</span></td>';
-        }else if($credito->estado_credito == 'Refinanciado') {
-          $output.= '<td><span class="badge rounded-pill bg-label-warning">Refinanciado</span></td>';
-        }else if($credito->estado_credito == 'Finalizado') {
-          $output.= '<td><span class="badge rounded-pill bg-label-info">Finalizado</span></td>';
-        }else if($credito->estado_credito == 'Incobrable') {
-          $output.= '<td><span class="badge rounded-pill bg-label-dark">Incobrable</span></td>';
-        }
-
-        $output.=
-          '<td>
-            <div class="dropdown-icon-demo">
-              <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm hide-arrow"
-                 data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bx bx-dots-vertical-rounded"></i>
-              </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="javascript:void(0);"><i
-                  class="bx bx-detail me-1"></i> Detalles</a>
-              <a class="dropdown-item" href="/creditos/cuotas/'. $credito->id_credito . '/edit"><i class="bx bx-dollar-circle me-1"></i> Cuotas</a>
-                                <div class="dropdown-divider"></div>
-
-                                <a class="dropdown-item text-danger" href="javascript:void(0);"><i
-                                    class="bx bx-trash me-1"></i>Incobrable</a>
-
-                            </div>
-                          </div>
-                        </td>
-                      </tr>';
-
-        $contador++;
-      }
-    }
-    return response($output);
-  }
-
-  /*public function filtrarCredito(Request $request)
-  {
-    $output = '';
-    $contador = 1;
-
-    session(['estado_filtro' => $request->filtro]);
-
-    if ($request->filtro == 'Todos') {
-      $creditos = Credito::query()->orderBy('estado_credito','ASC')->orderBy('fecha_vencimiento_credito', 'ASC')->get();
-    }else {
-      $creditos = Credito::query()->where(['estado_credito' => $request->filtro])->orderBy('fecha_vencimiento_credito', 'ASC')->get();
-    }
-
-
-    if ($creditos->isEmpty()) {
-      $output = '<tr style="text-align: center;">' .
-        '<td colspan="8">No se encontraron resultados</td>' .
-        '</tr>';
-    } else {
-      foreach ($creditos as $credito) {
-        $cliente = Cliente::query()->where('id_cliente', $credito->id_cliente)->first();
-        $cliente->nombre_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
-        $credito->cliente = $cliente;
-
         $output .=
           '<tr style="text-align: center;">' .
           '<td>' . $contador . '</td>' .
@@ -621,16 +547,35 @@ class CreditoController extends Controller
                  data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bx bx-dots-vertical-rounded"></i>
               </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="javascript:void(0);"><i
-                  class="bx bx-detail me-1"></i> Detalles</a>
-              <a class="dropdown-item" href="/creditos/cuotas/' . $credito->id_credito . '/edit"><i class="bx bx-dollar-circle me-1"></i> Cuotas</a>
-                                <div class="dropdown-divider"></div>
+            <div class="dropdown-menu">';
 
-                                <a class="dropdown-item text-danger" href="javascript:void(0);"><i
-                                    class="bx bx-trash me-1"></i>Incobrable</a>
+        if ($credito->estado_credito == 'Incobrable') {
+          $output .=
+            '<a class="dropdown-item text-success" onclick="reactivarCredito(' .  $credito->id_credito  .')">
+               <i class="bx bx-check me-1"></i>Reactivar</a>';
+        } else {
+          $output .=
+            '<a class="dropdown-item" href="javascript:void(0);">
+                <i class="bx bx-detail me-1"></i> Detalles</a>
+                  <a class="dropdown-item" href="/cuotas/'. $credito->id_credito . '/edit"><i class="bx bx-dollar-circle me-1"></i>
+                    Cuotas</a>
+                  <a class="dropdown-item" target="_blank" href="/generar-declaracion/'. $credito->id_credito . '">
+                    <i class="bx bx-file me-1"></i>
+                    Declaración Jurada</a>
+                  <a class="dropdown-item" target="_blank" href="/generar-pagare/' . $credito->id_credito . '"><i
+                      class="bx bx-credit-card me-1"></i>
+                    Pagaré</a>
+                  <a class="dropdown-item" target="_blank" href="/generar-tarjeta/' . $credito->id_credito . '"><i
+                      class="bx bx-list-ul me-1"></i>Tarjeta de Pagos</a>
+                  <a class="dropdown-item" target="_blank" href="/generar-recibo/' . $credito->id_credito . '"><i
+                      class="bx bx-receipt me-1"></i>Recibo de Crédito</a>
 
-                            </div>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item text-danger" onclick="incobrableCredito(' . $credito->id_credito .')"><i
+                      class="bx bx-trash me-1"></i>Incobrable</a>';
+        }
+
+        $output.= '</div>
                           </div>
                         </td>
                       </tr>';
@@ -639,6 +584,8 @@ class CreditoController extends Controller
       }
     }
     return response($output);
-  }*/
+  }
+
+
 
 }

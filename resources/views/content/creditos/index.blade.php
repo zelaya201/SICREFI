@@ -124,6 +124,7 @@
                     <option value="Renovado" {{ session('estado_filtro') === 'Renovado' ? 'selected' : '' }} class="text-capitalize">Renovados</option>
                     <option value="Refinanciado" {{ session('estado_filtro') === 'Refinanciado' ? 'selected' : '' }} class="text-capitalize">Refinanciados</option>
                     <option value="Finalizado" {{ session('estado_filtro') === 'Finalizado' ? 'selected' : '' }} class="text-capitalize">Finalizados</option>
+                    <option value="Incobrable" {{ session('estado_filtro') === 'Incobrable' ? 'selected' : '' }} class="text-capitalize">Incobrables</option>
                     <option value="Todos" {{ session('estado_filtro') === 'Todos' ? 'selected' : '' }}>Todos</option>
                   </select>
                 </div>
@@ -199,7 +200,6 @@
 
                               <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
                                 Cuotas</a>
-
 
                               <a class="dropdown-item" target="_blank" href="{{ route('generar-declaracion', $credito->id_credito) }}">
                                 <i class="bx bx-file me-1"></i>
@@ -344,7 +344,7 @@
         function reactivarCredito(id_credito) {
           accion = 'reactivar';
           titulo.html('<b>Reactivar crédito</b>');
-          descripcion.html('¿Estás seguro que deseas reactivar el crédito ' + id_credito + '?');
+          descripcion.html('¿Estás seguro que deseas reactivar el crédito?');
           btn_accion.html('Si, reactivar');
           btn_accion.removeClass('btn-danger');
           btn_accion.addClass('btn-info');
@@ -358,7 +358,7 @@
           accion = 'incobrable';
 
           titulo.html('<b>Marcar como incobrable</b>');
-          descripcion.html('¿Estás seguro que deseas marcar como incobrable al crédito ' + id_credito + '?');
+          descripcion.html('¿Estás seguro que deseas marcar como incobrable el crédito?');
           btn_accion.html('Si, marcar como incobrable');
           btn_accion.removeClass('btn-info');
           btn_accion.addClass('btn-danger');
