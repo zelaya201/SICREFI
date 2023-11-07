@@ -31,7 +31,11 @@ Route::get('/', function () {
     return view('content.index');
 })->name('inicio');
 
-Route::get('generate-declaracion', [PDFController::class, 'generateDeclaracion']);
+// PDF Route
+Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDeclaracion']);
+Route::get('generar-pagare/{credito}', [PDFController::class, 'generarPagare']);
+Route::get('generar-recibo/{credito}', [PDFController::class, 'generarRecibo']);
+Route::get('generar-tarjeta/{credito}', [PDFController::class, 'generarTarjeta']);
 
 // Negocio Route
 Route::resource('negocios', NegocioController::class);
@@ -64,7 +68,8 @@ Route::resource('telsNegocio', TelefonoNegocioController::class);
 Route::resource('telsReferencia', TelefonoReferenciaController::class);
 
 // Credito Route
-Route::get('/creditos/calcularFechasCuotas', [CreditoController::class, 'calcularFechasCuotas'])->name('creditos.calcularFechasCuotas');
+Route::get('/creditos/calcularFechasCuotas', [CreditoController::class, 'calcularFechasCuotas'])
+  ->name('creditos.calcularFechasCuotas');
 Route::resource('creditos', CreditoController::class);
 
 

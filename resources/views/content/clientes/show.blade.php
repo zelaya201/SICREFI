@@ -156,15 +156,15 @@
       <table class="table table-hover table-sm">
         <thead>
           <tr>
-            <td>ID</td>
-            <td>Monto</td>
-            <td>Desembolso</td>
-            <td>Interés</td>
-            <td>Plazo</td>
-            <td>Fecha de inicio</td>
-            <td>Fecha de fin</td>
-            <td>Tipo de Crédito</td>
-            <td>Estado</td>
+            <th>ID</th>
+            <th>Monto</th>
+            <th>Desembolso</th>
+            <th>Interés</th>
+            <th>Plazo</th>
+            <th>Fecha de inicio</th>
+            <th>Fecha de fin</th>
+            <th>Tipo de Crédito</th>
+            <th>Estado</th>
           </tr>
         </thead>
 
