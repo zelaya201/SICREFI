@@ -124,6 +124,7 @@
                     <option value="Renovado" {{ session('estado_filtro') === 'Renovado' ? 'selected' : '' }} class="text-capitalize">Renovados</option>
                     <option value="Refinanciado" {{ session('estado_filtro') === 'Refinanciado' ? 'selected' : '' }} class="text-capitalize">Refinanciados</option>
                     <option value="Finalizado" {{ session('estado_filtro') === 'Finalizado' ? 'selected' : '' }} class="text-capitalize">Finalizados</option>
+                    <option value="Incobrable" {{ session('estado_filtro') === 'Incobrable' ? 'selected' : '' }} class="text-capitalize">Incobrables</option>
                     <option value="Todos" {{ session('estado_filtro') === 'Todos' ? 'selected' : '' }}>Todos</option>
                   </select>
                 </div>
