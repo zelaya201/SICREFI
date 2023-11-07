@@ -52,7 +52,13 @@ class CreditoController extends Controller
           return $credito;
         });
 
-        return response(view('content.creditos.index', compact('creditos')));
+        $creditosVigentes = count(Credito::query()->where('estado_credito', 'Vigente')->get());
+        $creditosMora = count(Credito::query()->where('estado_credito', 'En mora')->get());
+        $creditosRenovados = count(Credito::query()->where('estado_credito', 'Renovado')->get());
+        $creditosRefinanciados = count(Credito::query()->where('estado_credito', 'Refinanciado')->get());
+
+
+        return response(view('content.creditos.index', compact('creditos', 'creditosVigentes', 'creditosMora', 'creditosRenovados', 'creditosRefinanciados')));
       }
 
       $creditos = Credito::query()->where(['estado_credito' => 'Vigente'])->orderBy('fecha_vencimiento_credito','ASC')->paginate(10);
@@ -66,7 +72,12 @@ class CreditoController extends Controller
         return $credito;
       });
 
-      return response(view('content.creditos.index', compact('creditos')));
+      $creditosVigentes = count(Credito::query()->where('estado_credito', 'Vigente')->get());
+      $creditosMora = count(Credito::query()->where('estado_credito', 'En mora')->get());
+      $creditosRenovados = count(Credito::query()->where('estado_credito', 'Renovado')->get());
+      $creditosRefinanciados = count(Credito::query()->where('estado_credito', 'Refinanciado')->get());
+
+      return response(view('content.creditos.index', compact('creditos', 'creditosVigentes', 'creditosMora', 'creditosRenovados', 'creditosRefinanciados')));
     }
 
     /**

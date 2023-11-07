@@ -47,12 +47,12 @@
             <div class="col-sm-6 col-lg-3">
               <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
                 <div>
-                  <h3 class="mb-1"></h3>
-                  <p class="mb-0">Clientes</p>
+                  <h3 class="mb-1">{{ $creditosVigentes }}</h3>
+                  <p class="mb-0">Créditos Vigentes</p>
                 </div>
                 <div class="avatar me-sm-4">
               <span class="avatar-initial rounded bg-label-secondary">
-                <i class="bx bx-user bx-sm"></i>
+                <i class="bx bx-file bx-sm"></i>
               </span>
                 </div>
               </div>
@@ -61,12 +61,12 @@
             <div class="col-sm-6 col-lg-3">
               <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
                 <div>
-                  <h3 class="mb-1"></h3>
-                  <p class="mb-0">Clientes con préstamos</p>
+                  <h3 class="mb-1">{{ $creditosMora }}</h3>
+                  <p class="mb-0">Créditos En Mora</p>
                 </div>
                 <div class="avatar me-lg-4">
               <span class="avatar-initial rounded bg-label-secondary">
-                <i class="bx bx-file bx-sm"></i>
+                <i class="bx bx-alarm-exclamation bx-sm"></i>
               </span>
                 </div>
               </div>
@@ -75,12 +75,12 @@
             <div class="col-sm-6 col-lg-3">
               <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
                 <div>
-                  <h3 class="mb-1"></h3>
-                  <p class="mb-0">Clientes Activos</p>
+                  <h3 class="mb-1">{{ $creditosRenovados }}</h3>
+                  <p class="mb-0">Creditos Renovados</p>
                 </div>
                 <div class="avatar me-sm-4">
               <span class="avatar-initial rounded bg-label-secondary">
-                <i class='bx bx-user-check bx-sm'></i>
+                <i class='bx bx-refresh bx-sm'></i>
               </span>
                 </div>
               </div>
@@ -88,12 +88,12 @@
             <div class="col-sm-6 col-lg-3">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
-                  <h3 class="mb-1"></h3>
-                  <p class="mb-0">Clientes Inactivos</p>
+                  <h3 class="mb-1">{{ $creditosRefinanciados }}</h3>
+                  <p class="mb-0">Creditos Refinanciados</p>
                 </div>
                 <div class="avatar">
               <span class="avatar-initial rounded bg-label-secondary">
-                <i class='bx bx-user-minus bx-sm'></i>
+                <i class='bx bx-calculator bx-sm'></i>
               </span>
                 </div>
               </div>
