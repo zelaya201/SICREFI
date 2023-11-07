@@ -24,56 +24,15 @@ class CreditoController extends Controller
      */
     public function index(Request $request)
     {
-      Session::forget('estado_filtro');
-      Session::forget('mostrar');
+      $creditos = Credito::query()->get();
+      $creditos->map(function ($credito){
+        $cliente = Cliente::query()->where('id_cliente', $credito->id_cliente)->first();
+        $cliente->nombre_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
+        $credito->cliente = $cliente;
+        return $credito;
+      });
 
-      $query = Credito::query()->select('monto_credito', 'tasa_interes_credito', 'fecha_vencimiento_credito', 'estado_credito',)->get();
-
-      if ($request->input('estado') || $request->input('mostrar')) {
-        $estado = $request->input('estado');
-        $mostrar = $request->input('mostrar', 10);
-
-        session(['estado_filtro' => $estado, 'mostrar' => $mostrar]);
-
-        if ($estado == 'Todos'){
-          $creditos = $query->orderBy('estado_credito', 'ASC')->orderBy('primer_nom_cliente', 'ASC')->paginate($mostrar);
-        }else{
-          $creditos = $query->where(['estado_credito' => $estado])->orderBy('primer_nom_cliente', 'ASC')->paginate($mostrar);
-        }
-
-        $creditos = $query->map(function ($credito){
-          $cliente = Cliente::query()->select('primer_nom_cliente', 'segundo_nom_cliente', 'primer_ape_cliente', 'segundo_ape_cliente')->where(['id_cliente' => $credito->id_cliente])->first();
-        });
-
-        $contar = count(Credito::all());
-        $activos = count(Credito::where('estado_credito', 'Activo')->get());
-        $inactivos = count(Credito::where('estado_credito', 'Inactivo')->get());
-
-        return response()->view(
-          'content.creditos.index',
-          [
-            'creditos' => $creditos,
-            'contar' => $contar,
-            'activos' => $activos,
-            'inactivos' => $inactivos
-          ]
-        );
-      }
-
-      $creditos = $query->where('estado_credito', 'Activo')->paginate(10);
-      $contar = count(Credito::all());
-      $activos = count(Credito::where('estado_credito', 'Activo')->get());
-      $inactivos = count(Credito::where('estado_credito', 'Inactivo')->get());
-
-        return response()->view(
-          'content.creditos.index',
-          [
-            'creditos' => $creditos,
-            'contar' => $contar,
-            'activos' => $activos,
-            'inactivos' => $inactivos
-          ]
-        );
+      return response(view('content.creditos.index', compact('creditos')));
     }
 
     /**
@@ -102,7 +61,13 @@ class CreditoController extends Controller
         if($credito){
           /* CALCULAR DEUDA Y PORCENTAJE PAGADO */
           $deudaCredito = Cuota::query()
-            ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])
+            ->where(['id_credito' => $credito->id_credito])
+            ->where('estado_cuota', 'Pendiente')
+            ->sum('total_cuota');
+
+          $deuda_mora = Cuota::query()
+            ->where(['id_credito' => $credito->id_credito])
+            ->where('estado_cuota', 'Atrasada')
             ->sum('total_cuota');
 
           $cuotasMora = Cuota::query()
@@ -110,7 +75,19 @@ class CreditoController extends Controller
             ->where('fecha_pago_cuota', '<', date('Y-m-d'))
             ->sum('total_cuota');
 
+          // Si hay cuotas en mora se le agrega un 5% de interés
+          $cuotas_mora = Cuota::query()
+            ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])
+            ->where('fecha_pago_cuota', '<', date('Y-m-d'))
+            ->get();
+
           if ($cuotasMora > 0) {
+            foreach ($cuotas_mora as $cuota_mora) {
+              $cuota_mora->mora_cuota = $cuota_mora->total_cuota * 0.05;
+              $cuota_mora->estado_cuota = 'Atrasada';
+              $cuota_mora->save();
+            }
+
             $deudaCredito += ($cuotasMora * 0.05);
             $credito->estado_credito = 'Mora';
           }
@@ -132,7 +109,7 @@ class CreditoController extends Controller
           }
 
           $credito->porcentaje_pagado = $porcentajePagado;
-          $credito->deuda_credito = $deudaCredito;
+          $credito->deuda_credito = $deudaCredito + $deuda_mora;
 
           /* CARGAR BIENES DEL CREDITO */
           $bienesCredito = CreditoBien::query()
@@ -224,7 +201,6 @@ class CreditoController extends Controller
 
           if ($credito->save()) {
             $cuotas = Cuota::query()->where(['id_credito' => $credito->id_credito])
-              ->where('estado_cuota', 'Pendiente')
               ->get();
 
             foreach ($cuotas as $cuota) {
@@ -282,6 +258,8 @@ class CreditoController extends Controller
           $credito_cuota->interes_cuota = $interes_cuota;
           $credito_cuota->total_cuota = $capital_cuota + $interes_cuota;
           $credito_cuota->mora_cuota = 0;
+          $credito_cuota->extra_cuota = 0;
+          $credito_cuota->fecha_abono_cuota = null;
           $credito_cuota->estado_cuota = 'Pendiente';
           $credito_cuota->id_credito = $credito->id_credito;
           $credito_cuota->save();

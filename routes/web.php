@@ -4,6 +4,7 @@ use App\Http\Controllers\BienController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ConyugeController;
 use App\Http\Controllers\CreditoController;
+use App\Http\Controllers\CuotaController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ReferenciaController;
@@ -32,11 +33,17 @@ Route::get('/', function () {
 })->name('inicio');
 
 // PDF Route
-Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDeclaracion']);
-Route::get('generar-pagare/{credito}', [PDFController::class, 'generarPagare']);
-Route::get('generar-recibo/{credito}', [PDFController::class, 'generarRecibo']);
-Route::get('generar-tarjeta/{credito}', [PDFController::class, 'generarTarjeta']);
-Route::get('generar-ticket/{credito}', [PDFController::class, 'generarTicket']);
+Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDeclaracion'])->name('generar-declaracion');
+Route::get('generar-pagare/{credito}', [PDFController::class, 'generarPagare'])->name('generar-pagare');
+Route::get('generar-recibo/{credito}', [PDFController::class, 'generarRecibo'])->name('generar-recibo');
+Route::get('generar-tarjeta/{credito}', [PDFController::class, 'generarTarjeta'])->name('generar-tarjeta');
+Route::get('generar-ticket/{credito}', [PDFController::class, 'generarTicket'])->name('generar-ticket');;
+
+// Cuota Route
+Route::get('/cuotas/pagarCredito/{credito}', [CuotaController::class, 'pagarCredito'])
+  ->name('cuotas.pagarCredito');
+Route::resource('cuotas', CuotaController::class);
+
 
 // Negocio Route
 Route::resource('negocios', NegocioController::class);
