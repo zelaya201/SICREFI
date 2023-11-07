@@ -83,6 +83,17 @@ class CreditoController extends Controller
         ->get();
 
       $clientes = $clientes->map(function ($cliente) {
+        // Verificar que el cliente no tenga un crédito incobrable
+        $credito = Credito::query()
+          ->where(['id_cliente' => $cliente->id_cliente, 'estado_credito' => 'Incobrable'])
+          ->first();
+
+        $cliente->incobrable = false;
+
+        if($credito){
+          $cliente->incobrable = true;
+        }
+
         $cliente->nombre_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente .' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
 
         $credito = Credito::query()
@@ -378,7 +389,7 @@ class CreditoController extends Controller
       Session::flash('mensaje', 'Crédito puesto en estado incobrable');
     }
 
-    return response()->view('content.creditos.index');
+    return response(['success' => true]);
   }
 
   public function reactivarCredito(int $id_credito){
@@ -390,7 +401,7 @@ class CreditoController extends Controller
       Session::flash('mensaje', 'Crédito reactivado');
     }
 
-    return response()->view('content.creditos.index');
+    return response(['success' => true]);
   }
 
   /**

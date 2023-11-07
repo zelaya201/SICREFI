@@ -13,9 +13,16 @@
             <select class="" id="id_cliente">
               <option disabled selected> Seleccione un cliente</option>
               @foreach($clientes as $cliente)
-                <option value="{{ json_encode($cliente) }}">
-                  {{ $cliente->dui_cliente }} - {{ $cliente->nombre_completo }}
-                </option>
+                @if($cliente->incobrable != true)
+                  <option value="{{ json_encode($cliente) }}">
+                    {{ $cliente->dui_cliente }} - {{ $cliente->nombre_completo }}
+                  </option>
+
+                @else
+                  <option value="{{ json_encode($cliente) }}" disabled>
+                    {{ $cliente->dui_cliente }} - {{ $cliente->nombre_completo }} (Incobrable)
+                  </option>
+                @endif
               @endforeach
             </select>
 
