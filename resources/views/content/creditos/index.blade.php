@@ -149,38 +149,34 @@
                 </tr>
                 </thead>
                 <tbody id="clientes_tbody">
-                @php
-                $registrosPerPage = 10;
-                $contador = ($creditos->currentPage() - 1) * $registrosPerPage + 1;
-                @endphp
-                @foreach($creditos as $credito)
-                  <tr>
-                    <td>{{$contador}}</td>
-                    <!--Filtro para Nombre-->
-                    @if($credito->segundo_nom_cliente == null or $credito->segundo_nom_cliente == null && $credito->tercer_nom_cliente == null)
-                      <td>{{$credito->primer_nom_cliente.' '.$credito->primer_ape_cliente.' '.$credito->segundo_ape_cliente}}</td>
-                    @elseif($credito->segundo_nom_cliente == null && $credito->segundo_ape_cliente == null or $credito->segundo_nom_cliente == null && $credito->tercer_nom_cliente == null && $credito->segundo_ape_cliente = null)
-                      <td>{{$credito->primer_nom_cliente.' '.$credito->primer_ape_cliente}}</td>
-                    @elseif($credito->tercer_nom_cliente == null)
-                      <td>{{$credito->primer_nom_cliente.' '.$credito->segundo_nom_cliente.' '.$credito->primer_ape_cliente.' '.$credito->segundo_ape_cliente}}</td>
-                    @elseif($credito->tercer_nom_cliente == null && $credito->segundo_ape_cliente = null )
-                      <td>{{$credito->primer_nom_cliente.' '.$credito->segundo_nom_cliente.' '.$credito->primer_ape_cliente}}</td>
-                    @elseif($credito->segundo_ape_cliente == null)
-                      <td>{{$credito->primer_nom_cliente.' '.$credito->segundo_nom_cliente.' '.$credito->tercer_nom_cliente.' '.$credito->primer_ape_cliente}}</td>
-                    @else
-                      <td>{{$credito->primer_nom_cliente.' '.$credito->segundo_nom_cliente.' '.$credito->tercer_nom_cliente.' '.$credito->primer_ape_cliente.' '.$credito->segundo_ape_cliente}}</td>
-                    @endif
-                    <td>{{$credito->monto}}</td>
-                    <td>{{$credito->porcentaje_pago}}</td>
-                    <td>{{$credito->fecha_vencimiento}}</td>
-                    <!--Filtro para Estado -->
-                    @if($credito->estado == 'Activo')
-                      <td><span class="badge rounded-pill bg-label-success">Activo</span></td>
-                    @elseif($credito->estado == 'Inactivo')
-                      <td><span class="badge rounded-pill bg-label-danger">Inactivo</span></td>
-                    @endif
-                  </tr>
-                @endforeach
+                  @foreach($creditos as $credito)
+                    <tr>
+                      <td>{{ $credito->id_credito }}</td>
+                      <td>{{ $credito->cliente->nombre_completo }}</td>
+                      <td>{{ $credito->monto_neto_credito }}</td>
+                      <td>0.0000%</td>
+                      <td>dd-mm-YYYY</td>
+                      <td>Activo</td>
+                      <td>
+                        <div class="dropdown-icon-demo">
+                          <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm hide-arrow"
+                             data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </a>
+                          <div class="dropdown-menu">
+                              <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
+                                Cuotas</a>
+                              <div class="dropdown-divider"></div>
+
+                              <a class="dropdown-item text-danger" href="javascript:void(0);"><i
+                                  class="bx bx-trash me-1"></i>Incobrable</a>
+
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+
+                  @endforeach
                 </tbody>
               </table>
 

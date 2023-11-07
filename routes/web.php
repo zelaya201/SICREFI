@@ -4,6 +4,7 @@ use App\Http\Controllers\BienController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ConyugeController;
 use App\Http\Controllers\CreditoController;
+use App\Http\Controllers\CuotaController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ReferenciaController;
@@ -36,6 +37,9 @@ Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDecla
 Route::get('generar-pagare/{credito}', [PDFController::class, 'generarPagare']);
 Route::get('generar-recibo/{credito}', [PDFController::class, 'generarRecibo']);
 Route::get('generar-tarjeta/{credito}', [PDFController::class, 'generarTarjeta']);
+
+// Cuota Route
+Route::resource('creditos/cuotas', CuotaController::class);
 
 // Negocio Route
 Route::resource('negocios', NegocioController::class);
