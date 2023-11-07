@@ -38,7 +38,7 @@
           <span>{{ Session::get('mensaje') }}</span>
         </div>
       </div>
-  @endif
+    @endif
 
     <div class="card mb-4">
       <div class="card-widget-separator-wrapper">
@@ -103,8 +103,7 @@
       </div>
     </div>
 
-
-    <form action="" method="GET">
+    <form id="filter_index" action="{{ route('creditos.index') }}" method="get">
       <div class="card p-3">
         <div class="card-datatable">
           <div class="dataTables_wrapper dt-bootstrap5 no-footer">
@@ -112,7 +111,7 @@
               <div class="col-md-6">
                 <div class="col-md-6">
                   <label>
-                    <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." aria-controls="DataTables_Table_0" onkeyup="search()">
+                    <input type="search" class="form-control"  id="search_bar" placeholder="Buscar por cliente...">
                   </label>
                 </div>
               </div>
@@ -120,8 +119,11 @@
               <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
                 <div class="invoice_status mb-3 mb-md-0">
                   <select id="estado" name="estado" class="form-select">
-                    <option value="Activo" {{ session('estado_filtro') === 'Activo' ? 'selected' : '' }} class="text-capitalize">Activos</option>
-                    <option value="Inactivo" {{ session('estado_filtro') === 'Inactivo' ? 'selected' : '' }} class="text-capitalize">Inactivos</option>
+                    <option value="Vigente" {{ session('estado_filtro') === 'Vigente' ? 'selected' : '' }} class="text-capitalize">Vigentes</option>
+                    <option value="En mora" {{ session('estado_filtro') === 'En mora' ? 'selected' : '' }} class="text-capitalize">En mora</option>
+                    <option value="Renovado" {{ session('estado_filtro') === 'Renovado' ? 'selected' : '' }} class="text-capitalize">Renovados</option>
+                    <option value="Refinanciado" {{ session('estado_filtro') === 'Refinanciado' ? 'selected' : '' }} class="text-capitalize">Refinanciados</option>
+                    <option value="Finalizado" {{ session('estado_filtro') === 'Finalizado' ? 'selected' : '' }} class="text-capitalize">Finalizados</option>
                     <option value="Todos" {{ session('estado_filtro') === 'Todos' ? 'selected' : '' }}>Todos</option>
                   </select>
                 </div>
@@ -136,27 +138,54 @@
             </div>
 
             <div id="table_div">
-              <table id="clientes_table" class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
+              <table id="creditos_table" class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
                 <thead>
                 <tr>
                   <th>#</th>
                   <th>Cliente</th>
-                  <th>Monto</th>
-                  <th>Porcentaje de pago</th>
-                  <th>fecha de vencimiento</th>
+                  <th>Monto crédito</th>
+                  <th>Interés</th>
+                  <th>Monto total</th>
+                  <th>Fecha de vencimiento</th>
                   <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>
-                <tbody id="clientes_tbody">
+                <tbody id="clientes_tbody" class="alldata">
+                @php
+                  $registrosPerPage = 10;
+                  $contador = ($creditos->currentPage()-1) * $registrosPerPage + 1;
+                  //$contador = 1;
+                @endphp
+                @if($creditos->isEmpty())
+                  <tr>
+                    <td colspan="8" class="text-center">No hay registros</td>
+                  </tr>
+                @else
                   @foreach($creditos as $credito)
-                    <tr>
-                      <td>{{ $credito->id_credito }}</td>
+                    <tr style="text-align: center;">
+                      <td>{{ $contador }}</td>
                       <td>{{ $credito->cliente->nombre_completo }}</td>
-                      <td>{{ $credito->monto_neto_credito }}</td>
-                      <td>0.0000%</td>
-                      <td>dd-mm-YYYY</td>
-                      <td>Activo</td>
+                      <td>$ {{ number_format($credito->monto_neto_credito,2) }}</td>
+                      <td>{{ number_format($credito->tasa_interes_credito,2) }} %</td>
+                      <td>$ {{ number_format($credito->monto_credito,2) }}</td>
+                      <td>{{ date('d/m/Y', strtotime($credito->fecha_vencimiento_credito)) }}</td>
+
+                      <!--Filtro para Estado-->
+                      @if($credito->estado_credito == 'Vigente')
+                        <td><span class="badge rounded-pill bg-label-success">Vigente</span></td>
+                      @elseif($credito->estado_credito == 'En mora')
+                        <td><span class="badge rounded-pill bg-label-danger">En mora</span></td>
+                      @elseif($credito->estado_credito == 'Renovado')
+                        <td><span class="badge rounded-pill bg-label-secondary">Renovado</span></td>
+                      @elseif($credito->estado_credito == 'Refinanciado')
+                        <td><span class="badge rounded-pill bg-label-warning">Refinanciado</span></td>
+                      @elseif($credito->estado_credito == 'Finalizado')
+                        <td><span class="badge rounded-pill bg-label-info">Finalizado</span></td>
+                      @elseif($credito->estado_credito == 'Incobrable')
+                        <td><span class="badge rounded-pill bg-label-dark">Incobrable</span></td>
+                      @endif
+
                       <td>
                         <div class="dropdown-icon-demo">
                           <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm hide-arrow"
@@ -164,25 +193,44 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </a>
                           <div class="dropdown-menu">
-                              <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
-                                Cuotas</a>
-                              <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="javascript:void(0);"><i
+                                class="bx bx-detail me-1"></i> Detalles</a>
 
-                              <a class="dropdown-item text-danger" href="javascript:void(0);"><i
-                                  class="bx bx-trash me-1"></i>Incobrable</a>
+                            <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
+                              Cuotas</a>
+
+
+                            <a class="dropdown-item" target="_blank" href="{{ route('generar-declaracion', $credito->id_credito) }}">
+                              <i class="bx bx-file me-1"></i>
+                              Declaración Jurada</a>
+                            <a class="dropdown-item" target="_blank" href="{{ route('generar-pagare', $credito->id_credito) }}"><i
+                                class="bx bx-credit-card me-1"></i>
+                              Pagaré</a>
+                            <a class="dropdown-item" target="_blank" href="{{ route('generar-tarjeta', $credito->id_credito) }}"><i
+                                class="bx bx-list-ul me-1"></i>Tarjeta de Pagos</a>
+                            <a class="dropdown-item" target="_blank" href="{{ route('generar-recibo', $credito->id_credito) }}"><i
+                                class="bx bx-receipt me-1"></i>Recibo de Crédito</a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="{{ route('creditos.asignarIncobrable', $credito->id_credito) }}"><i
+                                class="bx bx-trash me-1"></i>Incobrable</a>
 
                           </div>
                         </div>
                       </td>
                     </tr>
-
+                    @php $contador++; @endphp
                   @endforeach
+                @endif
                 </tbody>
+
+                <tbody id="searchdata" class="searchdata"></tbody>
               </table>
 
               <div class="row">
                 <div class="col-sm-12 col-md-6"></div>
                 <div class="col-sm-12 col-md-6 d-flex justify-content-end">
+                  {{ $creditos->appends(['estado' => session('estado_filtro'), 'mostrar' => session('mostrar')])->links() }}
                 </div>
               </div>
             </div>
@@ -191,8 +239,45 @@
       </div>
     </form>
 
-@endsection
+    @endsection
 
-@section('page-script')
+    @section('page-script')
+      <script>
+        $(document).ready(function () {
+          /* Filtro de busqueda */
+          $('#search_bar').keyup(function () {
+            $value = $(this).val();
 
+            if($value){
+              $('.searchdata').show();
+              $('.alldata').hide();
+            }else {
+              $('.searchdata').hide();
+              $('.alldata').show();
+            }
+
+            $.ajax({
+              type: 'get',
+              url: '{{ route('creditos.search') }}',
+              data: {
+                'search': $value
+              },
+
+              success: function (data) {
+                $('#searchdata').html(data);
+              }
+            });
+          })
+        });
+
+        /* Filtro de estado y paginacion */
+        $('#estado').on('change', function() {
+          $(this).closest('#filter_index').submit();
+        })
+
+        $('#mostrar').on('change', function() {
+          $(this).closest('#filter_index').submit();
+        })
+
+      </script>
 @endsection
