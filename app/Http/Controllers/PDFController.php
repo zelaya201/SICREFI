@@ -8,13 +8,16 @@ use App\Models\Cooperativa;
 use App\Models\Credito;
 use App\Models\CreditoBien;
 use App\Models\CreditoReferencia;
+use App\Models\Cuota;
 use App\Models\Referencia;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 class PDFController extends Controller
 {
 
-  protected $credito, $cliente;
+  protected $credito, $cliente, $coperativa;
 
     /**
      * Display a listing of the resource.
@@ -30,6 +33,10 @@ class PDFController extends Controller
       $this->cliente = new Cliente();
       $this->cliente = Cliente::query()
         ->where('id_cliente', $this->credito->id_cliente)->first();
+
+      $this->coperativa = Cooperativa::query()
+        ->select('nom_coop', 'dir_coop', 'tel_coop')
+        ->first();
     }
 
     /**
@@ -65,17 +72,13 @@ class PDFController extends Controller
         return $item;
       });
 
-      $coperativa = Cooperativa::query()
-        ->select('nom_coop', 'dir_coop', 'tel_coop')
-        ->first();
-
       $data = [
         'title' => 'Declaración Jurada de Bienes Muebles',
         'date' => date('m/d/Y'),
         'cliente' => $this->cliente,
         'bienes' => $bienes,
         'credito' => $this->credito,
-        'cooperativa' => $coperativa
+        'cooperativa' => $this->coperativa
       ];
 
       $pdf = PDF::loadView('content.pdf.declaracion', $data);
@@ -139,6 +142,7 @@ class PDFController extends Controller
     public function generarRecibo(int $id){
 
         $this->__invoke($id);
+        setlocale(LC_TIME, 'spanish');
 
         $this->cliente->nombre = $this
           ->cliente
@@ -147,17 +151,52 @@ class PDFController extends Controller
           ->cliente->tercer_nom_cliente;
         $this->cliente->apellido = $this->cliente->primer_ape_cliente . ' ' . $this->cliente->segundo_ape_cliente;
 
-        $this->credito->monto_credito = number_format($this->credito->monto_credito, 2, '.', ',');
-        $this->credito->interes_credito = number_format($this->credito->interes_credito, 2, '.', ',');
-        $this->credito->cuota_credito = number_format($this->credito->cuota_credito, 2, '.', ',');
-
         $data = [
           'title' => 'RECIBO DE PAGO',
-          'date' => date('m/d/Y'),
+          'fecha' => strftime("%d de %B de %Y", strtotime(date('Y-m-d'))),
           'cliente' => $this->cliente,
           'credito' => $this->credito
           ];
 
+        $pdf = PDF::loadView('content.pdf.recibo', $data);
+
+        return $pdf->stream('recibo.pdf');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     * @param int $id
+     */
+    public function generarTarjeta(int $id){
+
+        $this->__invoke($id);
+
+        $this->cliente->nombre = $this
+          ->cliente
+          ->primer_nom_cliente . ' ' . $this
+          ->cliente->segundo_nom_cliente . ' ' . $this
+          ->cliente->tercer_nom_cliente;
+        $this->cliente->apellido = $this->cliente->primer_ape_cliente . ' ' . $this->cliente->segundo_ape_cliente;
+
+        $cuotas = Cuota::query()
+          ->where(['id_credito' => $id])
+          ->get();
+
+        $data = [
+          'title' => 'TARJETA DE PAGO',
+          'date' => date('m/d/Y'),
+          'cliente' => $this->cliente,
+          'credito' => $this->credito,
+          'cuotas' => $cuotas,
+          'cooperativa' => $this->coperativa
+        ];
+
+        $pdf = PDF::loadView('content.pdf.tarjeta', $data);
+        $pdf->setPaper('letter');
+
+        return $pdf->stream('tarjeta.pdf');
     }
 
 }

@@ -31,9 +31,11 @@ Route::get('/', function () {
     return view('content.index');
 })->name('inicio');
 
+// PDF Route
 Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDeclaracion']);
 Route::get('generar-pagare/{credito}', [PDFController::class, 'generarPagare']);
 Route::get('generar-recibo/{credito}', [PDFController::class, 'generarRecibo']);
+Route::get('generar-tarjeta/{credito}', [PDFController::class, 'generarTarjeta']);
 
 // Negocio Route
 Route::resource('negocios', NegocioController::class);
