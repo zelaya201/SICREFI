@@ -199,4 +199,37 @@ class PDFController extends Controller
         return $pdf->stream('tarjeta.pdf');
     }
 
+  /**
+   * @param int $id
+   * @return \Illuminate\Http\Response
+   */
+  public function generarTicket(int $id){
+
+    $this->__invoke($id);
+
+    $this->cliente->nombre = $this
+        ->cliente
+        ->primer_nom_cliente . ' ' . $this
+        ->cliente->segundo_nom_cliente . ' ' . $this
+        ->cliente->tercer_nom_cliente;
+    $this->cliente->apellido = $this->cliente->primer_ape_cliente . ' ' . $this->cliente->segundo_ape_cliente;
+
+    $cuotas = Cuota::query()
+      ->where(['id_credito' => $id])
+      ->get();
+
+    $data = [
+      'title' => 'TICKET DE PAGO',
+      'date' => date('m/d/Y'),
+      'cliente' => $this->cliente,
+      'credito' => $this->credito,
+      'cuotas' => $cuotas,
+      'cooperativa' => $this->coperativa
+    ];
+
+    $pdf = PDF::loadView('content.pdf.ticket', $data);
+    $pdf->setPaper('letter');
+
+    return $pdf->stream('ticket.pdf');
+  }
 }
