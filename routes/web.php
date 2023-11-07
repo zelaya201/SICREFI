@@ -74,6 +74,7 @@ Route::resource('telsReferencia', TelefonoReferenciaController::class);
 // Credito Route
 Route::get('/creditos/calcularFechasCuotas', [CreditoController::class, 'calcularFechasCuotas'])
   ->name('creditos.calcularFechasCuotas');
+Route::get('/creditos/search', [CreditoController::class, 'buscarCredito'])->name('creditos.search');
 Route::resource('creditos', CreditoController::class);
 
 
