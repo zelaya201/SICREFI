@@ -39,7 +39,6 @@
       </p>
     </div>
 
-
     <div class="card mb-4">
       <div class="card-header pb-0">
         <span class="fw-bold">Datos generales</span>
@@ -47,29 +46,29 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3">
             <span class="fw-bold">DUI:</span>
             <span>{{ $cliente->dui_cliente }}</span>
           </div>
 
-          <div class="col-md-4 mb-3">
+          <div class="col-md-5">
             <span class="fw-bold">Nombre:</span>
             <span>{{ $cliente->nombre_completo }}</span>
           </div>
 
-          <div class="col-md-4 mb-3">
+          <div class="col-md-4">
             <span class="fw-bold">Correo electrónico:</span>
             <span>{{ $cliente->email_cliente }}</span>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <span class="fw-bold">Teléfono:</span>
-            <span>+503 </span>
+            <span> {{ $cliente->tel_cliente }}</span>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-5">
             <span class="fw-bold">Dirección:</span>
             <span>{{ $cliente->dir_cliente }}</span>
           </div>
@@ -153,22 +152,24 @@
 
     <!-- Tabla de créditos -->
     <div class="card px-3 py-2">
-      <table class="table table-hover table-sm">
-        <thead>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
           <tr>
             <th>ID</th>
             <th>Monto</th>
             <th>Desembolso</th>
             <th>Interés</th>
             <th>Plazo</th>
-            <th>Fecha de inicio</th>
-            <th>Fecha de fin</th>
-            <th>Tipo de Crédito</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Tipo</th>
             <th>Estado</th>
+            <th>Documentos</th>
           </tr>
-        </thead>
+          </thead>
 
-        <tbody>
+          <tbody>
           @foreach($creditos as $credito)
             <tr>
               <td>{{ $credito->id_credito }}</td>
@@ -198,16 +199,37 @@
                   <span class="badge rounded-pill bg-label-danger">Mora</span>
                 @endif
               </td>
+              <td>
+                <div class="dropdown-icon-demo">
+                  <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm hide-arrow"
+                     data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" target="_blank" href="{{ route('generar-declaracion', $credito->id_credito) }}">
+                      <i class="bx bx-file me-1"></i>
+                      Declaración Jurada</a>
+                    <a class="dropdown-item" target="_blank" href="{{ route('generar-pagare', $credito->id_credito) }}"><i
+                        class="bx bx-credit-card me-1"></i>
+                      Pagaré</a>
+                    <a class="dropdown-item" target="_blank" href="{{ route('generar-tarjeta', $credito->id_credito) }}"><i
+                        class="bx bx-list-ul me-1"></i>Tarjeta de Pagos</a>
+                    <a class="dropdown-item" target="_blank" href="{{ route('generar-recibo', $credito->id_credito) }}"><i
+                        class="bx bx-receipt me-1"></i>Recibo de Crédito</a>
+                  </div>
+                </div>
+              </td>
             </tr>
           @endforeach
 
-        @if(count($creditos) == 0)
-          <tr>
-            <td colspan="9">No hay créditos registrados</td>
-          </tr>
-        @endif
-        </tbody>
-      </table>
+          @if(count($creditos) == 0)
+            <tr>
+              <td colspan="9">No hay créditos registrados</td>
+            </tr>
+          @endif
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 @endsection

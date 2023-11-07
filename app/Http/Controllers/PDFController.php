@@ -159,6 +159,7 @@ class PDFController extends Controller
           ];
 
         $pdf = PDF::loadView('content.pdf.recibo', $data);
+        $pdf->setPaper(array(0,0,600,450));
 
         return $pdf->stream('recibo.pdf');
     }
@@ -197,6 +198,44 @@ class PDFController extends Controller
         $pdf->setPaper('letter');
 
         return $pdf->stream('tarjeta.pdf');
+    }
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   * @param int $id
+   */
+
+    public function generarTicket(int $id){
+
+      $this->__invoke($id);
+
+      $this->cliente->nombre = $this
+        ->cliente
+        ->primer_nom_cliente . ' ' . $this
+        ->cliente->segundo_nom_cliente . ' ' . $this
+        ->cliente->tercer_nom_cliente;
+      $this->cliente->apellido = $this->cliente->primer_ape_cliente . ' ' . $this->cliente->segundo_ape_cliente;
+
+      $cuotas = Cuota::query()
+        ->where(['id_credito' => $id])
+        ->get();
+
+      $data = [
+        'title' => 'TICKET DE PAGO',
+        'date' => date('m/d/Y'),
+        'cliente' => $this->cliente,
+        'fecha' => strftime("%d de %B de %Y", strtotime(date('Y-m-d'))),
+        'credito' => $this->credito,
+        'cuotas' => $cuotas,
+        'cooperativa' => $this->coperativa
+      ];
+
+      $pdf = PDF::loadView('content.pdf.ticket', $data);
+      $pdf->setPaper(array(0,0,250,600));
+
+      return $pdf->stream('ticket.pdf');
     }
 
 }

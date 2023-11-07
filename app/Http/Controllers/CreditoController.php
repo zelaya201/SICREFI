@@ -95,7 +95,13 @@ class CreditoController extends Controller
         if($credito){
           /* CALCULAR DEUDA Y PORCENTAJE PAGADO */
           $deudaCredito = Cuota::query()
-            ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])
+            ->where(['id_credito' => $credito->id_credito])
+            ->where('estado_cuota', 'Pendiente')
+            ->sum('total_cuota');
+
+          $deuda_mora = Cuota::query()
+            ->where(['id_credito' => $credito->id_credito])
+            ->where('estado_cuota', 'Atrasada')
             ->sum('total_cuota');
 
           $cuotasMora = Cuota::query()
@@ -103,9 +109,32 @@ class CreditoController extends Controller
             ->where('fecha_pago_cuota', '<', date('Y-m-d'))
             ->sum('total_cuota');
 
+          // Si hay cuotas en mora se le agrega un 5% de interés
+          $cuotas_mora = Cuota::query()
+            ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])
+            ->where('fecha_pago_cuota', '<', date('Y-m-d'))
+            ->get();
+
           if ($cuotasMora > 0) {
+            foreach ($cuotas_mora as $cuota_mora) {
+              $cuota_mora->mora_cuota = $cuota_mora->total_cuota * 0.05;
+              $cuota_mora->estado_cuota = 'Atrasada';
+              $cuota_mora->save();
+            }
+
             $deudaCredito += ($cuotasMora * 0.05);
             $credito->estado_credito = 'Mora';
+          }else{
+            $cuotas_mora = Cuota::query()
+              ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Atrasada'])->get();
+
+            if (count($cuotas_mora)> 0) {
+              foreach ($cuotas_mora as $cuota_mora) {
+                $deudaCredito += $cuota_mora->mora_cuota;
+              }
+
+              $credito->estado_credito = 'Mora';
+            }
           }
 
           $cuotasPagadas = Cuota::query()
@@ -125,7 +154,7 @@ class CreditoController extends Controller
           }
 
           $credito->porcentaje_pagado = $porcentajePagado;
-          $credito->deuda_credito = $deudaCredito;
+          $credito->deuda_credito = $deudaCredito + $deuda_mora;
 
           /* CARGAR BIENES DEL CREDITO */
           $bienesCredito = CreditoBien::query()
@@ -217,7 +246,6 @@ class CreditoController extends Controller
 
           if ($credito->save()) {
             $cuotas = Cuota::query()->where(['id_credito' => $credito->id_credito])
-              ->where('estado_cuota', 'Pendiente')
               ->get();
 
             foreach ($cuotas as $cuota) {
@@ -275,6 +303,8 @@ class CreditoController extends Controller
           $credito_cuota->interes_cuota = $interes_cuota;
           $credito_cuota->total_cuota = $capital_cuota + $interes_cuota;
           $credito_cuota->mora_cuota = 0;
+          $credito_cuota->extra_cuota = 0;
+          $credito_cuota->fecha_abono_cuota = null;
           $credito_cuota->estado_cuota = 'Pendiente';
           $credito_cuota->id_credito = $credito->id_credito;
           $credito_cuota->save();
@@ -332,6 +362,32 @@ class CreditoController extends Controller
     {
         //
     }
+
+
+  /**
+   * @param int $id_credito
+   * @return Response
+   */
+  public function asignarIncobrable(int $id_credito)
+  {
+    $credito = Credito::query()->where('id_credito', $id_credito)->first();
+    $credito->estado_credito = 'Incobrable';
+
+    if($credito->save()){
+      $cuotas = Cuota::query()->where('id_credito', $id_credito)->get();
+
+      foreach ($cuotas as $cuota){
+        $cuota->estado_cuota = 'Incobrable';
+        $cuota->save();
+      }
+
+      Session::flash('success', '');
+      Session::flash('mensaje', 'Crédito asignado como incobrable');
+      return response(['success' => true]);
+    }
+
+    return response(['success' => false], 500);
+  }
 
   /**
    * Remove the specified resource from storage.

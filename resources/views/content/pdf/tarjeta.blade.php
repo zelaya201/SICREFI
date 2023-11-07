@@ -57,7 +57,7 @@
     </tr>
     <tr>
       <td><strong>Fecha inicio:</strong></td>
-      <td></td>
+      <td>{{ strftime("%d-%m-%Y", strtotime($credito->fecha_emision_credito)) }}</td>
       <td><strong>Fecha de Vencimiento:</strong></td>
       <td>{{ strftime("%d-%m-%Y", strtotime($credito->fecha_vencimiento_credito)) }}</td>
     <tr>
@@ -111,7 +111,11 @@
 </section>
 
 <footer>
-
+  <p style="font-size: 14px;"><b><i><u>Recuerda</u></i></b></p>
+  <p style="font-size: 13px; line-height: 0.1;"><i>Es TU resposabilidad estar pendiente de las fechas y horarios de pago de las cuotas.</i></p>
+  <p style="font-size: 13px; line-height: 0.1;"><i>El impago de las cuotas generara intereses moratorios del 5% adicional.</i></p>
+  <p style="font-size: 13px; line-height: 0.1;"><i>El impago de las cuotas genera reportes de mal record crediticio en los buros crediticios.</i></p>
+  <p style="font-size: 13px; line-height: 0.1;"><i>De tu puntualidad depende el apoyo crediticio de nuestra institución en el futuro. </i></p>
 </footer>
 
 </body>

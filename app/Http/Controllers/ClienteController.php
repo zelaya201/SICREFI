@@ -323,6 +323,13 @@ class ClienteController extends Controller
 
     $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
     $cliente->nombre_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
+    $telefono = TelCliente::query()->select('tel_cliente')->where(['id_cliente' => $id])->get()->first();
+
+    $cliente->tel_cliente = 'No encontrado.';
+
+    if($telefono) {
+      $cliente->tel_cliente = '+503 ' . $telefono->tel_cliente;
+    }
 
     $creditos = Credito::query()->where(['id_cliente' => $id])->orderBy('id_credito', 'DESC')->get();
     $creditos = $creditos->map(function ($credito){
@@ -335,6 +342,14 @@ class ClienteController extends Controller
       if (count($cuotas_mora)> 0) {
         $credito->estado_credito = 'Mora';
         $credito->cuotas_mora = count($cuotas_mora);
+      }else{
+        $cuotas_mora = Cuota::query()
+          ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Atrasada'])->get();
+
+        if (count($cuotas_mora)> 0) {
+          $credito->estado_credito = 'Mora';
+          $credito->cuotas_mora = count($cuotas_mora);
+        }
       }
 
       return $credito;

@@ -33,13 +33,19 @@ Route::get('/', function () {
 })->name('inicio');
 
 // PDF Route
-Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDeclaracion']);
-Route::get('generar-pagare/{credito}', [PDFController::class, 'generarPagare']);
-Route::get('generar-recibo/{credito}', [PDFController::class, 'generarRecibo']);
-Route::get('generar-tarjeta/{credito}', [PDFController::class, 'generarTarjeta']);
+Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDeclaracion'])->name('generar-declaracion');
+Route::get('generar-pagare/{credito}', [PDFController::class, 'generarPagare'])->name('generar-pagare');
+Route::get('generar-recibo/{credito}', [PDFController::class, 'generarRecibo'])->name('generar-recibo');
+Route::get('generar-tarjeta/{credito}', [PDFController::class, 'generarTarjeta'])->name('generar-tarjeta');
+Route::get('generar-ticket/{credito}', [PDFController::class, 'generarTicket'])->name('generar-ticket');;
 
 // Cuota Route
-Route::resource('creditos/cuotas', CuotaController::class);
+Route::get('/cuotas/pagarCredito/{credito}', [CuotaController::class, 'pagarCredito'])
+  ->name('cuotas.pagarCredito');
+Route::get('/cuotas/pagarCuota/{cuota}', [CuotaController::class, 'pagarCuota'])->name('cuotas.pagarCuota');
+Route::get('/cuotas/posponerCuota/{cuota}', [CuotaController::class, 'posponerCuota'])->name('cuotas.posponerCuota');
+Route::resource('cuotas', CuotaController::class);
+
 
 // Negocio Route
 Route::resource('negocios', NegocioController::class);
@@ -74,6 +80,8 @@ Route::resource('telsReferencia', TelefonoReferenciaController::class);
 // Credito Route
 Route::get('/creditos/calcularFechasCuotas', [CreditoController::class, 'calcularFechasCuotas'])
   ->name('creditos.calcularFechasCuotas');
+Route::get('/creditos/asignarIncobrable/{credito}', [CreditoController::class, 'asignarIncobrable'])
+  ->name('creditos.asignarIncobrable');
 Route::get('/creditos/search', [CreditoController::class, 'buscarCredito'])->name('creditos.search');
 Route::resource('creditos', CreditoController::class);
 
