@@ -90,6 +90,17 @@ class CreditoController extends Controller
 
             $deudaCredito += ($cuotasMora * 0.05);
             $credito->estado_credito = 'Mora';
+          }else{
+            $cuotas_mora = Cuota::query()
+              ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Atrasada'])->get();
+
+            if (count($cuotas_mora)> 0) {
+              foreach ($cuotas_mora as $cuota_mora) {
+                $deudaCredito += $cuota_mora->mora_cuota;
+              }
+
+              $credito->estado_credito = 'Mora';
+            }
           }
 
           $cuotasPagadas = Cuota::query()
@@ -317,6 +328,32 @@ class CreditoController extends Controller
     {
         //
     }
+
+
+  /**
+   * @param int $id_credito
+   * @return Response
+   */
+  public function asignarIncobrable(int $id_credito)
+  {
+    $credito = Credito::query()->where('id_credito', $id_credito)->first();
+    $credito->estado_credito = 'Incobrable';
+
+    if($credito->save()){
+      $cuotas = Cuota::query()->where('id_credito', $id_credito)->get();
+
+      foreach ($cuotas as $cuota){
+        $cuota->estado_cuota = 'Incobrable';
+        $cuota->save();
+      }
+
+      Session::flash('success', '');
+      Session::flash('mensaje', 'Crédito asignado como incobrable');
+      return response(['success' => true]);
+    }
+
+    return response(['success' => false], 500);
+  }
 
   /**
    * Remove the specified resource from storage.

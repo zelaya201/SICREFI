@@ -16,7 +16,60 @@ class CuotaController extends Controller
      */
     public function index()
     {
-        //
+      $cuotas_mora = Cuota::query()
+        ->where(['estado_cuota' => 'Pendiente'])
+        ->where('fecha_pago_cuota', '<', date('Y-m-d'))
+        ->get();
+
+      if(count($cuotas_mora) > 0) {
+        foreach ($cuotas_mora as $cuota_mora) {
+          $cuota_mora->estado_cuota = 'Atrasada';
+          $cuota_mora->mora_cuota = 0.05 * $cuota_mora->total_cuota;
+          $cuota_mora->save();
+        }
+      }
+
+      $cuotas = Cuota::query()
+        ->where('fecha_pago_cuota', '=', date('Y-m-d'))
+        ->get();
+
+      $cuotas->map(function ($cuota) {
+        $cuotas_morosas = Cuota::query()
+          ->where(['id_credito' => $cuota->id_credito])
+          ->where(['estado_cuota' => 'Atrasada'])->get();
+
+        $cuota->anterior_pagada = true;
+
+        foreach ($cuotas_morosas as $cuota_morosa) {
+          if($cuota_morosa->id_credito == $cuota->id_credito && $cuota_morosa->id_cuota < $cuota->id_cuota) {
+            $cuota->anterior_pagada = false;
+          }
+        }
+
+        if($cuota != null) {
+          $cuota->cliente = Cliente::query()->where('id_cliente', $cuota->credito->id_cliente)->first();
+          $cuota->nom_completo = $cuota->cliente->primer_nom_cliente . ' ' . $cuota->cliente->segundo_nom_cliente . ' ' . $cuota->cliente->tercer_nom_cliente . ' ' . $cuota->cliente->primer_ape_cliente . ' ' . $cuota->cliente->segundo_ape_cliente;
+          $cuota->total_pagar = $cuota->total_cuota + $cuota->mora_cuota;
+        }
+        return $cuota;
+      });
+
+      $cuotas_mora = Cuota::query()
+        ->where(['estado_cuota' => 'Atrasada'])->get();
+
+      $cuotas_mora->map(function ($cuota){
+        $cuota->cliente = Cliente::query()->where('id_cliente', $cuota->credito->id_cliente)->first();
+        $cuota->nom_completo = $cuota->cliente->primer_nom_cliente . ' ' . $cuota->cliente->segundo_nom_cliente . ' ' . $cuota->cliente->tercer_nom_cliente . ' ' . $cuota->cliente->primer_ape_cliente . ' ' . $cuota->cliente->segundo_ape_cliente;
+        $cuota->total_pagar = $cuota->total_cuota + $cuota->mora_cuota;
+
+        return $cuota;
+      });
+
+        return response()
+          ->view('content.cuotas.index', [
+            'cuotas' => $cuotas,
+            'cuotas_mora' => $cuotas_mora,
+          ]);
     }
 
     /**
@@ -189,6 +242,53 @@ class CuotaController extends Controller
         ->route('creditos.index', $credito->id_credito)
         ->with('success', '')
         ->with('mensaje', 'Crédito pagado con éxito');
+    }
+
+    /**
+     * Pagar cuota de un crédito
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function pagarCuota($id)
+    {
+      $cuota = Cuota::query()->where('id_cuota', $id)->first();
+
+      $cuota->extra_cuota = 0;
+      $cuota->fecha_abono_cuota = date('Y-m-d');
+      $cuota->estado_cuota = 'Pagada';
+      $cuota->save();
+
+      $cuotas = Cuota::query()->where('id_credito', $cuota->id_credito)
+        ->where('estado_cuota', '!=', 'Pagada')
+        ->get();
+
+      if(count($cuotas) == 0) {
+        $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();
+        $credito->estado_credito = 'Finalizado';
+        $credito->save();
+      }
+
+      return redirect()
+        ->route('cuotas.index', $cuota->id_credito)
+        ->with('success', '')
+        ->with('mensaje', 'Cuota pagada con éxito');
+    }
+
+    /**
+     * Posponer cuota de un crédito
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function posponerCuota($id){
+      $cuota = Cuota::query()->where('id_cuota', $id)->first();
+      $cuota->fecha_pago_cuota = date('Y-m-d', strtotime($cuota->fecha_pago_cuota . ' + 1 day'));
+      $cuota->save();
+
+      return redirect()
+        ->route('cuotas.index', $cuota->id_credito)
+        ->with('success', '')
+        ->with('mensaje', 'Cuota pospuesta para el día siguiente con éxito');
     }
 
     /**

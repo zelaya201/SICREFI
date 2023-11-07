@@ -65,7 +65,7 @@
         <div class="row">
           <div class="col-md-3">
             <span class="fw-bold">Teléfono:</span>
-            <span>+503 </span>
+            <span> {{ $cliente->tel_cliente }}</span>
           </div>
 
           <div class="col-md-5">
