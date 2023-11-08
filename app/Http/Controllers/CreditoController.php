@@ -28,6 +28,18 @@ class CreditoController extends Controller
       Session::forget('estado_filtro');
       Session::forget('mostrar');
 
+      $cuotas_mora = Cuota::query()
+        ->where(['estado_cuota' => 'Pendiente'])
+        ->where('fecha_pago_cuota', '<', date('Y-m-d'))
+        ->get();
+
+      if(count($cuotas_mora) > 0) {
+        foreach ($cuotas_mora as $cuota_mora) {
+          $cuota_mora->estado_cuota = 'Atrasada';
+          $cuota_mora->mora_cuota = 0.05 * $cuota_mora->total_cuota;
+          $cuota_mora->save();
+        }
+      }
 
       $query = Credito::query();
 
@@ -73,7 +85,9 @@ class CreditoController extends Controller
       });
 
       $creditosVigentes = count(Credito::query()->where('estado_credito', 'Vigente')->get());
+
       $creditosMora = count(Credito::query()->where('estado_credito', 'En mora')->get());
+
       $creditosRenovados = count(Credito::query()->where('estado_credito', 'Renovado')->get());
       $creditosRefinanciados = count(Credito::query()->where('estado_credito', 'Refinanciado')->get());
 
