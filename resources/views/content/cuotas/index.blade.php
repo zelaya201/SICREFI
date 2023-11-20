@@ -4,13 +4,13 @@
 @endphp
 
 @extends('layouts/contentNavbarLayout')
-@section('title', 'Pagos rápidos')
+@section('title', 'Cobros rápidos')
 @section('content')
   <div class=" flex-grow-1 py-3">
     <div
       class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column mb-3">
       <div class="user-profile-info py-1">
-        <h4 class="fw-bold m-0"><span class="text-muted fw-light">Pagos /</span> Pagos rápidos</h4>
+        <h4 class="fw-bold m-0"><span class="text-muted fw-light">Cobros /</span> Cobros rápidos</h4>
       </div>
       <ul
         class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">

@@ -23,7 +23,7 @@
     },
     {
       "url": "/cuotas",
-      "name": "Pagos rápidos",
+      "name": "Cobros",
       "icon": "menu-icon tf-icons bx bx-coin",
       "slug": "cuotas.index"
     },
@@ -34,7 +34,33 @@
       "url": "#",
       "name": "Seguridad",
       "icon": "menu-icon tf-icons bx bx-lock",
-      "slug": "usuarios.index"
+      "slug": "seguridad.index",
+      "submenu": [
+        {
+          "url": "/usuarios",
+          "name": "Usuarios",
+          "icon": "menu-icon tf-icons bx bx-user",
+          "slug": "usuarios.index"
+        },
+        {
+          "url": "/roles",
+          "name": "Roles",
+          "icon": "menu-icon tf-icons bx bx-user-circle",
+          "slug": "roles.index"
+        },
+        {
+          "url": "/permisos",
+          "name": "Permisos",
+          "icon": "menu-icon tf-icons bx bx-lock-open",
+          "slug": "permisos.index"
+        }
+      ]
+    },
+    {
+      "url": "#",
+      "name": "Bitácora",
+      "icon": "menu-icon tf-icons bx bx-history",
+      "slug": "bitacora.index"
     },
     {
       "url": "#",

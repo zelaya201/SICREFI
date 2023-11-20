@@ -11,8 +11,6 @@ use App\Models\CreditoReferencia;
 use App\Models\Cuota;
 use App\Models\Referencia;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
 class PDFController extends Controller
 {
