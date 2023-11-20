@@ -160,26 +160,19 @@
                   <tbody id="clientes_tbody">
                   @php
                     $registrosPerPage = 10;
-                    $contador = ($clientes->currentPage()-1) * $registrosPerPage + 1;
+
                   @endphp
+
+                  <span class="d-none">
+                    {{ $contador = ($clientes->currentPage()-1) * $registrosPerPage + 1 }}
+                  </span>
+
                   @foreach($clientes as $cliente)
                     <tr>
                       <td>{{$contador}}</td>
                       <td>{{$cliente->dui_cliente}}</td>
                       <!--Filtro para Nombre-->
-                      @if($cliente->segundo_nom_cliente == null or $cliente->segundo_nom_cliente == null && $clientes->tercer_nom_cliente == null)
-                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
-                      @elseif($cliente->segundo_nom_cliente == null && $clientes->segundo_ape_cliente == null or $cliente->segundo_nom_cliente == null && $clientes->tercer_nom_cliente == null && $cliente->segundo_ape_cliente = null)
-                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->primer_ape_cliente}}</td>
-                      @elseif($cliente->tercer_nom_cliente == null)
-                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
-                      @elseif($cliente->tercer_nom_cliente == null && $cliente->segundo_ape_cliente = null )
-                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->primer_ape_cliente}}</td>
-                      @elseif($cliente->segundo_ape_cliente == null)
-                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->tercer_nom_cliente.' '.$cliente->primer_ape_cliente}}</td>
-                      @else
-                        <td>{{$cliente->primer_nom_cliente.' '.$cliente->segundo_nom_cliente.' '.$cliente->tercer_nom_cliente.' '.$cliente->primer_ape_cliente.' '.$cliente->segundo_ape_cliente}}</td>
-                      @endif
+                      <td>{{$cliente->nom_completo}}</td>
                       <td>{{$cliente->dir_cliente}}</td>
                       <!--Filtro para Estado-->
                       @if($cliente->estado_cliente == 'Activo')
@@ -211,7 +204,7 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" href="{{ route('clientes.showEdit', $cliente->id_cliente) }}"><i class="bx bx-edit-alt me-1"></i>
+                            <a class="dropdown-item" href="{{ route('clientes.edit', $cliente->id_cliente) }}"><i class="bx bx-edit-alt me-1"></i>
                               Editar</a>
 
                             <div class="dropdown-divider"></div>
@@ -255,8 +248,6 @@
       <!-- Modal Dar de alta -->
       @include('content.clientes._partials.dar_alta_cliente')
 
-
-
 @endsection
 
 @section('page-script')
@@ -281,7 +272,7 @@
           const compareWith = cellsOfRow[j].innerHTML.toLowerCase();
 
           // Buscamos el texto en el contenido de la celda
-          if (searchText.length == 0 || compareWith.indexOf(searchText) > -1) {
+          if (searchText.length === 0 || compareWith.indexOf(searchText) > -1) {
             found = true;
             total++;
           }
@@ -301,7 +292,7 @@
 
       lastTR.style.display = ''
 
-      if (searchText == "") {
+      if (searchText === "") {
         lastTR.style.display = 'none'
       }else if (total) {
         td.innerHTML="Se ha" + ((total>1)?"n ":" ") + "encontrado "+total+" coincidencia"+((total>1)?"s":"");
@@ -321,7 +312,7 @@
       })
 
       $('#submit_delete').on('click', function() {
-        var id = $('#id_cliente').val();
+        let id = $('#id_cliente').val();
 
         $.ajax({
           url: "{{ route('clientes.destroy', '') }}/" + id,
@@ -339,7 +330,7 @@
       })
 
       $('#submit_dar_alta').on('click', function (){
-        var id = $('#id_cliente_alta').val();
+        let id = $('#id_cliente_alta').val();
 
         $.ajax({
           url: "{{ route('clientes.update', '') }}/" + id,

@@ -6,7 +6,8 @@
 @extends('layouts/contentNavbarLayout')
 @section('title', 'Editar Cliente')
 @section('content')
-  <form action="{{ route('clientes.edit', $cliente->id_cliente) }}" method="get" autocomplete="off" enctype="multipart/form-data"
+  <form action="{{ route('clientes.edit', $cliente->id_cliente) }}" method="get" autocomplete="off"
+        enctype="multipart/form-data"
         id="form-cliente">
 
     <div class="d-flex align-items-center justify-content-between py-3">
@@ -15,7 +16,7 @@
           class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column gap-4">
           <div class="user-profile-info">
             <h4 class="fw-bold m-0"><span class="text-muted fw-light">Clientes / </span>
-              {{ $cliente->dui_cliente }} - {{ $cliente->primer_nom_cliente . ' ' . $cliente->primer_ape_cliente }}
+              Editar cliente
             </h4>
           </div>
           <ul
@@ -43,45 +44,7 @@
       </div>
     </div>
 
-    {{-- Navegación de Formulario --}}
-    {{--  <ul class="nav nav-pills nav-align-left nav-card-header-pills align-items-center" role="tablist">--}}
-    <ul class="nav nav-pills" role="tablist">
-      <li class="nav-item" role="presentation">
-        <a class="nav-link active" type="button" aria-selected="false" tabindex="-1"
-           href="{{ route('clientes.showEdit', $cliente->id_cliente) }}">
-          <i class="bx bx-user"></i> Cliente
-        </a>
-      </li>
-
-      <li class="nav-item" role="presentation">
-        <a class="nav-link {{ ($cliente->estado_civil_cliente != 'Casado') ? 'disabled' : '' }}" type="button"
-           aria-selected="false" tabindex="-1"
-           href="{{ route('conyuge.edit', $cliente->id_cliente) }}">
-          <i class="bx bx-user-check"></i> Conyuge
-        </a>
-      </li>
-
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-           href="{{ route('negocios.show', $cliente->id_cliente) }}">
-          <i class="tf-icons bx bx-store-alt"></i> Negocio
-        </a>
-      </li>
-
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" type="button" aria-selected="false" tabindex="-1" data-bs-target="#card-referencia"
-           href="{{ route('referencias.show', $cliente->id_cliente) }}">
-          <i class="bx bx-user-plus"></i> Referencias
-        </a>
-      </li>
-
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-           href="{{ route('bienes.show', $cliente->id_cliente) }}">
-          <i class="bx bx-building"></i> Bienes
-        </a>
-      </li>
-    </ul>
+    @include('content.clientes._partials.nav')
 
     @if(Session::has('success'))
       <div class="alert alert-primary d-flex m-0 mt-3" role="alert">
@@ -95,7 +58,7 @@
     @endif
 
     <div class="tab-content p-0">
-      @include('content.clientes._partials-edit.info-edit') {{-- Información del cliente --}}
+      @include('content.clientes._partials.form') {{-- Información del cliente --}}
 
 
     </div>
@@ -137,24 +100,24 @@
         }
       });
 
-      $('#btn-modificar-cliente').on('click', function (){
+      $('#btn-modificar-cliente').on('click', function () {
         $('#btn-modificar-cliente').prop('disabled', true);
         $('#btn-modificar-cliente').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Modificando...');
 
         $.ajax({
-          url : '{{ route("clientes.store") }}',
-          type : 'POST',
-          dataType : 'json',
-          data : $('#form-cliente').serialize() + '&modificarCliente=true&id_cliente=' + {{ $cliente->id_cliente }},
-          progress : function (){
+          url: '{{ route("clientes.update", ':id') }}'.replace(':id', {{ $cliente->id_cliente }}),
+          type: 'PUT',
+          dataType: 'json',
+          data: $('#form-cliente').serialize() + '&modificarCliente=true&id_cliente=' + {{ $cliente->id_cliente }},
+          progress: function () {
             $('#btn-modificar-cliente').prop('disabled', true);
           },
-          success : function (data) {
+          success: function (data) {
             if (data.success) {
               window.location.href = '{{ route('clientes.index') }}';
             }
           },
-          error : function (xhr){
+          error: function (xhr) {
             var data = xhr.responseJSON;
             if ($.isEmptyObject(data.errors) === false) {
               $.each(data.errors, function (key, value) {
@@ -189,18 +152,17 @@
           $(e.target).prop('disabled', false);
         } else {
 
-
           $.ajax({
             url: '{{ route("telsCliente.edit", ":id_cliente") }}'.replace(':id_cliente', id),
             type: 'get',
             dataType: 'json',
             data: {
-              id : id,
+              id: id,
               tel: objtel_cliente.val(),
             },
             success: function (data) {
               /* Mensaje de exito */
-              if(data.success) {
+              if (data.success) {
                 // Reedireccionar a la página de clientes
                 location.reload();
               }
@@ -227,8 +189,8 @@
           id: id,
           _token: "{{ csrf_token() }}",
         },
-        success: function(data) {
-          if(data.success) {
+        success: function (data) {
+          if (data.success) {
             // Reedireccionar a la página de clientes
             location.reload();
           }

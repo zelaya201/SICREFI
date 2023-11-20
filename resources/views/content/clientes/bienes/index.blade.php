@@ -8,80 +8,9 @@
 
 @section('content')
 
-
-
-  {{--  Header de botones --}}
-  <div class="d-flex align-items-center justify-content-between py-3">
-    <div class="flex-grow-1">
-      <div
-        class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column gap-4">
-        <div class="user-profile-info">
-          <h4 class="fw-bold m-0">
-            <span class="text-muted fw-light">Clientes /</span> Bienes muebles
-            <span
-              class="text-muted fw-light fw">/ {{ $cliente->dui_cliente }} - {{ $cliente->primer_nom_cliente . ' ' . $cliente->primer_ape_cliente }}</span>
-          </h4>
-        </div>
-        <ul
-          class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
-          <li class="list-inline-item fw-semibold">
-            <button type="button" class="btn rounded-pill btn-icon btn-warning"
-                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd"
-                    data-bs-offset="0,4"
-                    data-bs-placement="top" data-bs-html="true" title="Ayuda">
-              <span class="tf-icons bx bx-question-mark"></span>
-            </button>
-          </li>
-          <li class="list-inline-item fw-semibold">
-            <a class="nav-link btn btn-secondary" type="button" href="{{ route('clientes.index') }}">
-              <i class="bx bx-arrow-back"></i> Volver
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  {{--  Fin --}}
-
-  {{-- Navegacion entre panel --}}
-  <ul class="nav nav-pills" role="tablist">
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('clientes.showEdit', $cliente->id_cliente) }}">
-        <i class="bx bx-user"></i> Cliente
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link {{ ($cliente->estado_civil_cliente != 'Casado') ? 'disabled' : '' }}" type="button"
-         aria-selected="false" tabindex="-1"
-         href="{{ route('conyuge.edit', $cliente->id_cliente) }}">
-        <i class="bx bx-user-check"></i> Cónyuge
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('negocios.show', $cliente->id_cliente) }}">
-        <i class="tf-icons bx bx-store-alt"></i> Negocio
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('referencias.show', $cliente->id_cliente) }}">
-        <i class="bx bx-user-plus"></i> Referencias
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link active" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('bienes.show', $cliente->id_cliente) }}">
-        <i class="bx bx-building"></i> Bienes
-      </a>
-    </li>
-  </ul>
-  {{--  Fin --}}
+  @include('content.clientes._partials.header', ['title' => 'Bienes'])
+  @include('content.clientes._partials.info')
+  @include('content.clientes._partials.nav')
 
   @if(Session::has('success'))
     <div class="alert alert-primary d-flex m-0 mt-3" role="alert">
@@ -177,7 +106,7 @@
                             @else
                               <a class="dropdown-item" href="javascript:void(0);"
                                  onclick="darAltaBien({{ $bien->id_bien }})">
-                                <i class='bx bx-up-arrow-circle' ></i> Dar de alta
+                                <i class='bx bx-up-arrow-circle'></i> Dar de alta
                               </a>
                             @endif
                           </div>
@@ -327,7 +256,7 @@
       $('#btn-agregar-bien').click(function (e) {
         e.preventDefault();
 
-        if($('#nom_bien').val() !== '' && $('#descrip_bien').val() !== '' && $('#valor_bien').val() !== ''){
+        if ($('#nom_bien').val() !== '' && $('#descrip_bien').val() !== '' && $('#valor_bien').val() !== '') {
 
           var datos = $('#form-bien').serialize();
           let id_bien = $('#id_bien').val();
@@ -348,14 +277,14 @@
             data: datos,
             success: function (data) {
               /* Mensaje de exito */
-              if(data.success === false){
+              if (data.success === false) {
                 $('#nom_bien').addClass('is-invalid');
                 $('#nom_bien_error').html(data.message);
 
                 $('#nom_bien').change(function () {
                   $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
                 });
-              }else{
+              } else {
                 location.reload();
               }
 
@@ -364,8 +293,8 @@
               /* Mensajes de error */
             }
           });
-        }else{
-          if($('#nom_bien').val() === '') {
+        } else {
+          if ($('#nom_bien').val() === '') {
             $('#nom_bien').addClass('is-invalid');
             $('#nom_bien_error').html('El campo nombre es obligatorio');
 
@@ -374,7 +303,7 @@
             });
           }
 
-          if($('#descrip_bien').val() === '') {
+          if ($('#descrip_bien').val() === '') {
             $('#descrip_bien').addClass('is-invalid');
             $('#descrip_bien_error').html('El campo descripción es obligatorio');
 
@@ -383,7 +312,7 @@
             });
           }
 
-          if($('#valor_bien').val() === '') {
+          if ($('#valor_bien').val() === '') {
             $('#valor_bien').addClass('is-invalid');
             $('#valor_bien_error').html('El campo valor es obligatorio');
 
@@ -448,7 +377,7 @@
       });
     }
 
-    function darAltaBien(id){
+    function darAltaBien(id) {
       let datos = 'id_bien=' + id;
       datos += '&opcion=darAlta';
 
@@ -495,14 +424,14 @@
       });
     }
 
-    function mostrarBien(data){
+    function mostrarBien(data) {
       $('#id_bien').val(data.bien.id_bien);
       $('#nom_bien').val(data.bien.nom_bien);
       $('#descrip_bien').val(data.bien.descrip_bien);
       $('#valor_bien').val(parseFloat(data.bien.valor_bien).toFixed(2));
     }
 
-    function resetFormularioBien(){
+    function resetFormularioBien() {
       $('#form-bien input').removeAttr('disabled');
       $('#form-bien textarea').removeAttr('disabled');
       $('#btn-agregar-bien').removeClass('d-none');

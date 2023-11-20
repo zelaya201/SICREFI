@@ -36,6 +36,31 @@ class Cliente extends Model
       'estado_cliente'
     ];
 
+    public static $rules = [
+      'dui_cliente' => 'required|unique:cliente|numeric|digits:9',
+      'primer_nom_cliente' => 'required|min:2|max:50|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/',
+      'segundo_nom_cliente' => 'nullable|min:2|max:50|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/',
+      'tercer_nom_cliente' => 'nullable|min:2|max:50|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/',
+      'primer_ape_cliente' => 'required|min:2|max:50|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/',
+      'segundo_ape_cliente' => 'nullable|min:2|max:50|regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/',
+      'fech_nac_cliente' => 'required|date|before_or_equal: 18 years ago',
+      'ocupacion_cliente' => 'required|min:3',
+      'tipo_vivienda_cliente' => 'required|min:3',
+      'dir_cliente' => 'required',
+      'gasto_aliment_cliente' => 'required|numeric|min:0',
+      'gasto_agua_cliente' => 'required|numeric|min:0',
+      'gasto_luz_cliente' => 'required|numeric|min:0',
+      'gasto_cable_cliente' => 'required|numeric|min:0',
+      'gasto_vivienda_cliente' => 'required|numeric|min:0',
+      'gasto_otro_cliente' => 'required|numeric|min:0',
+      'email_cliente' => 'required|unique:cliente|email',
+      'estado_civil_cliente' => 'required'
+    ];
+
+    public static $messages = [
+      'fech_nac_cliente.before_or_equal' => 'El cliente debe ser mayor de edad.',
+    ];
+
     public function creditos(){
       return $this->hasMany(Credito::class, 'id_cliente');
     }

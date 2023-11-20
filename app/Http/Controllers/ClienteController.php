@@ -46,6 +46,8 @@ class ClienteController extends Controller
       $clientes->map(function ($cliente) {
         $cliente->conyuge = false;
 
+        $cliente->nom_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
+
         if($cliente->estado_civil_cliente == 'Casado') {
           $cliente->conyuge = true;
         }
@@ -77,6 +79,7 @@ class ClienteController extends Controller
     $clientes_creditos = count(Credito::query()->where(['estado_credito' => 'Vigente'])->get());
 
     $clientes->map(function ($cliente) {
+      $cliente->nom_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
       $cliente->conyuge = false;
 
       if($cliente->estado_civil_cliente == 'Casado') {
@@ -105,15 +108,12 @@ class ClienteController extends Controller
    */
   public function create()
   {
-    Session::forget('negocios'); // Elimina todos los registros de la sesión de negocios
-    Session::forget('referencias'); // Elimina todos los registros de la sesión de referencias
-    Session::forget('bienes'); // Elimina todos los registros de la sesión de bienes
     Session::forget('telefonos_clientes'); // Elimina todos los registros de la sesión de telefonos_clientes
     Session::forget('telefonos_conyuge'); // Elimina todos los registros de la sesión de telefonos_conyuge
-    Session::forget('telefonos_negocio_temporal'); // Elimina todos los registros de la sesión de telefonos_negocio_temporal
-    Session::forget('telefonos_referencia_temporal'); // Elimina todos los registros de la sesión de telefonos_referencia_temporal
 
-    return view('content.clientes.create');
+    $cliente = new Cliente();
+
+    return view('content.clientes.create', compact('cliente'));
   }
 
   /**
@@ -125,70 +125,10 @@ class ClienteController extends Controller
   public function store(Request $request)
   {
 
-    if($request->input('modificarCliente') == 'true') {
-      $id = $request->input('id_cliente');
-       $request->validate([
-        'dui_cliente' => 'required|numeric|digits:9|unique:cliente,dui_cliente,' . $id . ',id_cliente',
-        'primer_nom_cliente' => 'required|min:2|max:50|alpha',
-        'segundo_nom_cliente' => 'nullable|min:2|max:50|alpha',
-        'tercer_nom_cliente' => 'nullable|min:2|max:50|alpha',
-        'primer_ape_cliente' => 'required|min:2|max:50|alpha',
-        'segundo_ape_cliente' => 'nullable|min:2|max:50|alpha',
-        'fech_nac_cliente' => 'required|date',
-        'ocupacion_cliente' => 'required|min:3',
-        'tipo_vivienda_cliente' => 'required',
-        'dir_cliente' => 'required',
-        'gasto_aliment_cliente' => 'required|numeric',
-        'gasto_agua_cliente' => 'required|numeric',
-        'gasto_luz_cliente' => 'required|numeric',
-        'gasto_cable_cliente' => 'required|numeric',
-        'gasto_vivienda_cliente' => 'required|numeric',
-        'gasto_otro_cliente' => 'required|numeric',
-        'email_cliente' => 'required|email|unique:cliente,email_cliente,' . $id . ',id_cliente',
-        'estado_civil_cliente' => 'required',
-      ]);
-
-      $cliente = Cliente::where(['id_cliente' => $id])->get()->first();
-      $cliente->fill($request->all());
-
-      if($cliente->save()) {
-        /* Mensaje Flash */
-        Session::flash('success', '');
-        Session::flash('mensaje', 'Cliente modificado con éxito');
-        return ['success' => true];
-      }
-
-      return ['success' => false, 'message' => 'Error al modificar cliente', 'errors' => $cliente->errors()];
-    }
-
-    $date = date('Y-m-d', strtotime('-18 years'));
-
-    $request->validate([
-      'dui_cliente' => 'required|unique:cliente|numeric|digits:9',
-      'primer_nom_cliente' => 'required|min:2|max:50|alpha',
-      'segundo_nom_cliente' => 'nullable|min:2|max:50|alpha',
-      'tercer_nom_cliente' => 'nullable|min:2|max:50|alpha',
-      'primer_ape_cliente' => 'required|min:2|max:50|alpha',
-      'segundo_ape_cliente' => 'nullable|min:2|max:50|alpha',
-      'fech_nac_cliente' => 'required|date|before_or_equal:' . $date,
-      'ocupacion_cliente' => 'required|min:3',
-      'tipo_vivienda_cliente' => 'required',
-      'dir_cliente' => 'required',
-      'gasto_aliment_cliente' => 'required|numeric',
-      'gasto_agua_cliente' => 'required|numeric',
-      'gasto_luz_cliente' => 'required|numeric',
-      'gasto_cable_cliente' => 'required|numeric',
-      'gasto_vivienda_cliente' => 'required|numeric',
-      'gasto_otro_cliente' => 'required|numeric',
-      'email_cliente' => 'required|unique:cliente|email',
-      'estado_civil_cliente' => 'required',
-    ]);
+    $request->validate(Cliente::$rules, Cliente::$messages);
 
     $array_telefonos_clientes = $request->session()->get('telefonos_clientes');
     $array_telefonos_conyuge = $request->session()->get('telefonos_conyuge');
-    $array_negocios = $request->session()->get('negocios');
-    $array_referencias = $request->session()->get('referencias');
-    $array_bienes = $request->session()->get('bienes');
 
     if(empty($array_telefonos_clientes)) {
       return ['success' => false, 'message' => 'Debe agregar al menos un teléfono del cliente', 'tab' => 'cliente'];
@@ -196,11 +136,11 @@ class ClienteController extends Controller
 
     if($request->estado_civil_cliente == 'Casado') {
       $request->validate([
-        'primer_nom_conyuge' => 'required:min:2|max:50|alpha',
-        'segundo_nom_conyuge' => 'nullable|min:2|max:50|alpha',
-        'tercer_nom_conyuge' => 'nullable|min:2|max:50|alpha',
-        'primer_ape_conyuge' => 'required:min:2|max:50|alpha',
-        'segundo_ape_conyuge' => 'nullable|min:2|max:50|alpha',
+        'primer_nom_conyuge' => 'required:min:2|max:50|regex:/^[a-zA-Z0-9\s]+$/',
+        'segundo_nom_conyuge' => 'nullable|min:2|max:50|regex:/^[a-zA-Z0-9\s]+$/',
+        'tercer_nom_conyuge' => 'nullable|min:2|max:50|regex:/^[a-zA-Z0-9\s]+$/',
+        'primer_ape_conyuge' => 'required:min:2|max:50|regex:/^[a-zA-Z0-9\s]+$/',
+        'segundo_ape_conyuge' => 'nullable|min:2|max:50|regex:/^[a-zA-Z0-9\s]+$/',
         'ocupacion_conyuge' => 'required:min:3',
         'dir_conyuge' => 'required:min:3',
       ]);
@@ -208,14 +148,6 @@ class ClienteController extends Controller
       if(empty($array_telefonos_conyuge)) {
         return ['success' => false, 'message' => 'Debe agregar al menos un teléfono del conyuge', 'tab' => 'conyuge'];
       }
-    }
-
-    if(empty($array_referencias) || count($array_referencias) < 1) {
-      return ['success' => false, 'message' => 'Debe agregar al menos una referencia personal', 'tab' => 'referencia'];
-    }
-
-    if(empty($array_bienes)) {
-      return ['success' => false, 'message' => 'Debe agregar al menos un bien', 'tab' => 'bien'];
     }
 
     $cliente = new Cliente();
@@ -247,59 +179,6 @@ class ClienteController extends Controller
             $tel_conyuge->save();
           }
         }
-      }
-
-      $array = $request->session()->get('negocios');
-
-      if(!empty($array)) {
-        foreach ($array as $negocio) {
-          $neg = new Negocio();
-          $neg->fill($negocio);
-          $neg->estado_negocio = 'Activo';
-          $neg->id_cliente = $identificador;
-
-          if ($neg->save()) {
-            $tel_negocios = $negocio['telefonos_negocio'];
-            foreach ($tel_negocios as $telefono) {
-              $tel = new TelNegocio();
-              $tel->tel_negocio = $telefono['tel_negocio'];
-              $tel->id_negocio = Negocio::latest('id_negocio')->first()->id_negocio;
-              $tel->save();
-            }
-          }
-        }
-      }
-
-      $array = $request->session()->get('referencias');
-
-      foreach ($array as $referencia) {
-        $ref = new Referencia();
-        $ref->fill($referencia);
-        $ref->estado_ref = 'Activo';
-
-        $ref->id_cliente = $identificador;
-
-        if($ref->save()) {
-          $tel_referencias = $referencia['telefonos_ref'];
-          foreach ($tel_referencias as $telefono) {
-            $tel = new TelReferencia();
-            $tel->tel_ref = $telefono['tel_ref'];
-            $tel->id_ref = Referencia::latest('id_ref')->first()->id_ref;
-            $tel->save();
-          }
-        }
-      }
-
-      $array = $request->session()->get('bienes');
-
-      foreach ($array as $bien) {
-        $b = new Bien();
-        $b->nom_bien = $bien['nom_bien'];
-        $b->estado_bien = 'Activo';
-        $b->descrip_bien = $bien['descrip_bien'];
-        $b->valor_bien = doubleval($bien['valor_bien']);
-        $b->id_cliente = $identificador;
-        $b->save();
       }
 
       /* Mensaje Flash */
@@ -393,18 +272,11 @@ class ClienteController extends Controller
    * @param int $id
    * @return \Illuminate\Http\Response
    */
-  public function showEdit($id)
-  {
+  public function edit(int $id) {
+    /* Modificar cliente */
     $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
 
     return view('content.clientes.edit', compact('cliente'));
-  }
-
-  public function edit(Request $request, $id) {
-    /* Modificar cliente */
-
-
-    return $id;
   }
 
   /**
@@ -416,18 +288,51 @@ class ClienteController extends Controller
    */
   public function update(Request $request, $id)
   {
-    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
-    $cliente->fill(['estado_cliente' => 'Activo']);
+      $request->validate([
+        'dui_cliente' => 'required|numeric|digits:9|unique:cliente,dui_cliente,' . $id . ',id_cliente',
+        'primer_nom_cliente' => 'required|min:2|max:50|alpha',
+        'segundo_nom_cliente' => 'nullable|min:2|max:50|alpha',
+        'tercer_nom_cliente' => 'nullable|min:2|max:50|alpha',
+        'primer_ape_cliente' => 'required|min:2|max:50|alpha',
+        'segundo_ape_cliente' => 'nullable|min:2|max:50|alpha',
+        'fech_nac_cliente' => 'required|date',
+        'ocupacion_cliente' => 'required|min:3',
+        'tipo_vivienda_cliente' => 'required',
+        'dir_cliente' => 'required',
+        'gasto_aliment_cliente' => 'required|numeric',
+        'gasto_agua_cliente' => 'required|numeric',
+        'gasto_luz_cliente' => 'required|numeric',
+        'gasto_cable_cliente' => 'required|numeric',
+        'gasto_vivienda_cliente' => 'required|numeric',
+        'gasto_otro_cliente' => 'required|numeric',
+        'email_cliente' => 'required|email|unique:cliente,email_cliente,' . $id . ',id_cliente',
+        'estado_civil_cliente' => 'required',
+      ]);
 
-    if($cliente->save()) {
-      /* Mensaje Flash */
-      Session::flash('success', '');
-      Session::flash('mensaje', 'Cliente restaurado con éxito');
+      $cliente = Cliente::where(['id_cliente' => $id])->get()->first();
+      $cliente->fill($request->all());
 
-      return ['success' => true];
-    }
+      if($cliente->save()) {
+        /* Mensaje Flash */
+        Session::flash('success', '');
+        Session::flash('mensaje', 'Cliente modificado con éxito');
+        return ['success' => true];
+      }
 
-    return ['success' => false];
+      return ['success' => false, 'message' => 'Error al modificar cliente', 'errors' => $cliente->errors()];
+
+//    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
+//    $cliente->fill(['estado_cliente' => 'Activo']);
+//
+//    if($cliente->save()) {
+//      /* Mensaje Flash */
+//      Session::flash('success', '');
+//      Session::flash('mensaje', 'Cliente restaurado con éxito');
+//
+//      return ['success' => true];
+//    }
+//
+//    return ['success' => false];
   }
 
   /**

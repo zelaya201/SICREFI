@@ -9,15 +9,13 @@
 @section('content')
 
   {{--  Header de botones --}}
-  <div class="d-flex align-items-center justify-content-between py-3">
+  <div class="d-flex align-items-center justify-content-between pt-3">
     <div class="flex-grow-1">
       <div
         class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column gap-4">
         <div class="user-profile-info">
           <h4 class="fw-bold m-0">
             <span class="text-muted fw-light">Clientes /</span> Cónyuge
-            <span
-              class="text-muted fw-light fw">/ {{ $cliente->dui_cliente }} - {{ $cliente->primer_nom_cliente . ' ' . $cliente->primer_ape_cliente }}</span>
           </h4>
         </div>
         <ul
@@ -45,45 +43,8 @@
   </div>
   {{--  Fin --}}
 
-  {{-- Navegacion entre panel --}}
-  <ul class="nav nav-pills" role="tablist">
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('clientes.showEdit', $cliente->id_cliente) }}">
-        <i class="bx bx-user"></i> Cliente
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link active {{ ($cliente->estado_civil_cliente != 'Casado') ? 'disabled' : '' }}" type="button"
-         aria-selected="false" tabindex="-1"
-         href="{{ route('conyuge.edit', $cliente->id_cliente) }}">
-        <i class="bx bx-user-check"></i> Cónyuge
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('negocios.show', $cliente->id_cliente) }}">
-        <i class="tf-icons bx bx-store-alt"></i> Negocio
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('referencias.show', $cliente->id_cliente) }}">
-        <i class="bx bx-user-plus"></i> Referencias
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('bienes.show', $cliente->id_cliente) }}">
-        <i class="bx bx-building"></i> Bienes
-      </a>
-    </li>
-  </ul>
-  {{--  Fin --}}
+  @include('content.clientes._partials.info')
+  @include('content.clientes._partials.nav')
 
   @if(Session::has('success'))
     <div class="alert alert-primary d-flex m-0 mt-3" role="alert">
@@ -144,7 +105,7 @@
                 <div class="col-md-6 mb-3">
                   <label class="form-label" for="tercer_nom_conyuge">Tercer nombre</label>
                   <input type="text" class="form-control" id="tercer_nom_conyuge" name="tercer_nom_conyuge"
-                  value="{{ $conyuge->tercer_nom_conyuge }}"/>
+                         value="{{ $conyuge->tercer_nom_conyuge }}"/>
                   <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                     <div data-field="name" data-validator="notEmpty" id="tercer_nom_conyuge_error"></div>
                   </div>
@@ -154,7 +115,7 @@
                 <div class="col-md-6 mb-3">
                   <label class="form-label" for="primer_ape_conyuge">Primer apellido (*)</label>
                   <input type="text" class="form-control" name="primer_ape_conyuge" id="primer_ape_conyuge"
-                  value="{{ $conyuge->primer_ape_conyuge }}">
+                         value="{{ $conyuge->primer_ape_conyuge }}">
                   <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                     <div data-field="name" data-validator="notEmpty" id="primer_ape_conyuge_error"></div>
                   </div>
@@ -165,7 +126,7 @@
                 <div class="col-md-6 mb-3">
                   <label class="form-label" for="segundo_ape_conyuge">Segundo apellido</label>
                   <input type="text" class="form-control" id="segundo_ape_conyuge" name="segundo_ape_conyuge"
-                  value="{{ $conyuge->segundo_ape_conyuge }}"/>
+                         value="{{ $conyuge->segundo_ape_conyuge }}"/>
                   <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                     <div data-field="name" data-validator="notEmpty" id="segundo_ape_conyuge_error"></div>
                   </div>
@@ -174,7 +135,7 @@
                 <div class="col-md-6 mb-3">
                   <label class="form-label" for="ocupacion_conyuge">Ocupación (*)</label>
                   <input type="text" class="form-control" name="ocupacion_conyuge" id="ocupacion_conyuge"
-                  value="{{ $conyuge->ocupacion_conyuge }}">
+                         value="{{ $conyuge->ocupacion_conyuge }}">
                   <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                     <div data-field="name" data-validator="notEmpty" id="ocupacion_conyuge_error"></div>
                   </div>
@@ -184,7 +145,8 @@
               <div class="row">
                 <div class="col-md-12 mb-3">
                   <label class="form-label" for="dir_conyuge">Dirección (*)</label>
-                  <textarea class="form-control" name="dir_conyuge" id="dir_conyuge" rows="2">{{ $conyuge->dir_conyuge }}</textarea>
+                  <textarea class="form-control" name="dir_conyuge" id="dir_conyuge"
+                            rows="2">{{ $conyuge->dir_conyuge }}</textarea>
                   <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                     <div data-field="name" data-validator="notEmpty" id="dir_conyuge_error"></div>
                   </div>
@@ -223,25 +185,25 @@
                   </thead>
                   <tbody id="lista-telefonos-conyuge">
 
-                    @if(empty($telefonos) || count($telefonos) == 0)
+                  @if(empty($telefonos) || count($telefonos) == 0)
+                    <tr>
+                      <td colspan="3">No hay resultados</td>
+                    </tr>
+                  @else
+                    @foreach($telefonos as $telefono)
                       <tr>
-                        <td colspan="3">No hay resultados</td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>+503 {{ $telefono->tel_conyuge }}</td>
+                        <td>
+                          <input type="hidden" name="id_tel" id="id_tel" value="{{$telefono->id_tel_conyuge}}">
+                          <button type='button' class='btn btn-outline-danger btn-sm'
+                                  onclick="eliminarTelefono('{{ $telefono->id_tel_conyuge }}', event)">
+                            <i class='tf-icons bx bx-trash'></i>
+                          </button>
+                        </td>
                       </tr>
-                    @else
-                      @foreach($telefonos as $telefono)
-                        <tr>
-                          <td>{{ $loop->iteration }}</td>
-                          <td>{{ $telefono->tel_conyuge }}</td>
-                          <td>
-                            <input type="hidden" name="id_tel" id="id_tel" value="{{$telefono->id_tel_conyuge}}">
-                            <button type='button' class='btn btn-outline-danger btn-sm'
-                            onclick="eliminarTelefono('{{ $telefono->id_tel_conyuge }}', event)">
-                              <i class='tf-icons bx bx-trash'></i>
-                            </button>
-                          </td>
-                        </tr>
-                      @endforeach
-                    @endif
+                    @endforeach
+                  @endif
                   </tbody>
                 </table>
               </div>
@@ -253,7 +215,8 @@
   </form>
 
 
-  <form action="{{ route('telsConyuge.store') }}" method="post" autocomplete="off" enctype="multipart/form-data" id="form-telsconyuge">
+  <form action="{{ route('telsConyuge.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
+        id="form-telsconyuge">
     <!-- Modal agregar telefono conyuge -->
     <div class="modal fade" data-bs-backdrop="static" id="telefono-modal-conyuge" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -267,7 +230,8 @@
             <div class="row">
               <div class="col mb-3">
                 <label for="tel_conyuge" class="form-label">Teléfono (*)</label>
-                <input type="text" id="tel_conyuge" name="tel_conyuge" class="form-control" placeholder="00000000" maxlength="8">
+                <input type="text" id="tel_conyuge" name="tel_conyuge" class="form-control" placeholder="00000000"
+                       maxlength="8">
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="mensaje-telefono-conyuge"></div>
                 </div>
@@ -326,7 +290,7 @@
       });
 
       /* ALMACENAR TELEFONO */
-      $('#btn-agregar-telefono-conyuge').on('click', function (){
+      $('#btn-agregar-telefono-conyuge').on('click', function () {
         let id = "{{ (!empty($conyuge)) ? $conyuge->id_conyuge : 0 }}";
         let tel = $('#tel_conyuge');
         if (tel.val() === '') {
@@ -336,16 +300,16 @@
         } else if (tel.val().length < 8) {
           tel.addClass('is-invalid');
           $('#mensaje-telefono-conyuge').html('El campo debe tener al menos 8 caracteres.');
-        }else{
+        } else {
           $.ajax({
             url: '{{ route("telsConyuge.edit", ":id_conyuge") }}'.replace(':id_conyuge', id),
             type: 'get',
             data: {
-              id : id,
+              id: id,
               tel: tel.val(),
             },
-            success: function(data) {
-              if(data.success) {
+            success: function (data) {
+              if (data.success) {
                 // Reedireccionar a la página de clientes
                 location.reload();
               }
@@ -368,8 +332,8 @@
           id: id,
           _token: "{{ csrf_token() }}",
         },
-        success: function(data) {
-          if(data.success) {
+        success: function (data) {
+          if (data.success) {
             // Reedireccionar a la página de clientes
             location.reload();
           }

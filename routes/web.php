@@ -8,10 +8,12 @@ use App\Http\Controllers\CuotaController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ReferenciaController;
+use App\Http\Controllers\RolController;
 use App\Http\Controllers\TelefonoClienteController;
 use App\Http\Controllers\TelefonoConyugeController;
 use App\Http\Controllers\TelefonoNegocioController;
 use App\Http\Controllers\TelefonoReferenciaController;
+use App\Http\Controllers\UsuarioController;
 use App\Models\Credito;
 use Illuminate\Support\Facades\Route;
 
@@ -55,8 +57,6 @@ Route::resource('referencias',ReferenciaController::class);
 
 // Cliente Route
 Route::resource('clientes',ClienteController::class);
-Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'showEdit'])->name('clientes.showEdit');
-Route::get('/clientes/edit/{cliente}', [ClienteController::class, 'edit'])->name('clientes.edit');
 
 // Conyuge Route
 Route::resource('conyuge', ConyugeController::class);
@@ -89,5 +89,12 @@ Route::get('/creditos/reactivarCredito/{credito}', [CreditoController::class, 'r
 
 Route::get('/creditos/search', [CreditoController::class, 'buscarCredito'])->name('creditos.search');
 Route::resource('creditos', CreditoController::class);
+
+// Usuario Route
+Route::resource('usuarios', UsuarioController::class);
+Route::get('/usuarios/search', [UsuarioController::class, 'buscarUsuario'])->name('usuarios.search');
+
+// Rol Route
+Route::resource('roles', RolController::class);
 
 

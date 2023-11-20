@@ -7,78 +7,9 @@
 @section('title', 'Negocios')
 @section('content')
 
-  {{--  Header de botones --}}
-  <div class="d-flex align-items-center justify-content-between py-3">
-    <div class="flex-grow-1">
-      <div
-        class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column gap-4">
-        <div class="user-profile-info">
-          <h4 class="fw-bold m-0">
-            <span class="text-muted fw-light">Clientes /</span> Negocios
-            <span
-              class="text-muted fw-light fw">/ {{ $cliente->dui_cliente }} - {{ $cliente->primer_nom_cliente . ' ' . $cliente->primer_ape_cliente }}</span>
-
-          </h4>
-        </div>
-        <ul
-          class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
-          <li class="list-inline-item fw-semibold">
-            <button type="button" class="btn rounded-pill btn-icon btn-warning"
-                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd"
-                    data-bs-offset="0,4"
-                    data-bs-placement="top" data-bs-html="true" title="Ayuda">
-              <span class="tf-icons bx bx-question-mark"></span>
-            </button>
-          </li>
-          <li class="list-inline-item fw-semibold">
-            <a class="nav-link btn btn-secondary" type="button" href="{{ route('clientes.index') }}">
-              <i class="bx bx-arrow-back"></i> Volver
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-
-  {{-- Navegacion entre panel --}}
-  <ul class="nav nav-pills" role="tablist">
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('clientes.showEdit', $cliente->id_cliente) }}">
-        <i class="bx bx-user"></i> Cliente
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link {{ ($cliente->estado_civil_cliente != 'Casado') ? 'disabled' : '' }}" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('conyuge.edit', $cliente->id_cliente) }}">
-        <i class="bx bx-user-check"></i> Cónyuge
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link active" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('negocios.show', $cliente->id_cliente) }}">
-        <i class="tf-icons bx bx-store-alt"></i> Negocio
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('referencias.show', $cliente->id_cliente) }}">
-        <i class="bx bx-user-plus"></i> Referencias
-      </a>
-    </li>
-
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" type="button" aria-selected="false" tabindex="-1"
-         href="{{ route('bienes.show', $cliente->id_cliente) }}">
-        <i class="bx bx-building"></i> Bienes
-      </a>
-    </li>
-  </ul>
-  {{--  Fin --}}
+  @include('content.clientes._partials.header', ['title' => 'Negocios'])
+  @include('content.clientes._partials.info')
+  @include('content.clientes._partials.nav')
 
   @if(Session::has('success'))
     <div class="alert alert-primary d-flex m-0 mt-3" role="alert">
@@ -179,7 +110,7 @@
                               @else
                                 <a class="dropdown-item" href="javascript:void(0);"
                                    onclick="darAltaNegocio({{ $negocio->id_negocio }})">
-                                  <i class='bx bx-up-arrow-circle' ></i> Dar de alta
+                                  <i class='bx bx-up-arrow-circle'></i> Dar de alta
                                 </a>
                               @endif
                             </div>
@@ -260,7 +191,8 @@
                       <div class="col-md-6 mb-3">
                         <label for="nom_negocio" class="form-label">Nombre (*)</label>
                         <input type="text" name="nom_negocio" id="nom_negocio" class="form-control">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="nom_negocio_error"></div>
                         </div>
                       </div>
@@ -269,7 +201,8 @@
                         <label for="tiempo_negocio" class="form-label">Tiempo de operación (*)</label>
                         <input type="text" name="tiempo_negocio" id="tiempo_negocio" class="form-control"
                                placeholder="Cantidad en meses" onkeypress="return soloNumeros(event)">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="tiempo_negocio_error"></div>
                         </div>
                       </div>
@@ -279,7 +212,8 @@
                       <div class="col-md-12 mb-3">
                         <label class="form-label" for="dir_negocio">Dirección (*)</label>
                         <textarea class="form-control" name="dir_negocio" id="dir_negocio" rows="2"></textarea>
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="dir_negocio_error"></div>
                         </div>
                       </div>
@@ -290,7 +224,8 @@
                         <label for="buena_venta_negocio" class="form-label">Venta en dia bueno (*)</label>
                         <input type="text" name="buena_venta_negocio" id="buena_venta_negocio" class="form-control"
                                placeholder="0.00" onkeypress="return filterFloat(event,this);">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="buena_venta_negocio_error"></div>
                         </div>
                       </div>
@@ -299,7 +234,8 @@
                         <label for="mala_venta_negocio" class="form-label">Venta en dia malo (*)</label>
                         <input type="text" name="mala_venta_negocio" id="mala_venta_negocio" class="form-control"
                                placeholder="0.00" onkeypress="return filterFloat(event,this);">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="mala_venta_negocio_error"></div>
                         </div>
                       </div>
@@ -308,9 +244,11 @@
                     <div class="row">
                       <div class="col-md-6 mb-3">
                         <label for="ganancia_diaria_negocio" class="form-label">Ganancia diaria (*)</label>
-                        <input type="text" name="ganancia_diaria_negocio" id="ganancia_diaria_negocio" class="form-control"
+                        <input type="text" name="ganancia_diaria_negocio" id="ganancia_diaria_negocio"
+                               class="form-control"
                                placeholder="0.00" onkeypress="return filterFloat(event,this);">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="ganancia_diaria_negocio_error"></div>
                         </div>
                       </div>
@@ -319,7 +257,8 @@
                         <label for="inversion_diaria_negocio" class="form-label">Inversión diaria (*)</label>
                         <input type="text" name="inversion_diaria_negocio" id="inversion_diaria_negocio"
                                class="form-control" placeholder="0.00" onkeypress="return filterFloat(event,this);">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="inversion_diaria_negocio_error"></div>
                         </div>
                       </div>
@@ -338,16 +277,19 @@
                         <label for="gasto_emp_negocio" class="form-label">Pago de empleados (*)</label>
                         <input type="text" name="gasto_emp_negocio" id="gasto_emp_negocio" class="form-control"
                                placeholder="0.00" onkeypress="return filterFloat(event,this);">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="gasto_emp_negocio_error"></div>
                         </div>
                       </div>
 
                       <div class="col-md-6 mb-3">
                         <label for="gasto_alquiler_negocio" class="form-label">Alquiler de local (*)</label>
-                        <input type="text" name="gasto_alquiler_negocio" id="gasto_alquiler_negocio" class="form-control"
+                        <input type="text" name="gasto_alquiler_negocio" id="gasto_alquiler_negocio"
+                               class="form-control"
                                placeholder="0.00" onkeypress="return filterFloat(event,this);">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="gasto_alquiler_negocio_error"></div>
                         </div>
                       </div>
@@ -356,9 +298,11 @@
                     <div class="row">
                       <div class="col-md-4 mb-3">
                         <label for="gasto_impuesto_negocio" class="form-label">Impuestos (*)</label>
-                        <input type="text" name="gasto_impuesto_negocio" id="gasto_impuesto_negocio" class="form-control"
+                        <input type="text" name="gasto_impuesto_negocio" id="gasto_impuesto_negocio"
+                               class="form-control"
                                placeholder="0.00" onkeypress="return filterFloat(event,this);">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="gasto_impuesto_negocio_error"></div>
                         </div>
                       </div>
@@ -367,7 +311,8 @@
                         <label for="gasto_credito_negocio" class="form-label">Cuotas de créditos (*)</label>
                         <input type="text" name="gasto_credito_negocio" id="gasto_credito_negocio" class="form-control"
                                placeholder="0.00" onkeypress="return filterFloat(event,this);">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="gasto_credito_negocio_error"></div>
                         </div>
                       </div>
@@ -376,7 +321,8 @@
                         <label for="gasto_otro_negocio" class="form-label">Otros pagos (*)</label>
                         <input type="text" name="gasto_otro_negocio" id="gasto_otro_negocio" class="form-control"
                                placeholder="0.00" onkeypress="return filterFloat(event,this);">
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="gasto_otro_negocio_error"></div>
                         </div>
                       </div>
@@ -393,12 +339,14 @@
                     <div class="col-md-12">
                       <label class="form-label" for="tel_negocio" id="label-telefono-negocio">Teléfono (*)</label>
                       <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="tel_negocio" name="tel_negocio" placeholder="00000000"
+                        <input type="text" class="form-control" id="tel_negocio" name="tel_negocio"
+                               placeholder="00000000"
                                maxlength="8" onkeypress="return soloNumeros(event)"/>
                         <button type="button" class="btn btn-outline-info" id="btn-agregar-telefono-negocio">
                           <span class="tf-icons bx bx-plus"></span> Agregar
                         </button>
-                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div
+                          class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                           <div data-field="name" data-validator="notEmpty" id="tel_negocio_error"></div>
                         </div>
                       </div>
@@ -497,17 +445,17 @@
           data: data,
           dataType: "json",
           success: function (data) {
-            if(data.success === false){
+            if (data.success === false) {
 
-              if(data.input === 'nom_negocio') {
+              if (data.input === 'nom_negocio') {
                 $('#nom_negocio').addClass('is-invalid');
                 $('#nom_negocio_error').html(data.message);
-              }else{
+              } else {
                 $('#tabla-telefonos-negocio').addClass('border border-danger');
                 $('#tel_negocio').addClass('is-invalid');
                 $('#tel_negocio_error').html(data.message);
               }
-            }else{
+            } else {
               location.reload();
             }
           },
@@ -560,11 +508,11 @@
           $('#tel_negocio').addClass('is-invalid');
           $('#tel_negocio_error').html('El campo teléfono es obligatorio');
           return false;
-        }else if($('#tel_negocio').val().length < 8 || $('#tel_negocio').val().length > 8 || isNaN($('#tel_negocio').val())){
+        } else if ($('#tel_negocio').val().length < 8 || $('#tel_negocio').val().length > 8 || isNaN($('#tel_negocio').val())) {
           $('#tel_negocio').addClass('is-invalid');
           $('#tel_negocio_error').html('El campo teléfono debe tener 8 dígitos');
           return false;
-        }else{
+        } else {
           let datos = 'tel_negocio=' + $('#tel_negocio').val();
           datos += '&id_negocio=' + $('#id_negocio').val();
 
@@ -615,7 +563,7 @@
 
     });
 
-    function resetFormularioNegocio(){
+    function resetFormularioNegocio() {
       // Regresar Formulario al estado original
       $('#form-negocio input').removeClass('d-none is-invalid').removeAttr('disabled');
       $('#form-negocio label').removeClass('d-none');
@@ -649,7 +597,7 @@
       });
     }
 
-    function mostrarNegocio(data){
+    function mostrarNegocio(data) {
       $('#id_negocio').val(data.negocio.id_negocio);
       $('#nom_negocio').val(data.negocio.nom_negocio);
       $('#dir_negocio').val(data.negocio.dir_negocio);
@@ -745,9 +693,9 @@
         data: datos,
         success: function (data) {
           /* Mensaje de exito */
-          if(data.success === false) {
+          if (data.success === false) {
             $('#alert_tel_negocio').removeClass('d-none').html(data.message);
-          }else{
+          } else {
             mostrarTelefonosNegocio(data);
           }
 
@@ -778,7 +726,7 @@
       });
     }
 
-    function darAltaNegocio(id){
+    function darAltaNegocio(id) {
       let datos = 'id_negocio=' + id;
       datos += '&opcion=darAlta';
 

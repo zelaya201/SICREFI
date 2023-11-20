@@ -34,7 +34,7 @@
       "url": "#",
       "name": "Seguridad",
       "icon": "menu-icon tf-icons bx bx-lock",
-      "slug": "seguridad.index",
+      "slug": "usuarios.index",
       "submenu": [
         {
           "url": "/usuarios",
@@ -47,12 +47,6 @@
           "name": "Roles",
           "icon": "menu-icon tf-icons bx bx-user-circle",
           "slug": "roles.index"
-        },
-        {
-          "url": "/permisos",
-          "name": "Permisos",
-          "icon": "menu-icon tf-icons bx bx-lock-open",
-          "slug": "permisos.index"
         }
       ]
     },

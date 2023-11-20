@@ -150,7 +150,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_aliment_cliente">Alimentación (*)</label>
               <input type="text" class="form-control" name="gasto_aliment_cliente" id="gasto_aliment_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_aliment_cliente, 2) }}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ $cliente->gasto_aliment_cliente }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_aliment_cliente_error"></div>
@@ -160,7 +160,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_vivienda_cliente">Vivienda (*)</label>
               <input type="text" class="form-control" name="gasto_vivienda_cliente" id="gasto_vivienda_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_vivienda_cliente,2) }}"/>
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ $cliente->gasto_vivienda_cliente }}"/>
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_vivienda_cliente_error"></div>
@@ -172,7 +172,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_luz_cliente">Luz (*)</label>
               <input type="text" class="form-control" name="gasto_luz_cliente" id="gasto_luz_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_luz_cliente,2) }}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ $cliente->gasto_luz_cliente }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_luz_cliente_error"></div>
@@ -182,7 +182,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_agua_cliente">Agua (*)</label>
               <input type="text" class="form-control" name="gasto_agua_cliente" id="gasto_agua_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_agua_cliente,2) }}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ $cliente->gasto_agua_cliente }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_agua_cliente_error"></div>
@@ -194,7 +194,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_cable_cliente">Cable (*)</label>
               <input type="text" class="form-control" name="gasto_cable_cliente" id="gasto_cable_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_cable_cliente,2) }}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ $cliente->gasto_cable_cliente }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_cable_cliente_error"></div>
@@ -204,7 +204,7 @@
             <div class="col-md-6 mb-3">
               <label class="form-label" for="gasto_otro_cliente">Otros gastos (*)</label>
               <input type="text" class="form-control" name="gasto_otro_cliente" id="gasto_otro_cliente"
-                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ number_format($cliente->gasto_otro_cliente,2) }}">
+                     placeholder="0.00" onkeypress="return filterFloat(event,this);" value="{{ $cliente->gasto_otro_cliente }}">
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="gasto_otro_cliente_error"></div>
@@ -230,7 +230,7 @@
                      name="email_cliente"
                      id="email_cliente"
                      placeholder="admin@admin.com"
-                    value="{{$cliente->email_cliente}}"/>
+                     value="{{$cliente->email_cliente}}"/>
 
               <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 <div data-field="name" data-validator="notEmpty" id="email_cliente_error"></div>
@@ -256,24 +256,24 @@
               </tr>
               </thead>
               <tbody id="lista-telefonos-cliente">
-                @if(count($cliente->telefonos) > 0)
-                  @foreach($cliente->telefonos as $telefono)
-                    <tr>
-                      <td>{{$loop->iteration}}</td>
-                      <td>+503 {{$telefono->tel_cliente}}</td>
-                      <td>
-                        <button type='button' class='btn btn-outline-danger btn-sm'
-                        onclick="eliminarTelefono('{{ $telefono->id_tel_cliente }}', event)">
-                          <i class='tf-icons bx bx-trash'></i>
-                        </button>
-                      </td>
-                    </tr>
-                  @endforeach
-                @else
+              @if(count($cliente->telefonos) > 0)
+                @foreach($cliente->telefonos as $telefono)
                   <tr>
-                    <td colspan="3">No hay resultados</td>
+                    <td>{{$loop->iteration}}</td>
+                    <td>+503 {{$telefono->tel_cliente}}</td>
+                    <td>
+                      <button type='button' class='btn btn-outline-danger btn-sm'
+                              onclick="eliminarTelefono('{{ $telefono->id_tel_cliente }}', event)">
+                        <i class='tf-icons bx bx-trash'></i>
+                      </button>
+                    </td>
                   </tr>
-                @endif
+                @endforeach
+              @else
+                <tr>
+                  <td colspan="3">No hay resultados</td>
+                </tr>
+              @endif
               </tbody>
             </table>
 
@@ -290,37 +290,37 @@
 </div>
 
 <!-- Modal agregar telefono cliente -->
-  <div class="modal fade" id="telefono-modal-cliente" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-primary">
-          <h5 class="modal-title text-white text-center">Nuevo teléfono</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+<div class="modal fade" id="telefono-modal-cliente" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white text-center">Nuevo teléfono</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-        <div class="modal-body">
-          <input type="hidden" name="id_cliente" id="id_cliente" value="{{$cliente->id_cliente}}">
-          <div class="row">
-            <div class="col mb-3">
-              <label for="tel_cliente" class="form-label">Teléfono (*)</label>
-              <input type="text" id="tel_cliente" name="tel_cliente" class="form-control" placeholder="00000000"
-                     maxlength="8" onkeypress="return soloNumeros(event)">
-              <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                <div data-field="name" data-validator="notEmpty" id="mensaje_tel_cliente"></div>
-              </div>
+      <div class="modal-body">
+        <input type="hidden" name="id_cliente" id="id_cliente" value="{{$cliente->id_cliente}}">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="tel_cliente" class="form-label">Teléfono (*)</label>
+            <input type="text" id="tel_cliente" name="tel_cliente" class="form-control" placeholder="00000000"
+                   maxlength="8" onkeypress="return soloNumeros(event)">
+            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+              <div data-field="name" data-validator="notEmpty" id="mensaje_tel_cliente"></div>
             </div>
           </div>
+        </div>
 
-          <div class="col-12 text-center">
-            <button type="button" class="btn btn-primary me-sm-3 me-1 mt-3" id="submit_tel_cliente"><span
-                class="tf-icons bx bx-plus"></span>
-              Agregar
-            </button>
-            <button type="button" class="btn btn-label-secondary mt-3" data-bs-dismiss="modal"
-                    aria-label="Close">Cerrar
-            </button>
-          </div>
+        <div class="col-12 text-center">
+          <button type="button" class="btn btn-primary me-sm-3 me-1 mt-3" id="submit_tel_cliente"><span
+              class="tf-icons bx bx-plus"></span>
+            Agregar
+          </button>
+          <button type="button" class="btn btn-label-secondary mt-3" data-bs-dismiss="modal"
+                  aria-label="Close">Cerrar
+          </button>
         </div>
       </div>
     </div>
   </div>
+</div>

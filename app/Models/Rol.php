@@ -9,6 +9,11 @@ class Rol extends Model
 {
     use HasFactory;
 
+
+    protected $table = 'rol';
+
+    protected $primaryKey = 'id_rol';
+
     public function usuarios(){
       return $this->hasMany(Usuario::class, 'id_rol');
     }

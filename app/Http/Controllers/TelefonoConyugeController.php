@@ -35,6 +35,15 @@ class TelefonoConyugeController extends Controller
           if ($request->session()->has('telefonos_conyuge')) {
             end($array);
             $size = key($array) + 1;
+
+            // Verificar si el telefono ya existe
+            foreach ($array as $key => $value) {
+              if($value['tel_conyuge'] == $request->input('tel_conyuge')){
+                return [
+                  'success' => false, 'message' => 'El teléfono ya existe'
+                ];
+              }
+            }
           }
 
           $array = Arr::add($array,
