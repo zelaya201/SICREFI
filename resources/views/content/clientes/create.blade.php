@@ -230,7 +230,6 @@
        * FIN VALIDACIONES DE FORMULARIO
        */
 
-
       /** EVENTOS DE BOTONES CLIENTE **/
       btn_guardar_cliente.click(function (e) {
         e.preventDefault();
@@ -263,11 +262,11 @@
               }
 
               alerta_error.removeClass('d-none').addClass('d-flex');
-              menubar.html(data.message);
+
             }
           },
           error: function (xhr) {
-            let data = xhr.toJSON();
+            let data = xhr.responseJSON
             if ($.isEmptyObject(data.errors) === false) {
               let i = 0;
               let isCliente = false;
@@ -449,6 +448,8 @@
       }
 
       tabla_telefonos_cliente.removeClass('border border-danger');
+      cant_errores_conyuge.addClass('d-none');
+      alerta_error.removeClass('d-flex').addClass('d-none');
       lista_telefonos_cliente.html(html);
     }
 
@@ -481,8 +482,6 @@
     function mostrarTelefonosConyuge(data) {
       let html = "";
       let i = 1;
-
-      console.log(data);
 
       $.each(data, function (key, value) {
         html += '<tr id="ref_' + key + '">';

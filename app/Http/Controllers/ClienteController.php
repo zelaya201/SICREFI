@@ -16,6 +16,7 @@ use App\Models\TelReferencia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class ClienteController extends Controller
 {
@@ -46,7 +47,11 @@ class ClienteController extends Controller
       $clientes->map(function ($cliente) {
         $cliente->conyuge = false;
 
-        $cliente->nom_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
+        $cliente->nom_completo = $cliente->primer_nom_cliente . ' '
+          . $cliente->segundo_nom_cliente . ' '
+          . $cliente->tercer_nom_cliente . ' '
+          . $cliente->primer_ape_cliente . ' '
+          . $cliente->segundo_ape_cliente;
 
         if($cliente->estado_civil_cliente == 'Casado') {
           $cliente->conyuge = true;
