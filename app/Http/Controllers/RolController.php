@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rol;
 use Illuminate\Http\Request;
 
 class RolController extends Controller
@@ -13,7 +14,11 @@ class RolController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Rol::query()
+            ->orderBy('nom_rol', 'ASC')
+            ->get();
+
+        return response(view('content.roles.index', compact('roles')));
     }
 
     /**
@@ -23,7 +28,7 @@ class RolController extends Controller
      */
     public function create()
     {
-        //
+      return response(view('content.roles.create'));
     }
 
     /**

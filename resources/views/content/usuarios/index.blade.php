@@ -81,6 +81,7 @@
                   <th>Correo electrónico</th>
                   <th>Rol</th>
                   <th>Estado</th>
+                  <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody id="clientes_tbody" class="alldata">
