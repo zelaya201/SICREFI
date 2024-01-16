@@ -27,12 +27,16 @@
           <!-- /Logo -->
           <h4 class="mb-2 text-center">Reestablecer contraseña</h4>
             <p class="mb-4">Ingresa el correo electrónico asociado a tu cuenta para reestablecer tu contraseña.</p>
-          <form id="formAuthentication" class="mb-3" action="javascript:void(0)" method="GET">
+          <form id="formAuthentication" class="mb-3" action="{{ route('sendMail') }}" method="POST">
+            @csrf
+
+
+
             <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico</label>
-              <input type="text" class="form-control" id="email" name="email" placeholder="ejemplo@ejemplo.com" autofocus>
+              <label for="email_usuario" class="form-label">Correo electrónico</label>
+              <input type="text" class="form-control" id="email_usuario" name="email_usuario" placeholder="ejemplo@ejemplo.com" autofocus>
             </div>
-            <button class="btn btn-primary d-grid w-100">Enviar correo electrónico</button>
+            <button type="submit" class="btn btn-primary d-grid w-100">Enviar correo electrónico</button>
           </form>
           <div class="text-center">
             <a href="{{ route('login') }}" class="d-flex align-items-center justify-content-center">

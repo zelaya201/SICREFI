@@ -31,24 +31,10 @@
       "menuHeader": "Configuración"
     },
     {
-      "url": "#",
-      "name": "Seguridad",
-      "icon": "menu-icon tf-icons bx bx-lock",
-      "slug": "usuarios.index",
-      "submenu": [
-        {
-          "url": "/usuarios",
-          "name": "Usuarios",
-          "icon": "menu-icon tf-icons bx bx-user",
-          "slug": "usuarios.index"
-        },
-        {
-          "url": "/roles",
-          "name": "Roles",
-          "icon": "menu-icon tf-icons bx bx-user-circle",
-          "slug": "roles.index"
-        }
-      ]
+      "url": "/usuarios",
+      "name": "Usuarios",
+      "icon": "menu-icon tf-icons bx bx-user",
+      "slug": "usuarios.index"
     },
     {
       "url": "#",

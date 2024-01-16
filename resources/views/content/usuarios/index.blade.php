@@ -48,20 +48,27 @@
               <div class="col-md-6">
                 <div class="col-md-6">
                   <label>
-                    <input type="search" class="form-control"  id="search_bar" placeholder="Buscar por usuario...">
+                    <input type="search" class="form-control" id="search_bar" placeholder="Buscar por usuario...">
                   </label>
                 </div>
               </div>
 
-              <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
+              <div
+                class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
                 <div class="invoice_status mb-3 mb-md-0">
                   <select id="estado" name="estado" class="form-select">
-                    <option value="Vigente" {{ session('estado_filtro') === 'Activos' ? 'selected' : '' }} class="text-capitalize">Activos</option>
-                    <option value="En mora" {{ session('estado_filtro') === 'Inactivos' ? 'selected' : '' }} class="text-capitalize">Inactivos</option>
+                    <option value="Vigente"
+                            {{ session('estado_filtro') === 'Activos' ? 'selected' : '' }} class="text-capitalize">
+                      Activos
+                    </option>
+                    <option value="Inactivo"
+                            {{ session('estado_filtro') === 'Inactivos' ? 'selected' : '' }} class="text-capitalize">
+                      Inactivos
+                    </option>
                     <option value="Todos" {{ session('estado_filtro') === 'Todos' ? 'selected' : '' }}>Todos</option>
                   </select>
                 </div>
-                <div class="dataTables_length" ><label>
+                <div class="dataTables_length"><label>
                     <select id="mostrar" name="mostrar" class="form-select">
                       <option value="">Mostrar</option>
                       <option value="10" {{ session('mostrar') == 10 ? 'selected' : '' }}>10</option>
@@ -72,7 +79,8 @@
             </div>
 
             <div id="table_div">
-              <table id="usuarios_table" class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
+              <table id="usuarios_table"
+                     class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
                 <thead>
                 <tr>
                   <th>#</th>
@@ -90,15 +98,11 @@
                   $contador = 1;
                   //$contador = 1;
                 @endphp
-                @if($usuarios->isEmpty())
-                  <tr>
-                    <td colspan="8" class="text-center">No hay registros</td>
-                  </tr>
-                @else
+
                   @foreach($usuarios as $usuario)
                     <tr style="text-align: center;">
                       <td>{{ $contador }}</td>
-                      <td>{{ $usuario->nom_usuario }}</td>
+                      <td>{{ $usuario->nom_usuario }} {{ $usuario->ape_usuario }}</td>
 
                       <td>{{ $usuario->nick_usuario }}</td>
                       <td>{{ $usuario->email_usuario }}</td>
@@ -118,20 +122,24 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </a>
                           <div class="dropdown-menu">
-                              <a class="dropdown-item" href="javascript:void(0);"><i
-                                  class="bx bx-detail me-1"></i> editar</a>
-                          </div>
+                            <a class="dropdown-item" href="{{ route('usuarios.cambiarCredenciales', $usuario->id_usuario) }}"><i
+                                class="bx bx-lock me-1"></i> Cambiar contraseña</a>
 
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="javascript:void(0);"><i
-                                class="bx bx-detail me-1"></i> editar</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('usuarios.edit', $usuario->id_usuario) }}"><i
+                                class="bx bx-edit-alt me-1"></i> Editar</a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item text-danger" href="javascript:void(0);" id="btn_darbaja"><i
+                                class="bx bx-trash me-1"></i> Dar de baja</a>
                           </div>
                         </div>
                       </td>
                     </tr>
                     @php $contador++; @endphp
                   @endforeach
-                @endif
+
                 </tbody>
 
                 <tbody id="searchdata" class="searchdata"></tbody>
@@ -181,14 +189,57 @@
     @section('page-script')
       <script>
         $(document).ready(function () {
+
+
+          const btn_darbaja = $('#btn_darbaja');
+
+          btn_darbaja.on('click', function () {
+            const id_usuario = $(this).closest('tr').find('td').eq(0).text();
+            const nom_usuario = $(this).closest('tr').find('td').eq(1).text();
+            const estado_usuario = $(this).closest('tr').find('td').eq(5).text();
+
+            if (estado_usuario === 'Activo') {
+              $('#icono').html('<i class="bx bx-trash"></i>');
+              $('#titulo').html('Dar de baja');
+              $('#descripcion').html('¿Está seguro que desea dar de baja al usuario <b>' + nom_usuario + '</b>?');
+              $('#btn_accion').html('Dar de baja');
+              $('#btn_accion').addClass('btn-danger');
+              $('#btn_accion').removeClass('btn-info');
+            } else {
+              $('#icono').html('<i class="bx bx-check"></i>');
+              $('#titulo').html('Dar de alta');
+              $('#descripcion').html('¿Está seguro que desea dar de alta al usuario <b>' + nom_usuario + '</b>?');
+              $('#btn_accion').html('Dar de alta');
+              $('#btn_accion').addClass('btn-info');
+              $('#btn_accion').removeClass('btn-danger');
+            }
+
+            $('#modal_usuario').modal('show');
+
+            $('#btn_accion').on('click', function () {
+              $.ajax({
+                type: 'GET',
+                url: '{{ route('usuarios.darBaja', ':id') }}' . replace(':id', id_usuario),
+                data: {
+                  'id_usuario': id_usuario,
+                  'estado_usuario': (estado_usuario === 'Activo' ? 'Inactivo' : 'Activo')
+                },
+
+                success: function (data) {
+                  location.reload();
+                }
+              });
+            })
+          })
+
           /* Filtro de busqueda */
           $('#search_bar').keyup(function () {
             $value = $(this).val();
 
-            if($value){
+            if ($value) {
               $('.searchdata').show();
               $('.alldata').hide();
-            }else {
+            } else {
               $('.searchdata').hide();
               $('.alldata').show();
             }
@@ -209,11 +260,11 @@
         });
 
         /* Filtro de estado y paginacion */
-        $('#estado').on('change', function() {
+        $('#estado').on('change', function () {
           $(this).closest('#filter_index').submit();
         })
 
-        $('#mostrar').on('change', function() {
+        $('#mostrar').on('change', function () {
           $(this).closest('#filter_index').submit();
         })
       </script>

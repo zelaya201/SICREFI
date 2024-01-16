@@ -17,7 +17,7 @@
 
 @section('content')
   <form action="{{ route('creditos.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
-        id="form-credito">
+        id="form-coop">
     @csrf
 
     <div class="d-flex align-items-center justify-content-between py-3">
@@ -40,7 +40,7 @@
 
             <li class="list-inline-item fw-semibold">
 
-              <button class="nav-link btn btn-primary load" type="button" id="btn_guardar_credito">
+              <button class="nav-link btn btn-primary load" type="button" id="btn_editar_coop">
                 <span class="tf-icons bx bx-save"></span>
                 Modificar
               </button>
@@ -72,12 +72,18 @@
             <div class="row">
               <div class="col-md-8 mb-3">
                 <label class="form-label" for="nom_coop">Nombre (*)</label>
-                <input type="text" class="form-control" name="nom_coop" id="nom_coop" value="">
+                <input type="text" class="form-control" name="nom_coop" id="nom_coop" value="{{ $cooperativa->nom_coop }}">
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                  <div data-field="name" data-validator="notEmpty" id="nom_coop_error"></div>
+                </div>
               </div>
 
               <div class="col-md-4 mb-3">
                 <label class="form-label" for="tel_coop">Teléfono (*)</label>
-                <input type="text" class="form-control" placeholder="00000000" name="tel_coop" id="tel_coop" value="">
+                <input type="text" class="form-control" placeholder="00000000" name="tel_coop" id="tel_coop" value="{{ $cooperativa->tel_coop }}">
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                  <div data-field="name" data-validator="notEmpty" id="tel_coop_error"></div>
+                </div>
               </div>
             </div>
 
@@ -85,7 +91,7 @@
               <div class="col-md-12 mb-3">
                 <label class="form-label" for="dir_coop">Dirección (*)</label>
                 <textarea class="form-control" name="dir_coop" id="dir_coop" rows="2"
-                          placeholder="Calle / Municipio / Departamento"></textarea>
+                          placeholder="Calle / Municipio / Departamento">{{ $cooperativa->dir_coop }}</textarea>
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                   <div data-field="name" data-validator="notEmpty" id="dir_coop_error"></div>
                 </div>
@@ -109,5 +115,41 @@
 
 @section('page-script')
 
+  <script>
+
+    const btn_editar_coop = $('#btn_editar_coop');
+    const form_coop = $('#form-coop');
+
+    /* ############################################ */
+    btn_editar_coop.on('click', function () {
+      // REGISTRAR USUARIO
+
+      $.ajax({
+        url: '{{ route("configuracion.update", $cooperativa->id_coop) }}',
+        type: 'put',
+        dataType: 'json',
+        data: form_coop.serialize(),
+        success: function (data) {
+          if (data.success) {
+            window.location.href = '{{ route("configuracion.index") }}';
+          }
+        },
+        error: function (xhr) {
+          var data = xhr.responseJSON;
+
+          if ($.isEmptyObject(data.errors) === false) {
+            $.each(data.errors, function (key, value) {
+              // Mostrar errores en los inputs
+              $('#' + key).addClass('is-invalid');
+              $('#' + key + '_error').html(value); // Agregar el mensaje de error
+              $('#' + key + '_label').addClass('border border-danger rounded')
+            });
+          }
+
+        }
+      });
+    });
+    /* ############################################ */
+  </script>
 
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cooperativa;
 use Illuminate\Http\Request;
 
 class ConfiguracionController extends Controller
@@ -14,7 +15,9 @@ class ConfiguracionController extends Controller
      */
     public function index()
     {
-        return response(view('content.configuracion.index'));
+        $cooperativa = Cooperativa::all()->first();
+
+        return response(view('content.configuracion.index', compact('cooperativa')));
     }
 
     /**
@@ -69,7 +72,17 @@ class ConfiguracionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate(Cooperativa::$rules, Cooperativa::$messages);
+
+        $cooperativa = Cooperativa::find($id);
+
+        $cooperativa->fill($request->all());
+
+        if ($cooperativa->save()) {
+            return ['success' => true];
+        }
+
+        return ['success' => false];
     }
 
     /**

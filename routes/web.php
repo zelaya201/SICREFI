@@ -7,6 +7,7 @@ use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ConyugeController;
 use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\CuotaController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ReferenciaController;
@@ -32,9 +33,10 @@ use Illuminate\Support\Facades\Route;
 
 $controller_path = 'App\Http\Controllers';
 
-Route::get('/', function () {
-    return view('content.index');
-})->name('inicio');
+// Index Route
+Route::get('/', [IndexController::class, 'index'])->name('inicio');
+
+Route::get('/index', [IndexController::class, 'index'])->name('inicio');
 
 // Acerca de Route
 Route::get('/acerca-de', function () {
@@ -44,6 +46,11 @@ Route::get('/acerca-de', function () {
 // Autenticacion Route
 Route::get('/inicioSesion', [AutenticacionController::class, 'login'])
   ->name('login');
+
+Route::post('/inicioSesion', [AutenticacionController::class, 'postLogin'])->name('authenticate');
+
+// Envio de correo
+Route::post('/enviarCorreo', [AutenticacionController::class, 'sendMail'])->name('sendMail');
 
 // Logout Route
 Route::get('/cerrarSesion', [AutenticacionController::class, 'logout'])
@@ -56,6 +63,10 @@ Route::get('/reestablecerCredenciales', [AutenticacionController::class, 'resetP
 // Change Password Route
 Route::get('/cambiarCredenciales', [AutenticacionController::class, 'changePassword'])
   ->name('changePassword');
+
+// Update Password Route
+Route::post('/actualizarCredenciales', [AutenticacionController::class, 'updatePassword'])
+  ->name('updatePassword');
 
 // PDF Route
 Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDeclaracion'])->name('generar-declaracion');
@@ -80,6 +91,9 @@ Route::resource('referencias',ReferenciaController::class);
 
 // Cliente Route
 Route::resource('clientes',ClienteController::class);
+
+// Dar de alta un cliente
+Route::post('/clientes/darAlta/{cliente}', [ClienteController::class, 'darAlta'])->name('clientes.darAlta');
 
 // Conyuge Route
 Route::resource('conyuge', ConyugeController::class);
@@ -116,6 +130,16 @@ Route::resource('creditos', CreditoController::class);
 // Usuario Route
 Route::resource('usuarios', UsuarioController::class);
 Route::get('/usuarios/search', [UsuarioController::class, 'buscarUsuario'])->name('usuarios.search');
+
+
+Route::get('/usuarios/cambiarClave/{id}', [UsuarioController::class, 'cambiarClave'])
+  ->name('usuarios.cambiarClave');
+
+Route::get('/usuarios/cambiarCredenciales/{id}', [UsuarioController::class, 'cambiarCredenciales'])
+  ->name('usuarios.cambiarCredenciales');
+
+// Dar de baja un usuario
+Route::get('/usuarios/darBaja/{usuario}', [UsuarioController::class, 'cambiarEstado'])->name('usuarios.darBaja');
 
 // Rol Route
 Route::resource('roles', RolController::class);

@@ -27,7 +27,11 @@
             <!-- /Logo -->
             <h4 class="mb-2 text-center mt-0">Cambiar contraseña</h4>
             <p class="mb-4"></p>
-            <form id="formAuthentication" class="mb-3" action="javascript:void(0)" method="GET">
+            <form id="formAuthentication" class="mb-3" action="{{ route('updatePassword') }}" method="POST">
+              @csrf
+
+              <input type="hidden" value="{{ $token }}" name="token">
+
               <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
                   <label class="form-label" for="password">Nueva contraseña</label>
@@ -41,15 +45,15 @@
 
               <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
-                  <label class="form-label" for="password">Repetir contraseña</label>
+                  <label class="form-label" for="password_confirmation">Repetir contraseña</label>
                 </div>
                 <div class="input-group input-group-merge">
-                  <input type="password" id="password" class="form-control" name="password" placeholder="************"
+                  <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" placeholder="************"
                          aria-describedby="password"/>
                   <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                 </div>
               </div>
-              <button class="btn btn-primary d-grid w-100">Cambiar contraseña</button>
+              <button class="btn btn-primary d-grid w-100" disabled>Cambiar contraseña</button>
             </form>
             <div class="text-center">
               <a href="{{ route('login') }}" class="d-flex align-items-center justify-content-center">
@@ -63,4 +67,43 @@
       </div>
     </div>
   </div>
+@endsection
+
+@section('page-script')
+  <!-- Page js files -->
+  <script>
+    password = $('#password');
+    password_confirmation = $('#password_confirmation');
+
+    // Verificar que las contraseñas coincidan
+    password_confirmation.on('keyup', function () {
+      validatePassword();
+    });
+
+    password.on('keyup', function () {
+      validatePassword();
+    });
+
+    function validatePassword() {
+      if (password.val() === password_confirmation.val() && password.val() !== '' && password_confirmation.val() !== '') {
+        password_confirmation.removeClass('is-invalid');
+        password_confirmation.addClass('is-valid');
+
+        password.removeClass('is-invalid');
+        password.addClass('is-valid');
+
+        $('#formAuthentication button').prop('disabled', false);
+      } else {
+        password_confirmation.removeClass('is-valid');
+        password_confirmation.addClass('is-invalid');
+
+        password.removeClass('is-valid');
+        password.addClass('is-invalid');
+
+        $('#formAuthentication button').prop('disabled', true);
+      }
+    }
+
+
+  </script>
 @endsection

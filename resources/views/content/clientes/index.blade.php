@@ -224,9 +224,13 @@
 
                     @php $contador++; @endphp
                   @endforeach
-                  <tr class='noSearch' style="display:none; text-align: center">
-                    <td colspan="6"></td>
-                  </tr>
+
+
+                  @if(sizeof($clientes) < 1)
+                    <tr>
+                      <td colspan="6" class="text-center">No hay registros disponibles</td>
+                    </tr>
+                  @endif
                   </tbody>
                 </table>
 
@@ -333,8 +337,8 @@
         let id = $('#id_cliente_alta').val();
 
         $.ajax({
-          url: "{{ route('clientes.update', '') }}/" + id,
-          type: 'PUT',
+          url: "{{ route('clientes.darAlta', '') }}/" + id,
+          type: 'POST',
           data: {
             id : id,
             _token: "{{ csrf_token() }}",

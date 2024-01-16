@@ -47,7 +47,7 @@
                   <h5 class="text-nowrap mb-2 text">Monto cartera</h5>
                 </div>
                 <div class="mt-sm-auto">
-                  <h3 class="mb-0 text-primary">$0.00</h3>
+                  <h3 class="mb-0 text-primary">${{ number_format($montoCartera, 2) }}</h3>
                 </div>
               </div>
               <div id="profileReportChart"></div>
@@ -65,7 +65,7 @@
                   <h5 class="text-nowrap mb-2 text">Cobros</h5>
                 </div>
                 <div class="mt-sm-auto">
-                  <h3 class="mb-0 text-primary">0</h3>
+                  <h3 class="mb-0 text-primary">{{ $cobros }}</h3>
                 </div>
               </div>
               <div id="profileReportChart"></div>
@@ -83,7 +83,7 @@
                   <h5 class="text-nowrap mb-2 text">Usuarios</h5>
                 </div>
                 <div class="mt-sm-auto">
-                  <h3 class="mb-0 text-primary">0</h3>
+                  <h3 class="mb-0 text-primary">{{ $usuarios }}</h3>
                 </div>
               </div>
               <div id="profileReportChart"></div>
@@ -99,6 +99,21 @@
 
 @section('page-script')
   <script>
+
+    var clientes = <?php echo json_encode($clientes); ?>;
+    var datosClientes = []
+
+    for (var i = 0; i < clientes.length; i++) {
+      datosClientes.push(parseInt(clientes[i].total))
+    }
+
+    var creditos = <?php echo json_encode($creditos); ?>;
+    var datosCreditos = []
+
+    for (var i = 0; i < creditos.length; i++) {
+      datosCreditos.push(parseInt(creditos[i].total))
+    }
+
     let cardColor, headingColor, axisColor, shadeColor, borderColor;
 
     cardColor = config.colors.white;
@@ -111,11 +126,11 @@
         series: [
           {
             name: 'Créditos',
-            data: [30, 40, 25, 50, 49, 21, 70, 12, 43, 12, 41, 41, 53]
+            data: datosCreditos
           },
           {
             name: 'Clientes',
-            data: [30, -18, -9, -14, -5, -17, -15]
+            data: datosClientes
           }
         ],
         chart: {

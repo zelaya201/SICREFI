@@ -81,11 +81,10 @@
                   <th>Acciones</th>
                 </tr>
                 </thead>
-                <tbody id="roles_tbody" class="alldata">
+                <tbody id="roles_tbody" >
                 @php
                   $registrosPerPage = 10;
                   $contador = 1;
-                  //$contador = 1;
                 @endphp
                 @if($roles->isEmpty())
                   <tr>
@@ -98,9 +97,9 @@
                       <td>{{ $rol->nom_rol }}</td>
                       <td>
                         @if($rol->estado_rol == 'Activo')
-                          <span class="badge rounded-pill bg-success">Activo</span>
+                          <span class="badge rounded-pill bg-label-success">Activo</span>
                         @else
-                          <span class="badge rounded-pill bg-danger">Inactivo</span>
+                          <span class="badge rounded-pill bg-label-danger">Inactivo</span>
                         @endif
                       </td>
 
@@ -113,6 +112,10 @@
                           <div class="dropdown-menu">
                             <a class="dropdown-item" href="javascript:void(0);"><i
                                 class="bx bx-edit-alt me-1"></i> Editar</a>
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item text-danger" href="javascript:void(0);" id="btn_dar_baja"><i
+                                class="bx bx-trash me-1"></i> Dar de baja</a>
                           </div>
                         </div>
                       </td>

@@ -27,10 +27,32 @@
             <h4 class="mb-2 text-center">Inicio de sesión</h4>
             <p class="mb-4">Por favor inicia sesión con tus credenciales</p>
 
-            <form id="formAuthentication" class="mb-3" action="{{url('/')}}" method="GET">
+            @foreach($errors as $error)
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> {{ $error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            @endforeach
+
+            @if(session('success'))
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Exito!</strong> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            @endif
+
+            <form id="formAuthentication" class="mb-3" action="" method="POST">
+              @csrf
               <div class="mb-3">
                 <label for="email" class="form-label">Usuario o correo electronico</label>
-                <input type="text" class="form-control" id="email" name="email-username" placeholder="" autofocus>
+                <input type="text" class="form-control @error('email-usernae') is-invalid @enderror" id="email" name="email-username"
+                       value="{{ old('email-username') }}"
+                       placeholder="" autofocus>
+                @error('email-username')
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                  <div data-field="name" data-validator="notEmpty" id="id_rol_error">{{ $message }}</div>
+                </div>
+                @enderror
               </div>
               <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
@@ -40,7 +62,9 @@
                   </a>
                 </div>
                 <div class="input-group input-group-merge">
-                  <input type="password" id="password" class="form-control" name="password" placeholder="************"
+                  <input type="password" id="password" class="form-control"
+                         value="{{ old('password') }}"
+                         name="password" placeholder="************"
                          aria-describedby="password"/>
                   <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                 </div>

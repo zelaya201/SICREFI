@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email_usuario',175)->unique();
             $table->string('nick_usuario',75)->unique();
             $table->string('clave_usuario',255);
-            $table->string('token_usuario',8)->nullable();
+            $table->longText('token_usuario')->nullable();
             $table->string('estado_usuario',75);
             $table->bigInteger('id_rol')->unsigned();
             $table->foreign('id_rol')

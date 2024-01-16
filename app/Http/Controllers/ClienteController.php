@@ -326,18 +326,7 @@ class ClienteController extends Controller
 
       return ['success' => false, 'message' => 'Error al modificar cliente', 'errors' => $cliente->errors()];
 
-//    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
-//    $cliente->fill(['estado_cliente' => 'Activo']);
-//
-//    if($cliente->save()) {
-//      /* Mensaje Flash */
-//      Session::flash('success', '');
-//      Session::flash('mensaje', 'Cliente restaurado con éxito');
-//
-//      return ['success' => true];
-//    }
-//
-//    return ['success' => false];
+
   }
 
   /**
@@ -369,5 +358,23 @@ class ClienteController extends Controller
     }
 
     return ['success' => false];
+  }
+
+  public function darAlta(int $id){
+    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
+    $cliente->fill(['estado_cliente' => 'Activo']);
+
+    if($cliente->save()) {
+      /* Mensaje Flash */
+      Session::flash('success', '');
+      Session::flash('mensaje', 'Cliente dado de alta con éxito');
+
+      return ['success' => true];
+    }
+
+    return ['success' => false];
+
+
+
   }
 }
