@@ -57,7 +57,7 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        //
+      return response(view('content.usuarios.create'));
     }
 
     /**

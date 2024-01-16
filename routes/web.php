@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AutenticacionController;
 use App\Http\Controllers\BienController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ConyugeController;
 use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\CuotaController;
@@ -33,6 +35,27 @@ $controller_path = 'App\Http\Controllers';
 Route::get('/', function () {
     return view('content.index');
 })->name('inicio');
+
+// Acerca de Route
+Route::get('/acerca-de', function () {
+    return view('content.acerca-de');
+})->name('acerca-de');
+
+// Autenticacion Route
+Route::get('/inicioSesion', [AutenticacionController::class, 'login'])
+  ->name('login');
+
+// Logout Route
+Route::get('/cerrarSesion', [AutenticacionController::class, 'logout'])
+  ->name('logout');
+
+// Reset Password Route
+Route::get('/reestablecerCredenciales', [AutenticacionController::class, 'resetPassword'])
+  ->name('resetPassword');
+
+// Change Password Route
+Route::get('/cambiarCredenciales', [AutenticacionController::class, 'changePassword'])
+  ->name('changePassword');
 
 // PDF Route
 Route::get('generar-declaracion/{credito}', [PDFController::class, 'generarDeclaracion'])->name('generar-declaracion');
@@ -97,4 +120,6 @@ Route::get('/usuarios/search', [UsuarioController::class, 'buscarUsuario'])->nam
 // Rol Route
 Route::resource('roles', RolController::class);
 
+// Configuracion Route
+Route::resource('configuracion', ConfiguracionController::class);
 

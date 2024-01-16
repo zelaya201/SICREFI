@@ -232,9 +232,9 @@
                 <label for="tel_conyuge" class="form-label">Teléfono (*)</label>
                 <input type="text" id="tel_conyuge" name="tel_conyuge" class="form-control" placeholder="00000000"
                        maxlength="8">
-                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-                  <div data-field="name" data-validator="notEmpty" id="mensaje-telefono-conyuge"></div>
-                </div>
+                  <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                    <div data-field="name" data-validator="notEmpty" id="mensaje-telefono-conyuge"></div>
+                  </div>
               </div>
             </div>
 

@@ -57,10 +57,16 @@
       "slug": "bitacora.index"
     },
     {
-      "url": "#",
+      "url": "/configuracion",
       "name": "Ajustes",
       "icon": "menu-icon tf-icons bx bx-cog",
       "slug": "configuracion.index"
+    },
+    {
+      "url": "/acerca-de",
+      "name": "Acerca de",
+      "icon": "menu-icon tf-icons bx bx-info-circle",
+      "slug": "acerca-de"
     }
   ]
 }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OpcionAcceso;
-use App\Models\Rol;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class RolController extends Controller
+class ConfiguracionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,11 +14,7 @@ class RolController extends Controller
      */
     public function index()
     {
-        $roles = Rol::query()
-            ->orderBy('nom_rol', 'ASC')
-            ->get();
-
-        return response(view('content.roles.index', compact('roles')));
+        return response(view('content.configuracion.index'));
     }
 
     /**
@@ -29,12 +24,7 @@ class RolController extends Controller
      */
     public function create()
     {
-
-      $opciones = OpcionAcceso::all();
-
-      $opciones->load('detalles');
-
-      return response(view('content.roles.create', compact('opciones')));
+        //
     }
 
     /**

@@ -9,6 +9,10 @@ class OpcionAcceso extends Model
 {
     use HasFactory;
 
+    protected $table = 'opcion_acceso';
+
+    protected $primaryKey = 'id_opcion_acceso';
+
     public function rol() {
       return $this->belongsTo(Rol::class, 'id_rol');
     }
