@@ -43,6 +43,12 @@
       "slug": "bitacora.index"
     },
     {
+      "url": "/copias-de-seguridad",
+      "name": "Copias de seguridad",
+      "icon": "menu-icon tf-icons bx bx-cloud-download",
+      "slug": "copias-de-seguridad.index"
+    },
+    {
       "url": "/configuracion",
       "name": "Ajustes",
       "icon": "menu-icon tf-icons bx bx-cog",

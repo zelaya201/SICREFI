@@ -209,11 +209,13 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item text-danger" href="javascript:void(0);" id="btn_dar_baja" onclick="darDeBaja('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}')"><i
+                            <a class="dropdown-item text-danger" href="javascript:void(0);" id="btn_dar_baja"
+                               onclick="cambiarEstado('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}', '{{ $cliente->estado_cliente }}')"><i
                                 class="bx bx-trash me-1"></i> Dar de baja</a>
 
                             @else
-                              <a class="dropdown-item" href="javascript:void(0);" onclick="darDeAlta('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}')">
+                              <a class="dropdown-item" href="javascript:void(0);"
+                                 onclick="cambiarEstado('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}', '{{ $cliente->estado_cliente }}')">
                                 <i class='bx bxs-upvote' ></i> Dar de alta
                               </a>
                             @endif
@@ -246,16 +248,35 @@
         </div>
       </form>
 
-      <!-- Modal Eliminar -->
-      @include('content.clientes._partials.eliminar_cliente')
-
-      <!-- Modal Dar de alta -->
-      @include('content.clientes._partials.dar_alta_cliente')
+      <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header border-bottom">
+              <h4 class="modal-title" id="modal_title"></h4>
+            </div>
+            <div class="modal-body text-center">
+              <p id="modal_body"></p>
+            </div>
+            <div class="modal-footer border-top">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button id="modal_submit" type="button" class="btn"></button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 @endsection
 
 @section('page-script')
   <script>
+    const modal = $('#modal');
+    const modal_title = $('#modal_title');
+    const modal_body = $('#modal_body');
+    const modal_submit = $('#modal_submit');
+
+    let estado_cliente = '';
+    let id_cliente = '';
+
     function search() {
       const tableReg = document.getElementById('clientes_table');
       const searchText = document.getElementById('search_bar').value.toLowerCase();
@@ -315,54 +336,50 @@
         $(this).closest('form').submit();
       })
 
-      $('#submit_delete').on('click', function() {
-        let id = $('#id_cliente').val();
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
 
+      modal_submit.click(function () {
         $.ajax({
-          url: "{{ route('clientes.destroy', '') }}/" + id,
-          type: 'DELETE',
+          type: 'POST',
+          url: '{{ route('clientes.cambiarEstado', ':id') }}' . replace(':id', id_cliente),
           data: {
-            id : id,
-            _token: "{{ csrf_token() }}",
+            'id_cliente': id_cliente,
+            'estado_cliente': (estado_cliente === 'Activo' ? 'Inactivo' : 'Activo')
           },
-          success: function(data) {
-            if(data.success) {
-              window.location.href = '{{ route("clientes.index") }}';
+
+          success: function (data) {
+            if (data.success === true) {
+              modal.modal('hide');
+              location.reload();
             }
           }
         });
       })
 
-      $('#submit_dar_alta').on('click', function (){
-        let id = $('#id_cliente_alta').val();
-
-        $.ajax({
-          url: "{{ route('clientes.darAlta', '') }}/" + id,
-          type: 'POST',
-          data: {
-            id : id,
-            _token: "{{ csrf_token() }}",
-          },
-          success: function(data) {
-            if(data.success) {
-              window.location.href = '{{ route("clientes.index") }}';
-            }
-          }
-        });
-      });
 
     })
 
-    function darDeBaja(id, nombre) {
-      $('#id_cliente').val(id);
-      $('#label_nom_cliente').text(nombre);
-      $('#modal-eliminar').modal('show');
+    function cambiarEstado(id, nombre, estado) {
+      if(estado === 'Activo') {
+        modal_title.html(`<i class="bx bx-error-circle bx-lg text-danger"></i> <b>Dar de baja</b>`);
+        modal_body.html(`<p>¿Estás seguro que deseas dar de baja el cliente <b>${nombre}</b>?</p>`);
+        modal_submit.text('Dar de baja');
+        modal_submit.attr('class', 'btn btn-danger');
+      } else {
+        modal_title.html(`<i class="bx bx-info-circle bx-lg text-info"></i> <b>Dar de alta</b>`);
+        modal_body.html(`<p>¿Estás seguro que deseas dar de alta el cliente <b>${nombre}</b>?</p>`);
+        modal_submit.text('Dar de alta');
+        modal_submit.attr('class', 'btn btn-info');
+      }
+
+      estado_cliente = estado;
+      id_cliente = id;
+      modal.modal('show');
     }
 
-    function darDeAlta(id, nombre) {
-      $('#id_cliente_alta').val(id);
-      $('#label_nom_cliente_alta').text(nombre);
-      $('#modal-dar-alta').modal('show');
-    }
   </script>
 @endsection

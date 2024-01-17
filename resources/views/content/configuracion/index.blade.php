@@ -51,17 +51,28 @@
       </div>
     </div>
 
-    <div class="alert alert-danger d-none m-0 mt-3" role="alert" id="alerta-error">
+    @if(session('success'))
+      <div class="alert alert-primary d-flex" role="alert">
+          <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
+              class="bx bx-user fs-6"></i></span>
+        <div class="d-flex flex-column ps-1">
+          <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Acción exitosa</h6>
+          <span>{{ Session::get('success') }}</span>
+        </div>
+      </div>
+    @elseif(session('error'))
+      <div class="alert alert-danger d-none m-0 mt-3" role="alert" id="alerta-error">
       <span class="badge badge-center rounded-pill bg-danger border-label-danger p-3 me-2" id="label-error"><i
           class="bx bx-error fs-6"></i></span>
-      <div class="d-flex flex-column">
-        <h6 class="alert-heading d-flex align-items-center mb-1">Mensaje de alerta</h6>
-        <span id="mensaje_error"></span>
+        <div class="d-flex flex-column">
+          <h6 class="alert-heading d-flex align-items-center mb-1">Ocurrió un error</h6>
+          <span id="mensaje_error"></span>
+        </div>
       </div>
-    </div>
+    @endif
 
     <div class="row">
-      <div class="col-lg-8 mb-4">
+      <div class="col-lg-12 mb-4">
         <div class="card h-100">
           <div class="card-header pb-0">
             <span class="fw-bold">Información general</span>

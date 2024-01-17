@@ -34,8 +34,8 @@
           <span class="badge badge-center rounded-pill bg-primary border-label-primary p-3 me-2"><i
               class="bx bx-user fs-6"></i></span>
         <div class="d-flex flex-column ps-1">
-          <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
-          <span>{{ Session::get('mensaje') }}</span>
+          <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Acción exitosa</h6>
+          <span>{{ Session::get('success') }}</span>
         </div>
       </div>
     @endif
@@ -131,8 +131,13 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item text-danger" href="javascript:void(0);" id="btn_darbaja"><i
-                                class="bx bx-trash me-1"></i> Dar de baja</a>
+                            @if($usuario->estado_usuario == 'Activo')
+                              <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="darDeBaja({{ $usuario->id_usuario }}, '{{ $usuario->nom_usuario . ' ' . $usuario->ape_usuario }}', '{{ $usuario->estado_usuario }}')"><i
+                                  class="bx bx-trash me-1"></i> Dar de baja</a>
+                            @elseif($usuario->estado_usuario == 'Inactivo')
+                              <a class="dropdown-item" href="javascript:void(0);" onclick="darDeBaja({{ $usuario->id_usuario }}, '{{ $usuario->nom_usuario . ' ' . $usuario->ape_usuario }}', '{{ $usuario->estado_usuario }}')"><i
+                                  class="bx bx-revision me-1"></i> Dar de alta</a>
+                            @endif
                           </div>
                         </div>
                       </td>
@@ -156,116 +161,74 @@
       </div>
     </form>
 
-    <!-- Modal reactivar -->
-    <div class="modal fade" id="modal_usuario" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" style="width: 550px;">
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-body mt-2">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-1">
-                    <h1 id="icono">
-
-                    </h1>
-                  </div>
-                  <div class="col-md-10 ms-4 mt-2">
-                    <h4><b><span id="titulo"></span></b></h4>
-                    <h6 class="text-secondary fw-normal mt-3" id="descripcion"></h6>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="modal-header border-bottom">
+            <h4 class="modal-title" id="modal_title"></h4>
           </div>
-          <div class="modal-footer">
+          <div class="modal-body text-center">
+            <p id="modal_body"></p>
+          </div>
+          <div class="modal-footer border-top">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button id="btn_accion" type="button" class="btn btn-info">Dar de alta</button>
+            <button id="modal_submit" type="button" class="btn"></button>
           </div>
         </div>
       </div>
     </div>
+
+
     @endsection
 
     @section('page-script')
       <script>
+
+        const modal = $('#modal');
+        const modal_title = $('#modal_title');
+        const modal_body = $('#modal_body');
+        const modal_submit = $('#modal_submit');
+
+        let estado_usuario = ''
+        let id_usuario = ''
+
         $(document).ready(function () {
-
-
-          const btn_darbaja = $('#btn_darbaja');
-
-          btn_darbaja.on('click', function () {
-            const id_usuario = $(this).closest('tr').find('td').eq(0).text();
-            const nom_usuario = $(this).closest('tr').find('td').eq(1).text();
-            const estado_usuario = $(this).closest('tr').find('td').eq(5).text();
-
-            if (estado_usuario === 'Activo') {
-              $('#icono').html('<i class="bx bx-trash"></i>');
-              $('#titulo').html('Dar de baja');
-              $('#descripcion').html('¿Está seguro que desea dar de baja al usuario <b>' + nom_usuario + '</b>?');
-              $('#btn_accion').html('Dar de baja');
-              $('#btn_accion').addClass('btn-danger');
-              $('#btn_accion').removeClass('btn-info');
-            } else {
-              $('#icono').html('<i class="bx bx-check"></i>');
-              $('#titulo').html('Dar de alta');
-              $('#descripcion').html('¿Está seguro que desea dar de alta al usuario <b>' + nom_usuario + '</b>?');
-              $('#btn_accion').html('Dar de alta');
-              $('#btn_accion').addClass('btn-info');
-              $('#btn_accion').removeClass('btn-danger');
-            }
-
-            $('#modal_usuario').modal('show');
-
-            $('#btn_accion').on('click', function () {
-              $.ajax({
-                type: 'GET',
-                url: '{{ route('usuarios.darBaja', ':id') }}' . replace(':id', id_usuario),
-                data: {
-                  'id_usuario': id_usuario,
-                  'estado_usuario': (estado_usuario === 'Activo' ? 'Inactivo' : 'Activo')
-                },
-
-                success: function (data) {
-                  location.reload();
-                }
-              });
-            })
-          })
-
-          /* Filtro de busqueda */
-          $('#search_bar').keyup(function () {
-            $value = $(this).val();
-
-            if ($value) {
-              $('.searchdata').show();
-              $('.alldata').hide();
-            } else {
-              $('.searchdata').hide();
-              $('.alldata').show();
-            }
-
+          modal_submit.click(function () {
             $.ajax({
-              type: 'get',
-              url: '{{ route('usuarios.search') }}',
+              type: 'GET',
+              url: '{{ route('usuarios.darBaja', ':id') }}' . replace(':id', id_usuario),
               data: {
-                'search': $value
+                'id_usuario': id_usuario,
+                'estado_usuario': (estado_usuario === 'Activo' ? 'Inactivo' : 'Activo')
               },
 
               success: function (data) {
-                $('#searchdata').html(data);
+                if (data.success === true) {
+                  modal.modal('hide');
+                  location.reload();
+                }
               }
             });
           })
 
-        });
-
-        /* Filtro de estado y paginacion */
-        $('#estado').on('change', function () {
-          $(this).closest('#filter_index').submit();
         })
 
-        $('#mostrar').on('change', function () {
-          $(this).closest('#filter_index').submit();
-        })
+        function darDeBaja(id, nombre, estado) {
+          if(estado === 'Activo') {
+            modal_title.html(`<i class="bx bx-error-circle bx-lg text-danger"></i> <b>Dar de baja</b>`);
+            modal_body.html(`<p>¿Estás seguro que deseas dar de baja al usuario de <b>${nombre}</b>?</p>`);
+            modal_submit.text('Dar de baja');
+            modal_submit.attr('class', 'btn btn-danger');
+          } else {
+            modal_title.html(`<i class="bx bx-info-circle bx-lg text-info"></i> <b>Dar de alta</b>`);
+            modal_body.html(`<p>¿Estás seguro que deseas dar de alta al usuario de <b>${nombre}</b>?</p>`);
+            modal_submit.text('Dar de alta');
+            modal_submit.attr('class', 'btn btn-info');
+          }
+
+          estado_usuario = estado;
+          id_usuario = id;
+          modal.modal('show');
+        }
       </script>
 @endsection

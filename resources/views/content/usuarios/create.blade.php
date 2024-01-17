@@ -34,7 +34,7 @@
             </li>
             <li class="list-inline-item fw-semibold">
 
-              <button class="nav-link btn btn-primary load" type="button" id="btn_guardar_usuario">
+              <button class="nav-link btn btn-primary load" type="button" id="btn_confirmar">
                 <span class="tf-icons bx bx-save"></span>
                 Guardar usuario
               </button>
@@ -59,12 +59,46 @@
 
   <script>
     const btn_guardar_usuario = $('#btn_guardar_usuario');
-    const form_usuario = $('#form-usuario');
+    const btn_confirmar = $('#btn_confirmar');
 
+    const form_usuario = $('#form-usuario');
     const inputs = form_usuario.find('input, select, textarea, checkbox');
+
+
+    const modal = $('#modal');
+    const modal_title = $('#modal_title');
+    const modal_body = $('#modal_body');
 
     inputs.change(function () {
       $(this).removeClass('is-invalid'); //Eliminar clase 'is-invalid'
+    });
+
+    btn_confirmar.on('click', function () {
+
+      // Validar campos
+      if(inputs.toArray().some(input => $(input).val() === '')){
+        btn_guardar_usuario.click();
+        return;
+      }
+
+      modal_title.html(`<i class="bx bx-info-circle bx-lg text-primary"></i> <b>Confirmar acción</b>`);
+      modal_body.html(`
+            <p>
+                ¿Estás seguro que deseas guardar el usuario con los siguientes datos?
+                <ul class="text-start">
+                    <li>Nombre: <b>${$('#nom_usuario').val()} ${$('#ape_usuario').val()}</b></li>
+                    <li>Usuario: <b>${$('#nick_usuario').val()}</b></li>
+                    <li>Rol: <b>${$('#id_rol option:selected').text()}</b></li>
+                    <li>Correo electrónico: <b>${$('#email_usuario').val()}</b></li>
+                </ul>
+
+                <span><b>Nota:</b> Las credenciales se enviarán al correo electrónico proporcionado.</span>
+            </p>
+      `);
+      btn_guardar_usuario.text('Si, guardar');
+      btn_guardar_usuario.attr('class', 'btn btn-primary');
+
+      modal.modal('show');
     });
 
     /* ############################################ */
@@ -93,6 +127,7 @@
             });
           }
 
+          modal.modal('hide');
         }
       });
     });

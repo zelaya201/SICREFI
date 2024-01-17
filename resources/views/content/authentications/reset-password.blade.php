@@ -12,6 +12,20 @@
   <div class="authentication-wrapper authentication-basic container-p-y">
     <div class="authentication-inner py-4">
 
+      @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ $errors->first() }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      @elseif(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Exito!</strong> {{ session('success') }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      @endif
+
+
+
       <!-- Forgot Password -->
       <div class="card">
         <div class="card-body">

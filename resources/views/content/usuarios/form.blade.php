@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-lg-8 mb-4">
+  <div class="col-lg-12 mb-4">
     <div class="card h-100">
       <div class="card-header pb-0">
         <span class="fw-bold">Información general</span>
@@ -69,6 +69,23 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom">
+        <h4 class="modal-title" id="modal_title"></h4>
+      </div>
+      <div class="modal-body text-center">
+        <p id="modal_body"></p>
+      </div>
+      <div class="modal-footer border-top">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="btn_guardar_usuario" type="button" class="btn"></button>
       </div>
     </div>
   </div>

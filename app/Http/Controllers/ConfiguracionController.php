@@ -79,6 +79,7 @@ class ConfiguracionController extends Controller
         $cooperativa->fill($request->all());
 
         if ($cooperativa->save()) {
+          $request->session()->flash('success', 'La configuración se ha actualizado correctamente.');
             return ['success' => true];
         }
 

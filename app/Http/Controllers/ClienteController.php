@@ -337,8 +337,11 @@ class ClienteController extends Controller
    */
   public function destroy($id)
   {
-    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
 
+  }
+
+  public function cambiarEstado(int $id){
+    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
     $credito = Credito::query()->where(['id_cliente' => $id, 'estado_credito' => 'Vigente'])->get()->first();
 
     if($credito) {
@@ -347,34 +350,20 @@ class ClienteController extends Controller
       return ['success' => true];
     }
 
-    $cliente->fill(['estado_cliente' => 'Inactivo']);
+    if($cliente->estado_cliente == 'Activo') {
+      $cliente->fill(['estado_cliente' => 'Inactivo']);
+    }else {
+      $cliente->fill(['estado_cliente' => 'Activo']);
+    }
 
     if($cliente->save()) {
       /* Mensaje Flash */
       Session::flash('success', '');
-      Session::flash('mensaje', 'Cliente eliminado con éxito');
+      Session::flash('mensaje', 'El estado del cliente se ha actualizado correctamente.');
 
       return ['success' => true];
     }
 
     return ['success' => false];
-  }
-
-  public function darAlta(int $id){
-    $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
-    $cliente->fill(['estado_cliente' => 'Activo']);
-
-    if($cliente->save()) {
-      /* Mensaje Flash */
-      Session::flash('success', '');
-      Session::flash('mensaje', 'Cliente dado de alta con éxito');
-
-      return ['success' => true];
-    }
-
-    return ['success' => false];
-
-
-
   }
 }

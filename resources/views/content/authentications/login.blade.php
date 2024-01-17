@@ -11,6 +11,19 @@
   <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
       <div class="authentication-inner">
+        @if($errors->any())
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ $errors->first() }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        @elseif(session('success'))
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+
         <!-- Register -->
         <div class="card">
           <div class="card-body">
@@ -34,17 +47,10 @@
               </div>
             @endforeach
 
-            @if(session('success'))
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Exito!</strong> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            @endif
-
             <form id="formAuthentication" class="mb-3" action="" method="POST">
               @csrf
               <div class="mb-3">
-                <label for="email" class="form-label">Usuario o correo electronico</label>
+                <label for="email" class="form-label">Usuario o correo electrónico</label>
                 <input type="text" class="form-control @error('email-usernae') is-invalid @enderror" id="email" name="email-username"
                        value="{{ old('email-username') }}"
                        placeholder="" autofocus>
@@ -56,7 +62,7 @@
               </div>
               <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
-                  <label class="form-label" for="password">Password</label>
+                  <label class="form-label" for="password">Contraseña</label>
                   <a href="{{ route('resetPassword') }}">
                     <small>¿Olvidaste tu contraseña?</small>
                   </a>

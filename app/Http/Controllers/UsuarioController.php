@@ -8,6 +8,8 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class UsuarioController extends Controller
 {
@@ -59,10 +61,67 @@ class UsuarioController extends Controller
     $usuario->estado_usuario = 'Activo';
 
     if ($usuario->save()) {
-      return ['success' => true];
+
+      $request->session()->flash('success', 'El usuario se ha registrado correctamente.');
+
+      $subject = 'Bienvenido a SICREFI';
+
+      $msg = '<div style="background-color: #f5f5f5; padding: 20px; font-family: Arial, Helvetica, sans-serif; color: #000000;">
+                <div style="background-color: #ffffff; padding: 20px; border-radius: 10px;">
+                  <div style="text-align: center;">
+                    <img src="https://i.ibb.co/0jZQYQg/logo.png" alt="Logo" width="200px">
+                  </div>
+                  <h1 style="text-align: center; color: #000000;">Bienvenido a SICREFI</h1>
+                  <p style="text-align: justify; color: #000000;">Hola <strong>' . $usuario->nom_usuario . '</strong>, te damos la bienvenida a SICREFI, tu sistema de gestión de créditos.</p>
+                  <p style="text-align: justify; color: #000000;">A continuación te proporcionamos tus credenciales de acceso:</p>
+                  <ul style="text-align: justify; color: #000000;">
+                    <li><strong>Usuario:</strong> ' . $usuario->nick_usuario . '</li>
+                    <li><strong>Contraseña:</strong> ' . $clave . '</li>
+                  </ul>
+                  <p style="text-align: justify; color: #000000;">Te recomendamos cambiar tu contraseña una vez que hayas iniciado sesión.</p>
+                  <p style="text-align: justify; color: #000000;">Si tienes alguna duda o consulta, no dudes en contactarnos.</p>
+                  <p style="text-align: justify; color: #000000;">Saludos cordiales,</p>
+                  <p style="text-align: justify; color: #000000;">Equipo de SICREFI</p>
+                </div>
+              </div>';
+
+      return ['success' => $this->smtp_mailer($usuario->email_usuario, $subject, $msg)];
     }
 
     return ['success' => false];
+  }
+
+  function smtp_mailer($to, $subject, $msg)
+  {
+    $mail = new PHPMailer(true);
+
+    try {
+      //Server settings
+      $mail->SMTPDebug = 0;                      // Enable verbose debug output
+      $mail->isSMTP();                                            // Send using SMTP
+      $mail->Host = env('MAIL_HOST');                    // Set the SMTP server to send through
+      $mail->SMTPSecure = 'TLS';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+      $mail->CharSet = 'UTF-8';
+      $mail->IsHTML(true);
+      $mail->SMTPAuth = true;                                   // Enable SMTP authentication
+      $mail->Username = env('MAIL_USERNAME');                     // SMTP username
+      $mail->Password = env('MAIL_PASSWORD');                               // SMTP password
+      $mail->Port = 587;                                    // TCP port to connect to
+
+      //Recipients
+      $mail->setFrom('support@safeboxsv.tech', 'SafeBox');
+      $mail->addAddress($to);     // Add a recipient
+
+      // Content
+      $mail->isHTML(true);                                  // Set email format to HTML
+      $mail->Subject = $subject;
+      $mail->Body = $msg;
+
+      $mail->send();
+      return true;
+    } catch (Exception $e) {
+      return false;
+    }
   }
 
   /**
@@ -117,6 +176,7 @@ class UsuarioController extends Controller
     $usuario->fill($request->all());
 
     if ($usuario->save()) {
+      $request->session()->flash('success', 'El usuario se ha actualizado correctamente.');
       return ['success' => true];
     }
 
@@ -147,6 +207,9 @@ class UsuarioController extends Controller
     $usuario->estado_usuario = $request->estado_usuario;
 
     if ($usuario->save()) {
+
+      Session::flash('success', 'El estado del usuario se ha actualizado correctamente.');
+
       return ['success' => true];
     }
 
@@ -177,6 +240,9 @@ class UsuarioController extends Controller
     $usuario->clave_usuario = md5($request->clave_nueva);
 
     if ($usuario->save()) {
+
+      Session::flash('success', 'La contraseña se ha actualizado correctamente.');
+
       return ['success' => true];
     }
 

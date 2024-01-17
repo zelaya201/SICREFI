@@ -93,7 +93,7 @@ Route::resource('referencias',ReferenciaController::class);
 Route::resource('clientes',ClienteController::class);
 
 // Dar de alta un cliente
-Route::post('/clientes/darAlta/{cliente}', [ClienteController::class, 'darAlta'])->name('clientes.darAlta');
+Route::post('/clientes/cambiarEstado/{cliente}', [ClienteController::class, 'cambiarEstado'])->name('clientes.cambiarEstado');
 
 // Conyuge Route
 Route::resource('conyuge', ConyugeController::class);

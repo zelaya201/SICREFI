@@ -20,6 +20,9 @@ class AutenticacionController extends Controller
     $request->validate([
       'email-username' => 'required',
       'password' => 'required',
+    ], [
+      'email-username.required' => 'Complete todos los campos.',
+      'password.required' => 'Complete todos los campos.',
     ]);
 
     $credentials = [
@@ -34,17 +37,26 @@ class AutenticacionController extends Controller
 
     if ($usuario) {
       return redirect()->route('inicio');
+    }else{
+      $usuario = Usuario::query()
+        ->where('nick_usuario', $credentials['email_usuario'])
+        ->where('clave_usuario', $credentials['clave_usuario'])
+        ->first();
+
+      if ($usuario) {
+        return redirect()->route('inicio');
+      }
     }
 
     return back()->withErrors([
-      'email-username' => 'Credenciales incorretas.',
-    ]);
+      'email-username' => 'Usuario y/o contraseña son incorrectas.',
+    ])->withInput($request->only('email-username'));
   }
 
   public function logout()
   {
     Session::flush();
-    return redirect()->route('login');
+    return redirect()->route('login')->with('success', 'Se ha cerrado la sesión correctamente.');
   }
 
   public function updatePassword(Request $request)
@@ -95,8 +107,8 @@ class AutenticacionController extends Controller
       'email_usuario' => ['required', 'email']
     ],
       [
-        'email_usuario.required' => 'El campo correo electrónico es obligatorio.',
-        'email_usuario.email' => 'El campo correo electrónico debe ser una dirección de correo válida.'
+        'email_usuario.required' => 'Por favor ingrese un correo electrónico.',
+        'email_usuario.email' => 'Por favor ingrese un correo electrónico válido.'
       ]
     );
 
@@ -132,7 +144,9 @@ class AutenticacionController extends Controller
       return redirect()->route('login')->with('success', 'Se ha enviado un correo electrónico con las instrucciones para restablecer la contraseña.');
     }
 
-    return back()->with('error', 'No se ha encontrado ningún usuario con el correo electrónico proporcionado.');
+    return back()->withErrors([
+      'email_usuario' => 'No se ha encontrado ningún usuario con el correo electrónico proporcionado.',
+    ]);
 
   }
 

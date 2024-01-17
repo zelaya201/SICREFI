@@ -195,12 +195,9 @@
                           </a>
                           <div class="dropdown-menu">
                             @if($credito->estado_credito != 'Incobrable')
-                              <a class="dropdown-item" href="javascript:void(0);"><i
-                                  class="bx bx-detail me-1"></i> Detalles</a>
-
                               <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
                                 Cuotas</a>
-
+                              <div class="dropdown-divider"></div>
                               <a class="dropdown-item" target="_blank" href="{{ route('generar-declaracion', $credito->id_credito) }}">
                                 <i class="bx bx-file me-1"></i>
                                 Declaración Jurada</a>
@@ -213,7 +210,7 @@
                                   class="bx bx-receipt me-1"></i>Recibo de Crédito</a>
 
                               <div class="dropdown-divider"></div>
-                              <a class="dropdown-item text-danger" onclick="incobrableCredito('{{ $credito->id_credito }}')"><i
+                              <a href="javascript:" class="dropdown-item text-danger" onclick="incobrableCredito('{{ $credito->id_credito }}')"><i
                                   class="bx bx-trash me-1"></i>Incobrable</a>
                             @else
                               <a class="dropdown-item text-success" onclick="reactivarCredito('{{ $credito->id_credito }}')"><i
