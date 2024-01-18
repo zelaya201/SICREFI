@@ -44,12 +44,11 @@
       <div class="card p-3">
         <div class="card-datatable">
           <div class="dataTables_wrapper dt-bootstrap5 no-footer">
-            <div class="row my-3">
-              <div class="col-md-6">
-                <div class="col-md-6">
-                  <label>
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <div class="col-md-6 mb-3">
+                  <label></label>
                     <input type="search" class="form-control" id="search_bar" placeholder="Buscar por usuario...">
-                  </label>
                 </div>
               </div>
 
@@ -78,7 +77,7 @@
               </div>
             </div>
 
-            <div id="table_div">
+            <div class="table-responsive" id="table_div">
               <table id="usuarios_table"
                      class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
                 <thead>
@@ -220,10 +219,10 @@
             modal_submit.text('Dar de baja');
             modal_submit.attr('class', 'btn btn-danger');
           } else {
-            modal_title.html(`<i class="bx bx-info-circle bx-lg text-info"></i> <b>Dar de alta</b>`);
+            modal_title.html(`<i class="bx bx-check-circle bx-lg text-success"></i> <b>Dar de alta</b>`);
             modal_body.html(`<p>¿Estás seguro que deseas dar de alta al usuario de <b>${nombre}</b>?</p>`);
             modal_submit.text('Dar de alta');
-            modal_submit.attr('class', 'btn btn-info');
+            modal_submit.attr('class', 'btn btn-success');
           }
 
           estado_usuario = estado;

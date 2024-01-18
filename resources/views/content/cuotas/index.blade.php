@@ -37,7 +37,7 @@
               class="bx bx-user fs-6"></i></span>
         <div class="d-flex flex-column ps-1">
           <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
-          <span>{{ Session::get('mensaje') }}</span>
+          <span>{{ Session::get('success') }}</span>
         </div>
       </div>
     @endif
@@ -91,7 +91,9 @@
                       <div class="dropdown-menu">
                         @if($cuota->estado_cuota == 'Pendiente')
                           @if($cuota->anterior_pagada)
-                            <a class="dropdown-item" href="{{ route('cuotas.pagarCuota', $cuota->id_cuota) }}">
+                            <a class="dropdown-item" href="javascript:void(0);"
+                               onclick="confirmarPago('{{ route('cuotas.pagarCuota', $cuota->id_cuota) }}','{{ $cuota->nom_completo }}', {{ $cuota->total_cuota }}, {{ $cuota->mora_cuota }}, {{ $cuota->total_pagar }}, '{{ $cuota->estado_cuota }}')"
+                            >
                               <i class="bx bx-coin me-1"></i>
                               Pagar</a>
                           @endif
@@ -161,7 +163,9 @@
                       <i class="bx bx-dots-vertical-rounded"></i>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" href="{{ route('cuotas.pagarCuota', $cuota->id_cuota) }}">
+                      <a class="dropdown-item" href="javascript:void(0);"
+                         onclick="confirmarPago('{{ route('cuotas.pagarCuota', $cuota->id_cuota) }}','{{ $cuota->nom_completo }}', {{ $cuota->total_cuota }}, {{ $cuota->mora_cuota }}, {{ $cuota->total_pagar }}, '{{ $cuota->estado_cuota }}')"
+                      >
                         <i class="bx bx-coin me-1"></i>
                         Pagar</a>
                     </div>
@@ -177,4 +181,67 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header border-bottom">
+          <h4 class="modal-title" id="modal_title">
+            <i class="bx bx-check-circle bx-lg text-success"></i> <b>Confirmar acción</b>
+          </h4>
+        </div>
+        <div class="modal-body text-center">
+          <p id="modal_body">
+            ¿Estás seguro que deseas pagar la cuota?
+            <ul class="text-start">
+              <li>Cliente: <b id="text_cliente"></b></li>
+              <li>Monto: <b id="text_monto"></b></li>
+              <li>Mora: <b id="text_mora"></b></li>
+              <li>Total: <b id="text_total"></b></li>
+              <li>Estado: <b id="text_estado"></b></li>
+            </ul>
+          </p>
+        </div>
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-secondary load" data-bs-dismiss="modal">Cancelar</button>
+          <button id="modal_submit" type="submit" class="btn btn-success">Si, pagar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
+
+@section('page-script')
+  <script>
+
+    const modal = $('#modal');
+    const text_cliente = $('#text_cliente');
+    const text_monto = $('#text_monto');
+    const text_mora = $('#text_mora');
+    const text_total = $('#text_total');
+    const text_estado = $('#text_estado');
+    const modal_submit = $('#modal_submit');
+
+    let url = '';
+
+    $(document).ready(function () {
+      modal_submit.click(function () {
+        modal.modal('hide');
+        window.location.href = url;
+      });
+    });
+
+    function confirmarPago(ruta, cliente, cuota, mora, total, estado){
+      text_cliente.text(cliente);
+      text_monto.text('$' + cuota.toFixed(2));
+      text_mora.text('$' + mora.toFixed(2));
+      text_total.text('$' + total.toFixed(2));
+      text_estado.text(estado);
+      modal.modal('show');
+      url = ruta;
+    }
+  </script>
+@endsection
+
+

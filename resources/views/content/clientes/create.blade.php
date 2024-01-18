@@ -28,7 +28,7 @@
             </li>
             <li class="list-inline-item fw-semibold">
 
-              <button class="nav-link btn btn-primary load" type="button" id="btn-guardar-cliente">
+              <button class="nav-link btn btn-primary" type="button" id="btn_confirmar">
                 <span class="tf-icons bx bx-save"></span>
                 Guardar cliente
               </button>
@@ -126,6 +126,23 @@
     </div>
   </form>
 
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header border-bottom">
+          <h4 class="modal-title" id="modal_title"></h4>
+        </div>
+        <div class="modal-body text-center">
+          <p id="modal_body"></p>
+        </div>
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-secondary load" data-bs-dismiss="modal">Cancelar</button>
+          <button id="btn-guardar-cliente" type="button" class="btn"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   {{-- Off canvas de Ayuda--}}
   {{--<div class="mt-3">--}}
   {{--  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel">--}}
@@ -157,6 +174,7 @@
     const card_conyuge = $('#card-conyuge');
 
     const btn_guardar_cliente = $('#btn-guardar-cliente');
+    const btn_confirmar = $('#btn_confirmar');
 
     const item_cliente = $('#item-cliente');
     const item_conyuge = $('#item-conyuge');
@@ -192,6 +210,10 @@
 
     const telefono_modal_cliente = $('#telefono-modal-cliente');
     const telefono_modal_conyuge = $('#telefono-modal-conyuge');
+
+    const modal = $('#modal');
+    const modal_title = $('#modal_title');
+    const modal_body = $('#modal_body');
 
     $(document).ready(function () {
       $.ajaxSetup({
@@ -230,6 +252,25 @@
        * FIN VALIDACIONES DE FORMULARIO
        */
 
+
+      /**
+       * MODAL CONFIRMAR CLIENTE
+       */
+
+      btn_confirmar.on('click', function () {
+
+        modal_title.html(`<i class="bx bx-info-circle bx-lg text-primary"></i> <b>Confirmar acción</b>`);
+        modal_body.html(`
+            <p>
+                ¿Estás seguro que deseas guardar el nuevo cliente?
+            </p>
+      `);
+        btn_guardar_cliente.text('Si, guardar');
+        btn_guardar_cliente.attr('class', 'btn btn-primary');
+
+        modal.modal('show');
+      });
+
       /** EVENTOS DE BOTONES CLIENTE **/
       btn_guardar_cliente.click(function (e) {
         e.preventDefault();
@@ -262,10 +303,12 @@
               }
 
               alerta_error.removeClass('d-none').addClass('d-flex');
-
+              modal.modal('hide');
             }
           },
           error: function (xhr) {
+            modal.modal('hide');
+
             let data = xhr.responseJSON
             if ($.isEmptyObject(data.errors) === false) {
               let i = 0;

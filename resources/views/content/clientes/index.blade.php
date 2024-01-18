@@ -118,12 +118,11 @@
         <div class="card p-3">
           <div class="card-datatable">
             <div class="dataTables_wrapper dt-bootstrap5 no-footer">
-              <div class="row my-3">
-                <div class="col-md-6">
-                  <div class="col-md-6">
-                    <label>
-                      <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." aria-controls="DataTables_Table_0" onkeyup="search()">
-                    </label>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="col-md-6 mb-3">
+                    <label for=""></label>
+                      <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." onkeyup="search()">
                   </div>
                 </div>
 
@@ -145,8 +144,8 @@
                 </div>
               </div>
 
-              <div id="table_div">
-                <table id="clientes_table" class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
+              <div class="table-responsive" id="table_div">
+                <table id="clientes_table" class="table border-top dataTable no-footer dtr-column my-2">
                   <thead>
                   <tr>
                     <th>#</th>
@@ -216,7 +215,7 @@
                             @else
                               <a class="dropdown-item" href="javascript:void(0);"
                                  onclick="cambiarEstado('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}', '{{ $cliente->estado_cliente }}')">
-                                <i class='bx bxs-upvote' ></i> Dar de alta
+                                <i class='bx bx-revision' ></i> Dar de alta
                               </a>
                             @endif
                           </div>
@@ -370,10 +369,10 @@
         modal_submit.text('Dar de baja');
         modal_submit.attr('class', 'btn btn-danger');
       } else {
-        modal_title.html(`<i class="bx bx-info-circle bx-lg text-info"></i> <b>Dar de alta</b>`);
+        modal_title.html(`<i class="bx bx-check-circle bx-lg text-success"></i> <b>Dar de alta</b>`);
         modal_body.html(`<p>¿Estás seguro que deseas dar de alta el cliente <b>${nombre}</b>?</p>`);
         modal_submit.text('Dar de alta');
-        modal_submit.attr('class', 'btn btn-info');
+        modal_submit.attr('class', 'btn btn-success');
       }
 
       estado_cliente = estado;

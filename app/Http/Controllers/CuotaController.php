@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\Credito;
 use App\Models\Cuota;
+use DateTime;
 use Illuminate\Http\Request;
 
 class CuotaController extends Controller
@@ -26,6 +27,10 @@ class CuotaController extends Controller
           $cuota_mora->estado_cuota = 'Atrasada';
           $cuota_mora->mora_cuota = 0.05 * $cuota_mora->total_cuota;
           $cuota_mora->save();
+
+          $credito = Credito::query()->where('id_credito', $cuota_mora->id_credito)->first();
+          $credito->estado_credito = 'En mora';
+          $credito->save();
         }
       }
 
@@ -139,6 +144,9 @@ class CuotaController extends Controller
             $cuotaAPagar->estado_cuota = 'Atrasada';
             $cuotaAPagar->mora_cuota = 0.05 * $cuotaAPagar->total_cuota;
             $cuotaAPagar->save();
+
+            $credito = Credito::query()->where('id_credito', $cuotaAPagar->id_credito)->first();
+            $credito->estado_credito = 'En mora';
           }
         }else{
           $cuotaAPagar = new Cuota();
@@ -201,21 +209,23 @@ class CuotaController extends Controller
         ->where('estado_cuota', '!=', 'Pagada')
         ->get();
 
+      $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();
+      $credito->estado_credito = 'Vigente';
+      $credito->save();
+
       if(count($cuotas) == 0) {
         $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();
         $credito->estado_credito = 'Finalizado';
         $credito->save();
 
         return redirect()
-          ->route('creditos.index', $credito->id_credito)
-          ->with('success', '')
-          ->with('mensaje', 'Crédito pagado con éxito');
+          ->route('cuotas.edit', $credito->id_credito)
+          ->with('success', 'El crédito ha sido pagado con éxito');
       }
 
       return redirect()
         ->route('cuotas.edit', $cuota->id_credito)
-        ->with('success', '')
-        ->with('mensaje', 'Cuota pagada con éxito');
+        ->with('success', 'La cuota ha sido pagada con éxito');
     }
 
     /**
@@ -240,8 +250,7 @@ class CuotaController extends Controller
 
       return redirect()
         ->route('creditos.index', $credito->id_credito)
-        ->with('success', '')
-        ->with('mensaje', 'Crédito pagado con éxito');
+        ->with('success', 'El crédito ha sido pagado con éxito');
     }
 
     /**
@@ -270,25 +279,37 @@ class CuotaController extends Controller
 
       return redirect()
         ->route('cuotas.index', $cuota->id_credito)
-        ->with('success', '')
-        ->with('mensaje', 'Cuota pagada con éxito');
+        ->with('success', 'La cuota ha sido pagada con éxito');
     }
 
-    /**
-     * Posponer cuota de un crédito
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+  /**
+   * Posponer cuota de un crédito
+   * @param int $id
+   * @return \Illuminate\Http\Response
+   * @throws \Exception
+   */
 
     public function posponerCuota($id){
       $cuota = Cuota::query()->where('id_cuota', $id)->first();
+      $date =  new DateTime($cuota->fecha_pago_cuota);
+
       $cuota->fecha_pago_cuota = date('Y-m-d', strtotime($cuota->fecha_pago_cuota . ' + 1 day'));
-      $cuota->save();
+
+      if($date->format('N') == 6) {
+        $cuota->fecha_pago_cuota = date('Y-m-d', strtotime($cuota->fecha_pago_cuota . ' + 2 day'));
+      }
+
+      $fechaFormateada = date('d-m-Y', strtotime($cuota->fecha_pago_cuota));
+
+      if($cuota->save()){
+        return redirect()
+          ->route('cuotas.index', $cuota->id_credito)
+          ->with('success', 'La cuota ha sido pospuesta con éxito a la fecha ' . $fechaFormateada);
+      }
 
       return redirect()
         ->route('cuotas.index', $cuota->id_credito)
-        ->with('success', '')
-        ->with('mensaje', 'Cuota pospuesta para el día siguiente con éxito');
+        ->with('error', 'La cuota no ha sido pospuesta con éxito');
     }
 
     /**

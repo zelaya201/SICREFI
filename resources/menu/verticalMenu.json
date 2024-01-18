@@ -28,7 +28,7 @@
       "slug": "cuotas.index"
     },
     {
-      "menuHeader": "Configuración"
+      "menuHeader": "Seguridad"
     },
     {
       "url": "/usuarios",
@@ -37,7 +37,7 @@
       "slug": "usuarios.index"
     },
     {
-      "url": "#",
+      "url": "/bitacora",
       "name": "Bitácora",
       "icon": "menu-icon tf-icons bx bx-history",
       "slug": "bitacora.index"
@@ -47,6 +47,10 @@
       "name": "Copias de seguridad",
       "icon": "menu-icon tf-icons bx bx-cloud-download",
       "slug": "seguridad.index"
+    },
+
+    {
+      "menuHeader": "Configuración"
     },
     {
       "url": "/configuracion",

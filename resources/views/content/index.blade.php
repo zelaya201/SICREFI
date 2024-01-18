@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="col-10 mb-4">
+    <div class="col-lg-10 mb-4">
       <div class="card table-responsive">
         <div class="row row-bordered g-0">
           <div class="col-md-12">
@@ -37,8 +37,8 @@
       </div>
     </div>
 
-    <div class="col-2 mb-4">
-      <div class="col-12 mb-4">
+    <div class="col-lg-2 mb-4">
+      <div class="col-lg-12 mb-4">
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AutenticacionController;
 use App\Http\Controllers\BienController;
+use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ConyugeController;
@@ -119,11 +120,8 @@ Route::resource('telsReferencia', TelefonoReferenciaController::class);
 Route::get('/creditos/calcularFechasCuotas', [CreditoController::class, 'calcularFechasCuotas'])
   ->name('creditos.calcularFechasCuotas');
 
-Route::get('/creditos/asignarIncobrable/{credito}', [CreditoController::class, 'asignarIncobrable'])
-  ->name('creditos.asignarIncobrable');
-
-Route::get('/creditos/reactivarCredito/{credito}', [CreditoController::class, 'reactivarCredito'])
-  ->name('creditos.reactivarCredito');
+Route::get('/creditos/cambiarEstado/{credito}', [CreditoController::class, 'cambiarEstado'])
+  ->name('creditos.cambiarEstado');
 
 Route::get('/creditos/search', [CreditoController::class, 'buscarCredito'])->name('creditos.search');
 Route::resource('creditos', CreditoController::class);
@@ -151,3 +149,5 @@ Route::resource('seguridad', SeguridadController::class);
 // Configuracion Route
 Route::resource('configuracion', ConfiguracionController::class);
 
+// Bitacora Route
+Route::resource('bitacora', BitacoraController::class);

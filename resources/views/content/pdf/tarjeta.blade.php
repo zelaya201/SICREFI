@@ -76,28 +76,9 @@
         <th>Cuota</th>
         <th>Fecha</th>
         <th>Valor cuota</th>
-        <th>Cuota</th>
-        <th>Fecha</th>
-        <th>Valor cuota</th>
       </tr>
     </thead>
     <tbody>
-      @if(count($cuotas) > 40)
-        @php
-          $mitad = count($cuotas) / 2;
-        @endphp
-
-        @for($i = 0; $i < $mitad; $i++)
-          <tr>
-            <td>{{ $i+1 }}</td>
-            <td>{{ strftime("%d-%m-%Y", strtotime($cuotas[$i]->fecha_pago_cuota)) }}</td>
-            <td>${{ number_format($cuotas[$i]->total_cuota,2) }}</td>
-            <td>{{ ($i+1)+$mitad }}</td>
-            <td>{{ strftime("%d-%m-%Y", strtotime($cuotas[$i + $mitad]->fecha_pago_cuota)) }}</td>
-            <td>${{ number_format($cuotas[$i + $mitad]->total_cuota,2) }}</td>
-          </tr>
-        @endfor
-      @else
         @foreach($cuotas as $cuota)
           <tr>
             <td>{{ $loop->iteration }}</td>
@@ -105,7 +86,6 @@
             <td>${{ number_format($cuota->total_cuota,2) }}</td>
           </tr>
         @endforeach
-      @endif
     </tbody>
   </table>
 </section>

@@ -10,7 +10,11 @@
     <div
       class="d-flex align-items-center justify-content-md-between justify-content-start flex-md-row flex-column mb-1">
       <div class="user-profile-info py-1">
-        <h4 class="fw-bold m-0"><span class="text-muted fw-light">Créditos /</span> @if($cuotaAPagar->id_cuota > 0) Pago de cuotas @else Resumen de pagos @endif </h4>
+        <h4 class="fw-bold m-0"><span class="text-muted fw-light">Créditos /</span> @if($cuotaAPagar->id_cuota > 0)
+            Pago de cuotas
+          @else
+            Resumen de pagos
+          @endif </h4>
       </div>
       <ul
         class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
@@ -27,7 +31,7 @@
             <button class="nav-link btn btn-primary" type="button" id="btn_pagar_credito_total"
                     data-bs-toggle="modal"
                     data-bs-target="#modal_pagar_credito">
-              <span class="tf-icons bx bx-wallet-alt me-1"></span> Pagar Crédito Total
+              <span class="tf-icons bx bx-credit-card-front me-1"></span> Pagar crédito
             </button>
           </li>
         @endif
@@ -54,7 +58,7 @@
               class="bx bx-user fs-6"></i></span>
         <div class="d-flex flex-column ps-1">
           <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
-          <span>{{ Session::get('mensaje') }}</span>
+          <span>{{ Session::get('success') }}</span>
         </div>
       </div>
     @endif
@@ -183,10 +187,41 @@
 
             <div class="row">
               <div class="col-md-12 text-center">
-                <button type="submit" class="btn btn-outline-primary mt-sm-0 mt-4" id="btn_pagar_cuota">
+                <button type="button" class="btn btn-outline-primary mt-sm-0 mt-4"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal"
+                        id="btn_pagar_cuota">
                   <i class="bx bx-coin me-1"></i>
                   Realizar pago
                 </button>
+              </div>
+            </div>
+
+            <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header border-bottom">
+                    <h4 class="modal-title" id="modal_title">
+                      <i class="bx bx-check-circle bx-lg text-success"></i> <b>Confirmar acción</b>
+                    </h4>
+                  </div>
+                  <div class="modal-body text-center">
+                    <p id="modal_body">
+                      ¿Estás seguro que deseas pagar la cuota n° {{ $cuotas_pagadas+1 }} con los siguientes datos?
+                      <ul class="text-start">
+                        <li>Fecha de pago: <b>{{ date('d-m-Y', strtotime($cuotaAPagar->fecha_pago_cuota)) }}</b></li>
+                        <li>Monto: <b>{{ number_format($cuotaAPagar->total_cuota, 2) }}</b></li>
+                        <li>Mora: <b>{{ number_format($cuotaAPagar->mora_cuota, 2) }}</b></li>
+                        <li>Total: <b>{{ number_format($cuotaAPagar->total_pagar, 2) }}</b></li>
+                      </ul>
+                    </p>
+                  </div>
+                  <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-secondary load" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="modal_submit" type="submit" class="btn btn-success">Si, pagar</button>
+                  </div>
+                </div>
               </div>
             </div>
           </form>
@@ -210,7 +245,7 @@
           <th>Monto</th>
           <th>Interes</th>
           <th>Mora</th>
-{{--          <th>Extra</th>--}}
+          {{--          <th>Extra</th>--}}
           <th>Total</th>
           <th>Estado</th>
           <th>Comprobante</th>
@@ -224,7 +259,7 @@
               <td>${{ number_format($cuota->monto_cuota, 2) }}</td>
               <td>${{ number_format($cuota->interes_cuota, 2) }}</td>
               <td>${{ number_format($cuota->mora_cuota, 2) }}</td>
-{{--              <td>${{ number_format($cuota->extra_cuota, 2) }}</td>--}}
+              {{--              <td>${{ number_format($cuota->extra_cuota, 2) }}</td>--}}
               <td>${{ number_format($cuota->total_cuota, 2) }}</td>
               <td>
                 @if($cuota->estado_cuota == 'Pagada')
@@ -260,34 +295,28 @@
         id="form_pagar_credito">
     @csrf
 
-    <div class="modal fade" id="modal_pagar_credito" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal fade" id="modal_pagar_credito" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-body mt-2">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-1">
-                    <h1>
-                      <i class="bx bx-info-circle bx-lg text-info"></i>
-                    </h1>
-                  </div>
-                  <div class="col-md-10 ms-4 mt-2">
-                    <h4><b>Confirmación</b></h4>
-                    <h6 class="text-secondary fw-normal ">¿Estás seguro que deseas pagar el crédito
-                      n° {{ $credito->id_credito }} en su totalidad?</h6>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="modal-header border-bottom">
+            <h4 class="modal-title" id="modal_title">
+              <i class="bx bx-check-circle bx-lg text-success"></i> <b>Confirmar acción</b>
+            </h4>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn" data-bs-dismiss="modal">Cancelar</button>
-            <button id="btn_pagar_credito" type="submit" class="btn btn-info">Si, pagar crédito</button>
+          <div class="modal-body text-center">
+            <p id="modal_body">
+              ¿Estás seguro que deseas pagar el crédito n° {{ $credito->id_credito }} en su totalidad?
+            </p>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn btn-secondary load" data-bs-dismiss="modal">Cancelar</button>
+            <button id="modal_submit" type="submit" class="btn btn-success">Si, pagar</button>
           </div>
         </div>
       </div>
     </div>
+
   </form>
 
 @endsection
@@ -300,6 +329,11 @@
     const form_pagar_credito = $('#form_pagar_credito');
     const form_pagar_cuota = $('#form_pagar_cuota');
 
+    const modal = $('#modal');
+    const modal_title = $('#modal_title');
+    const modal_body = $('#modal_body');
+    const modal_submit = $('#modal_submit');
+
     $(document).ready(function () {
 
       btn_pagar_credito.addEventListener('click', function (e) {
@@ -307,11 +341,29 @@
         form_pagar_credito.submit();
       });
 
-      btn_pagar_cuota.addEventListener('click', function (e) {
-        // Ejecutar submit
-        e.preventDefault();
-        form_pagar_cuota.submit();
-      });
+      btn_pagar_cuota.on('click', pagarCuota());
     });
+
+    function pagarCuota() {
+      modal_title.html('<i class="bx bx-check-circle bx-lg text-success"></i> <b>Confirmar acción</b>');
+      modal_body.html(
+        `<p>
+            ¿Estás seguro que deseas pagar la cuota n° {{ $cuotaAPagar->n_cuota }} con los siguientes datos?
+            <ul class="text-start">
+                <li>Fecha de pago: <b>${$('#fecha_pago_cuota').val()}</b></li>
+                <li>Monto: <b>${$('#monto_cuota').val()}</b></li>
+                <li>Interes: <b>${$('#interes_cuota').val()}</b></li>
+                <li>Mora: <b>${$('#mora_cuota').val()}</b></li>
+                <li>Total: <b>${$('#total_cuota').val()}</b></li>
+            </ul>
+        </p>`
+      );
+      modal_submit.html('Si, pagar');
+      modal_submit.addClass('btn-success');
+      modal_submit.removeClass('btn-danger');
+
+
+      return true;
+    }
   </script>
 @endsection
