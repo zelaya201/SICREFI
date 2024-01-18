@@ -107,12 +107,11 @@
       <div class="card p-3">
         <div class="card-datatable">
           <div class="dataTables_wrapper dt-bootstrap5 no-footer">
-            <div class="row my-3">
-              <div class="col-md-6">
-                <div class="col-md-6">
-                  <label>
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <div class="col-md-6 mb-3">
+                  <label></label>
                     <input type="search" class="form-control"  id="search_bar" placeholder="Buscar por cliente...">
-                  </label>
                 </div>
               </div>
 
@@ -138,7 +137,7 @@
               </div>
             </div>
 
-            <div id="table_div">
+            <div class="table-responsive" id="table_div">
               <table id="creditos_table" class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
                 <thead>
                 <tr>
@@ -194,17 +193,38 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </a>
                           <div class="dropdown-menu">
+
+                            @if($credito->estado_credito != 'Incobrable' && $credito->estado_credito != 'Finalizado')
                               <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
                                 Pago de cuotas
                               </a>
-
+                            @elseif($credito->estado_credito == 'Finalizado')
+                                <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
+                                    Ver detalle
+                                </a>
+                            @endif
+                              <div class="dropdown-divider"></div>
                               <a class="dropdown-item" target="_blank" href="{{ route('generar-declaracion', $credito->id_credito) }}">
                                 <i class="bx bx-file me-1"></i>
-                                Contrato</a>
+                                Declaración Jurada</a>
+                              <a class="dropdown-item" target="_blank" href="{{ route('generar-pagare', $credito->id_credito) }}"><i
+                                  class="bx bx-credit-card me-1"></i>
+                                Pagaré</a>
+                              <a class="dropdown-item" target="_blank" href="{{ route('generar-tarjeta', $credito->id_credito) }}"><i
+                                  class="bx bx-list-ul me-1"></i>Tarjeta de Pagos</a>
+                              <a class="dropdown-item" target="_blank" href="{{ route('generar-recibo', $credito->id_credito) }}"><i
+                                  class="bx bx-receipt me-1"></i>Recibo de Crédito</a>
 
+
+                            @if($credito->estado_credito != 'Finalizado' && $credito->estado_credito != 'Incobrable')
                               <div class="dropdown-divider"></div>
                               <a href="javascript:" class="dropdown-item text-danger" onclick="cambiarEstado('{{ $credito->id_credito }}', '{{ $credito->estado_credito }}')"><i
                                   class="bx bx-trash me-1"></i>Incobrable</a>
+                              @elseif($credito->estado_credito == 'Incobrable')
+                                <div class="dropdown-divider"></div>
+                                <a href="javascript:" class="dropdown-item" onclick="cambiarEstado('{{ $credito->id_credito }}', '{{ $credito->estado_credito }}')"><i
+                                    class="bx bx-check me-1"></i>Reactivar</a>
+                            @endif
 
                           </div>
                         </div>
@@ -331,9 +351,9 @@
             modal_submit.text('Marcar como incobrable');
             modal_submit.attr('class', 'btn btn-danger');
           } else {
-            modal_title.html(`<i class="bx bx-check-circle bx-lg text-success"></i> <b>Dar de alta</b>`);
-            modal_body.html(`<p>¿Estás seguro que deseas dar de alta el credito número: <b>${id}</b>?</p>`);
-            modal_submit.text('Dar de alta');
+            modal_title.html(`<i class="bx bx-check-circle bx-lg text-success"></i> <b>Reactivar crédito</b>`);
+            modal_body.html(`<p>¿Estás seguro que deseas reactivar el credito número: <b>${id}</b>?</p>`);
+            modal_submit.text('Si, reactivar');
             modal_submit.attr('class', 'btn btn-success');
           }
 

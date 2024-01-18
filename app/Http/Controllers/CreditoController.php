@@ -311,8 +311,6 @@ class CreditoController extends Controller
         }
       }
 
-      return response(['success' => false]);
-
       /* Registro del nuevo crédito */
       $credito = new Credito();
       $credito->fecha_emision_credito = date('Y-m-d');

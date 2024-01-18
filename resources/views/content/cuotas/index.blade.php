@@ -37,7 +37,7 @@
               class="bx bx-user fs-6"></i></span>
         <div class="d-flex flex-column ps-1">
           <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
-          <span>{{ Session::get('mensaje') }}</span>
+          <span>{{ Session::get('success') }}</span>
         </div>
       </div>
     @endif
@@ -178,3 +178,5 @@
     </div>
   </div>
 @endsection
+
+

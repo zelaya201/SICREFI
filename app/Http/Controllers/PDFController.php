@@ -256,4 +256,6 @@ class PDFController extends Controller
       return $pdf->stream('ticket.pdf');
     }
 
+
+
 }

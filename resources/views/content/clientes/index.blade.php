@@ -118,12 +118,11 @@
         <div class="card p-3">
           <div class="card-datatable">
             <div class="dataTables_wrapper dt-bootstrap5 no-footer">
-              <div class="row my-3">
-                <div class="col-md-6">
-                  <div class="col-md-6">
-                    <label>
-                      <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." aria-controls="DataTables_Table_0" onkeyup="search()">
-                    </label>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="col-md-6 mb-3">
+                    <label for=""></label>
+                      <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." onkeyup="search()">
                   </div>
                 </div>
 
@@ -145,8 +144,8 @@
                 </div>
               </div>
 
-              <div id="table_div">
-                <table id="clientes_table" class="table-responsive invoice-list-table table border-top dataTable no-footer dtr-column my-2">
+              <div class="table-responsive" id="table_div">
+                <table id="clientes_table" class="table border-top dataTable no-footer dtr-column my-2">
                   <thead>
                   <tr>
                     <th>#</th>

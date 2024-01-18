@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\Credito;
 use App\Models\Cuota;
+use DateTime;
 use Illuminate\Http\Request;
 
 class CuotaController extends Controller
@@ -218,15 +219,13 @@ class CuotaController extends Controller
         $credito->save();
 
         return redirect()
-          ->route('creditos.index', $credito->id_credito)
-          ->with('success', '')
-          ->with('mensaje', 'Crédito pagado con éxito');
+          ->route('cuotas.edit', $credito->id_credito)
+          ->with('success', 'El crédito ha sido pagado con éxito');
       }
 
       return redirect()
         ->route('cuotas.edit', $cuota->id_credito)
-        ->with('success', '')
-        ->with('mensaje', 'Cuota pagada con éxito');
+        ->with('success', 'La cuota ha sido pagada con éxito');
     }
 
     /**
@@ -251,8 +250,7 @@ class CuotaController extends Controller
 
       return redirect()
         ->route('creditos.index', $credito->id_credito)
-        ->with('success', '')
-        ->with('mensaje', 'Crédito pagado con éxito');
+        ->with('success', 'El crédito ha sido pagado con éxito');
     }
 
     /**
@@ -281,25 +279,35 @@ class CuotaController extends Controller
 
       return redirect()
         ->route('cuotas.index', $cuota->id_credito)
-        ->with('success', '')
-        ->with('mensaje', 'Cuota pagada con éxito');
+        ->with('success', 'La cuota ha sido pagada con éxito');
     }
 
-    /**
-     * Posponer cuota de un crédito
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+  /**
+   * Posponer cuota de un crédito
+   * @param int $id
+   * @return \Illuminate\Http\Response
+   * @throws \Exception
+   */
 
     public function posponerCuota($id){
       $cuota = Cuota::query()->where('id_cuota', $id)->first();
+      $date =  new DateTime($cuota->fecha_pago_cuota);
+
       $cuota->fecha_pago_cuota = date('Y-m-d', strtotime($cuota->fecha_pago_cuota . ' + 1 day'));
-      $cuota->save();
+
+      if($date->format('N') == 6) {
+        $cuota->fecha_pago_cuota = date('Y-m-d', strtotime($cuota->fecha_pago_cuota . ' + 2 day'));
+      }
+
+      if($cuota->save()){
+        return redirect()
+          ->route('cuotas.index', $cuota->id_credito)
+          ->with('success', 'La cuota ha sido pospuesta con éxito a la fecha ' . $cuota->fecha_pago_cuota);
+      }
 
       return redirect()
         ->route('cuotas.index', $cuota->id_credito)
-        ->with('success', '')
-        ->with('mensaje', 'Cuota pospuesta para el día siguiente con éxito');
+        ->with('error', 'La cuota no ha sido pospuesta con éxito');
     }
 
     /**
