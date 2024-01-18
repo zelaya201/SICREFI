@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AutenticacionController;
 use App\Http\Controllers\BienController;
+use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ConyugeController;
@@ -144,3 +145,5 @@ Route::resource('roles', RolController::class);
 // Configuracion Route
 Route::resource('configuracion', ConfiguracionController::class);
 
+// Bitacora Route
+Route::resource('bitacora', BitacoraController::class);

@@ -37,7 +37,7 @@
       "slug": "usuarios.index"
     },
     {
-      "url": "#",
+      "url": "/bitacora",
       "name": "Bitácora",
       "icon": "menu-icon tf-icons bx bx-history",
       "slug": "bitacora.index"
