@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bitacora;
 use App\Models\Cliente;
 use App\Models\Cooperativa;
 use App\Models\Credito;
@@ -216,6 +217,13 @@ class CuotaController extends Controller
       $cuota->estado_cuota = 'Pagada';
       $cuota->save();
 
+      $bitacora = new Bitacora();
+      $bitacora->id_usuario = session()->get('id_usuario');
+      $bitacora->tabla_operacion_bitacora = 'Cuota';
+      $bitacora->operacion_bitacora = 'Se registró el pago de la cuota con id ' . $cuota->id_cuota . ' del crédito número ' . $cuota->id_credito . '';
+      $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+      $bitacora->save();
+
       $cuotas = Cuota::query()->where('id_credito', $cuota->id_credito)
         ->where('estado_cuota', '!=', 'Pagada')
         ->get();
@@ -314,6 +322,13 @@ class CuotaController extends Controller
       $credito->estado_credito = 'Finalizado';
       $credito->save();
 
+      $bitacora = new Bitacora();
+      $bitacora->id_usuario = session()->get('id_usuario');
+      $bitacora->tabla_operacion_bitacora = 'Credito';
+      $bitacora->operacion_bitacora = 'Se registró el pago del crédito número ' . $credito->id_credito . '';
+      $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+      $bitacora->save();
+
       return redirect()
         ->route('creditos.index', $credito->id_credito)
         ->with('success', 'El crédito ha sido pagado con éxito');
@@ -332,6 +347,13 @@ class CuotaController extends Controller
       $cuota->fecha_abono_cuota = date('Y-m-d');
       $cuota->estado_cuota = 'Pagada';
       $cuota->save();
+
+      $bitacora = new Bitacora();
+      $bitacora->id_usuario = session()->get('id_usuario');
+      $bitacora->tabla_operacion_bitacora = 'Cuota';
+      $bitacora->operacion_bitacora = 'Se registró el pago de la cuota con id ' . $cuota->id_cuota . ' del crédito número ' . $cuota->id_credito . '';
+      $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+      $bitacora->save();
 
       $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();
       $credito->estado_credito = 'Vigente';

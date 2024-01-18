@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bien;
+use App\Models\Bitacora;
 use App\Models\Cliente;
 use App\Models\Credito;
 use App\Models\CreditoBien;
@@ -308,6 +309,14 @@ class CreditoController extends Controller
           }
 
           if ($credito->save()) {
+
+            $bitacora = new Bitacora();
+            $bitacora->id_usuario = session('id_usuario');
+            $bitacora->tabla_operacion_bitacora = 'Credito';
+            $bitacora->operacion_bitacora = 'El crédito ' . $credito->id_credito . ' ha sido ' . $credito->estado_credito;
+            $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+            $bitacora->save();
+
             $cuotas = Cuota::query()->where(['id_credito' => $credito->id_credito])
               ->get();
 
@@ -335,6 +344,14 @@ class CreditoController extends Controller
       $credito->fecha_vencimiento_credito = $cuotas[count($cuotas) - 1]->format('Y-m-d');
 
       if($credito->save()){
+
+        $bitacora = new Bitacora();
+        $bitacora->id_usuario = session('id_usuario');
+        $bitacora->tabla_operacion_bitacora = 'Credito';
+        $bitacora->operacion_bitacora = 'Se registro el crédito ' . $credito->id_credito . ' en la tabla de créditos';
+        $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+        $bitacora->save();
+
         $bienes = $request->input('bienes');
         $bienes = explode(',', $bienes);
 

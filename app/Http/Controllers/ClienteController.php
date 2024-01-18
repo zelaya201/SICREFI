@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bien;
+use App\Models\Bitacora;
 use App\Models\Cliente;
 use App\Models\Conyuge;
 use App\Models\Credito;
@@ -17,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class ClienteController extends Controller
 {
@@ -169,6 +172,13 @@ class ClienteController extends Controller
     $cliente->estado_cliente = 'Activo';
 
     if($cliente->save()) {
+      $bitacora = new Bitacora();
+      $bitacora->id_usuario = session()->get('id_usuario');
+      $bitacora->tabla_operacion_bitacora = 'Cliente';
+      $bitacora->operacion_bitacora = 'Se insertó el registro ' . $cliente->id_cliente . ' en la tabla cliente';
+      $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+      $bitacora->save();
+
       $identificador = Cliente::latest('id_cliente')->first()->id_cliente;
 
       $array = $request->session()->get('telefonos_clientes');
@@ -177,6 +187,14 @@ class ClienteController extends Controller
         $tel_cliente->tel_cliente = $telefono['tel_cliente'];
         $tel_cliente->id_cliente = $identificador;
         $tel_cliente->save();
+
+        // Bitacora
+        $bitacora = new Bitacora();
+        $bitacora->id_usuario = session()->get('id_usuario');
+        $bitacora->tabla_operacion_bitacora = 'TelCliente';
+        $bitacora->operacion_bitacora = 'Se insertó el registro ' . $tel_cliente->id_tel_cliente . ' en la tabla tel_cliente';
+        $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+        $bitacora->save();
       }
 
       if($cliente->estado_civil_cliente == 'Casado') {
@@ -185,12 +203,29 @@ class ClienteController extends Controller
         $conyuge->id_cliente = $identificador;
 
         if($conyuge->save()) {
+
+          // Bitacora
+          $bitacora = new Bitacora();
+          $bitacora->id_usario = session()->get('id_usuario');
+          $bitacora->tabla_operacion_bitacora = 'Conyuge';
+          $bitacora->operacion_bitacora = 'Se insertó el registro ' . $conyuge->id_conyuge . ' en la tabla conyuge';
+          $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+          $bitacora->save();
+
           $array = $request->session()->get('telefonos_conyuge');
           foreach ($array as $telefono) {
             $tel_conyuge = new TelConyuge();
             $tel_conyuge->tel_conyuge = $telefono['tel_conyuge'];
             $tel_conyuge->id_conyuge = Conyuge::latest('id_conyuge')->first()->id_conyuge;
             $tel_conyuge->save();
+
+            // Bitacora
+            $bitacora = new Bitacora();
+            $bitacora->id_usuario = session()->get('id_usuario');
+            $bitacora->tabla_operacion_bitacora = 'TelConyuge';
+            $bitacora->operacion_bitacora = 'Se insertó el registro ' . $tel_conyuge->id_tel_conyuge . ' en la tabla tel_conyuge';
+            $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+            $bitacora->save();
           }
         }
       }
@@ -337,6 +372,14 @@ class ClienteController extends Controller
       $cliente->fill($request->all());
 
       if($cliente->save()) {
+
+        $bitacora = new Bitacora();
+        $bitacora->id_usuario = session()->get('id_usuario');
+        $bitacora->tabla_operacion_bitacora = 'Cliente';
+        $bitacora->operacion_bitacora = 'Se modificó el registro ' . $cliente->id_cliente . ' en la tabla cliente';
+        $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+        $bitacora->save();
+
         /* Mensaje Flash */
         Session::flash('success', '');
         Session::flash('mensaje', 'Cliente modificado con éxito');
@@ -376,6 +419,13 @@ class ClienteController extends Controller
     }
 
     if($cliente->save()) {
+      $bitacora = new Bitacora();
+      $bitacora->id_usuario = session()->get('id_usuario');
+      $bitacora->tabla_operacion_bitacora = 'Cliente';
+      $bitacora->operacion_bitacora = 'Se cambió el estado a ' . $cliente->estado_cliente . ' del registro '  . $cliente->id_cliente . ' en la tabla cliente';
+      $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+      $bitacora->save();
+
       /* Mensaje Flash */
       Session::flash('success', '');
       Session::flash('mensaje', 'El estado del cliente se ha actualizado correctamente.');

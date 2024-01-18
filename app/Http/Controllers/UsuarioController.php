@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bitacora;
 use App\Models\Credito;
 use App\Models\Rol;
 use App\Models\Usuario;
@@ -67,6 +68,14 @@ class UsuarioController extends Controller
     $usuario->estado_usuario = 'Activo';
 
     if ($usuario->save()) {
+
+      // Bitacora
+      $bitacora = new Bitacora();
+      $bitacora->id_usuario = session()->get('id_usuario');
+      $bitacora->tabla_operacion_bitacora = 'Usuario';
+      $bitacora->operacion_bitacora = 'Se ha registrado el usuario ' . $usuario->nom_usuario . ' ' . $usuario->ape_usuario;
+      $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+      $bitacora->save();
 
       $request->session()->flash('success', 'El usuario se ha registrado correctamente.');
 
@@ -187,6 +196,15 @@ class UsuarioController extends Controller
     $usuario->fill($request->all());
 
     if ($usuario->save()) {
+
+      // Bitacora
+      $bitacora = new Bitacora();
+      $bitacora->id_usuario = session()->get('id_usuario');
+      $bitacora->tabla_operacion_bitacora = 'Usuario';
+      $bitacora->operacion_bitacora = 'Se ha actualizado el usuario ' . $usuario->id_usuario . ' ' . $usuario->nom_usuario . ' ' . $usuario->ape_usuario;
+      $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+      $bitacora->save();
+
       $request->session()->flash('success', 'El usuario se ha actualizado correctamente.');
       return ['success' => true];
     }
@@ -223,6 +241,14 @@ class UsuarioController extends Controller
 
     if ($usuario->save()) {
 
+      // Bitacora
+      $bitacora = new Bitacora();
+      $bitacora->id_usuario = session()->get('id_usuario');
+      $bitacora->tabla_operacion_bitacora = 'Usuario';
+      $bitacora->operacion_bitacora = 'Se ha actualizado el estado del usuario ' . $usuario->id_usuario . ' ' . $usuario->nom_usuario . ' ' . $usuario->ape_usuario;
+      $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+      $bitacora->save();
+
       Session::flash('success', 'El estado del usuario se ha actualizado correctamente.');
 
       return ['success' => true];
@@ -255,6 +281,14 @@ class UsuarioController extends Controller
     $usuario->clave_usuario = md5($request->clave_nueva);
 
     if ($usuario->save()) {
+
+      // Bitacora
+      $bitacora = new Bitacora();
+      $bitacora->id_usuario = session()->get('id_usuario');
+      $bitacora->tabla_operacion_bitacora = 'Usuario';
+      $bitacora->operacion_bitacora = 'Se ha actualizado la contraseña del usuario ' . $usuario->id_usuario . ' ' . $usuario->nom_usuario . ' ' . $usuario->ape_usuario;
+      $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+      $bitacora->save();
 
       Session::flash('success', 'La contraseña se ha actualizado correctamente.');
 

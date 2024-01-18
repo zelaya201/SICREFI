@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bitacora;
 use App\Models\Cliente;
 use App\Models\Credito;
 use App\Models\Negocio;
@@ -120,6 +121,13 @@ class NegocioController extends Controller
         $negocio->estado_negocio = 'Activo';
 
         if($negocio->save()){
+
+          $bitacora = new Bitacora();
+          $bitacora->id_usuario = session()->get('id_usuario');
+          $bitacora->tabla_operacion_bitacora = 'Negocio';
+          $bitacora->operacion_bitacora = 'Se inserto el registro ' . $negocio->id_negocio . ' en la tabla negocios';
+          $bitacora->save();
+
           $tel_negocios = $request->session()->get('telefonos_negocio_temporal');
 
           foreach ($tel_negocios as $telefono) {
@@ -127,6 +135,13 @@ class NegocioController extends Controller
             $tel->tel_negocio = $telefono['tel_negocio'];
             $tel->id_negocio = Negocio::latest('id_negocio')->first()->id_negocio;
             $tel->save();
+
+            $bitacora = new Bitacora();
+            $bitacora->id_usuario = session()->get('id_usuario');
+            $bitacora->tabla_operacion_bitacora = 'TelNegocio';
+            $bitacora->operacion_bitacora = 'Se inserto el registro ' . $tel->id_tel_negocio . ' en la tabla tel_negocios';
+            $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+            $bitacora->save();
           }
 
           $request->session()->forget('telefonos_negocio_temporal');
@@ -163,6 +178,14 @@ class NegocioController extends Controller
         $negocio->estado_negocio = 'Inactivo';
 
         if($negocio->save()) {
+
+          $bitacora = new Bitacora();
+          $bitacora->id_usuario = session()->get('id_usuario');
+          $bitacora->tabla_operacion_bitacora = 'Negocio';
+          $bitacora->operacion_bitacora = 'Se dio de baja el registro ' . $negocio->id_negocio . ' en la tabla negocios';
+          $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+          $bitacora->save();
+
           $request->session()->flash('success');
           $request->session()->flash('mensaje', 'Negocio eliminado correctamente');
           return ['success' => true, 'message' => 'Negocio eliminado correctamente'];
@@ -238,6 +261,13 @@ class NegocioController extends Controller
         $negocio->fill($request->input());
 
         if($negocio->save()) {
+          $bitacora = new Bitacora();
+          $bitacora->id_usuario = session()->get('id_usuario');
+          $bitacora->tabla_operacion_bitacora = 'Negocio';
+          $bitacora->operacion_bitacora = 'Se actualizo el registro ' . $negocio->id_negocio . ' en la tabla negocios';
+          $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+          $bitacora->save();
+
           $request->session()->flash('success');
           $request->session()->flash('mensaje', 'Negocio actualizado correctamente');
           return ['success' => true];
@@ -249,6 +279,14 @@ class NegocioController extends Controller
       $negocio->estado_negocio = 'Activo';
 
       if($negocio->save()) {
+
+        $bitacora = new Bitacora();
+        $bitacora->id_usuario = session()->get('id_usuario');
+        $bitacora->tabla_operacion_bitacora = 'Negocio';
+        $bitacora->operacion_bitacora = 'Se dio de alta el registro ' . $negocio->id_negocio . ' en la tabla negocios';
+        $bitacora->fecha_operacion_bitacora = date('Y-m-d');
+        $bitacora->save();
+
         $request->session()->flash('success');
         $request->session()->flash('mensaje', 'Negocio restaurado correctamente');
         return ['success' => true];
