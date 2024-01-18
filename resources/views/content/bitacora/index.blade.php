@@ -16,9 +16,8 @@
 @endsection
 
 @section('content')
-  <form action="{{ route('creditos.store') }}" method="post" autocomplete="off" enctype="multipart/form-data"
-        id="form-coop">
-    @csrf
+  <form action="" method="get" autocomplete="off" enctype="multipart/form-data"
+        id="form-bitacora">
 
     <div class="d-flex align-items-center justify-content-between py-3">
       <div class="flex-grow-1">
@@ -72,8 +71,26 @@
           </div>
           <div class="card-body">
 
+
             <div class="row">
-              <div class="col-md-4 mb-3">
+              <div class="col-md-3 mb-3">
+                <label class="form-label" for="id_tabla">Tabla</label>
+                <select class="form-select" name="id_tabla" id="id_tabla">
+                  <option value="">Seleccione una tabla</option>
+                  <option value="1">Clientes</option>
+                  <option value="2">Créditos</option>
+                  <option value="3">Pagos</option>
+                  <option value="4">Usuarios</option>
+                  <option value="5">Configuración</option>
+                  <option value="6">Copias de seguridad</option>
+                </select>
+
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                  <div data-field="name" data-validator="notEmpty" id="tel_coop_error"></div>
+                </div>
+              </div>
+
+              <div class="col-md-3 mb-3">
                 <label class="form-label" for="fecha_desde">Desde</label>
                 <input type="datetime-local" class="form-control" name="fecha_desde" id="fecha_desde" value="">
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
@@ -81,7 +98,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4 mb-3">
+              <div class="col-md-3 mb-3">
                 <label class="form-label" for="fecha_hasta">Hasta</label>
                 <input type="datetime-local" class="form-control" name="fecha_hasta" id="fecha_hasta" value="">
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
@@ -89,7 +106,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4 mb-3">
+              <div class="col-md-3 mb-3">
                 <label class="form-label" for="id_usuario">Usuario</label>
 
                 <select class="form-select" name="id_usuario" id="id_usuario">
