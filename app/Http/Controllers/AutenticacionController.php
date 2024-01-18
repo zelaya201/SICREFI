@@ -38,6 +38,7 @@ class AutenticacionController extends Controller
     $usuario = Usuario::query()
       ->where('email_usuario', $credentials['email_usuario'])
       ->where('clave_usuario', $credentials['clave_usuario'])
+      ->where('estado_usuario', 'Activo')
       ->first();
 
     if ($usuario) {
@@ -57,6 +58,7 @@ class AutenticacionController extends Controller
       $usuario = Usuario::query()
         ->where('nick_usuario', $credentials['email_usuario'])
         ->where('clave_usuario', $credentials['clave_usuario'])
+        ->where('estado_usuario', 'Activo')
         ->first();
 
       if ($usuario) {
@@ -155,9 +157,6 @@ class AutenticacionController extends Controller
 
       $msg = "<div style='background-color: #f5f5f5; padding: 20px;'>";
       $msg .= "<div style='background-color: #fff; border-radius: 5px; padding: 20px;'>";
-      $msg .= "<div style='text-align: center;'>";
-      $msg .= "<img src='{$urlLogo}' alt='SafeBox' style='width: 100px;'>";
-      $msg .= "</div>";
       $msg .= "<h1 style='color: #217373; font-size: 30px; font-weight: 600; margin-bottom: 20px;'>¡Hola, {$user->nom_usuario} {$user->ape_usuario}!</h1>";
       $msg .= "<p style='font-size: 16px; margin-bottom: 20px;'>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta.</p>";
       $msg .= "<p style='font-size: 16px; margin-bottom: 20px;'>Si no has realizado esta solicitud, puedes ignorar este correo electrónico.</p>";
