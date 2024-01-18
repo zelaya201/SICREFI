@@ -35,12 +35,22 @@
               <div data-field="name" data-validator="notEmpty" id="nick_usuario_error"></div>
             </div>
           </div>
-
-
           <div class="col-md-6 mb-3">
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label class="form-label" for="email_usuario">Correo electronico (*)</label>
+                <input type="text" class="form-control" placeholder="ejemplo@ejemplo.com"
+                       name="email_usuario" id="email_usuario" value="{{ $usuario->email_usuario }}">
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                  <div data-field="name" data-validator="notEmpty" id="email_usuario_error"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3 d-none">
             <label class="form-label" for="id_rol">Rol (*)</label>
             <select class="form-select" id="id_rol" name="id_rol">
-              <option> Seleccione un rol</option>
               @foreach($roles as $rol)
                 <option value="{{ $rol->id_rol }}" {{ $usuario->id_rol == $rol->id_rol ? 'selected' : '' }}>{{ $rol->nom_rol }}</option>
               @endforeach
@@ -52,16 +62,7 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-md-12 mb-3">
-            <label class="form-label" for="email_usuario">Correo electronico (*)</label>
-            <input type="text" class="form-control" placeholder="ejemplo@ejemplo.com"
-                   name="email_usuario" id="email_usuario" value="{{ $usuario->email_usuario }}">
-            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
-              <div data-field="name" data-validator="notEmpty" id="email_usuario_error"></div>
-            </div>
-          </div>
-        </div>
+
 
         <div class="row">
           <div class="col-md-12 mb-3 text-end">
