@@ -15,6 +15,10 @@ class ConfiguracionController extends Controller
      */
     public function index()
     {
+      if(!session()->has('id_usuario')){
+        return redirect()->route('login');
+      }
+
         $cooperativa = Cooperativa::all()->first();
 
         return response(view('content.configuracion.index', compact('cooperativa')));

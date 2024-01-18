@@ -12,6 +12,11 @@ class AutenticacionController extends Controller
 {
   public function login()
   {
+
+    if(Session::has('id_usuario')){
+      return redirect()->route('inicio');
+    }
+
     return view('content.authentications.login');
   }
 
@@ -36,6 +41,17 @@ class AutenticacionController extends Controller
       ->first();
 
     if ($usuario) {
+      $usuario->load('rol');
+
+      session([
+        'usuario' => $usuario->nick_usuario,
+        'id_usuario' => $usuario->id_usuario,
+        'nombre' => $usuario->nom_usuario,
+        'apellido' => $usuario->ape_usuario,
+        'email' => $usuario->email_usuario,
+        'rol' => $usuario->rol->nom_rol,
+      ]);
+
       return redirect()->route('inicio');
     }else{
       $usuario = Usuario::query()
@@ -44,6 +60,17 @@ class AutenticacionController extends Controller
         ->first();
 
       if ($usuario) {
+        $usuario->load('rol');
+
+        session([
+          'usuario' => $usuario->nick_usuario,
+          'id_usuario' => $usuario->id_usuario,
+          'nombre' => $usuario->nom_usuario,
+          'apellido' => $usuario->ape_usuario,
+          'email' => $usuario->email_usuario,
+          'rol' => $usuario->rol->nom_rol,
+        ]);
+
         return redirect()->route('inicio');
       }
     }
@@ -168,7 +195,7 @@ class AutenticacionController extends Controller
       $mail->Port = 587;                                    // TCP port to connect to
 
       //Recipients
-      $mail->setFrom('support@safeboxsv.tech', 'SafeBox');
+      $mail->setFrom('support@sicrefisv.tech', 'SICREFI');
       $mail->addAddress($to);     // Add a recipient
 
       // Content

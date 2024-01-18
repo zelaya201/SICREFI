@@ -81,6 +81,10 @@ class ConyugeController extends Controller
      */
     public function edit($id)
     {
+      if(!session()->has('id_usuario')){
+        return redirect()->route('login');
+      }
+
         $conyuge = Conyuge::query()->where('id_cliente', $id)->first();
         $telefonos = null;
 

@@ -15,6 +15,9 @@ class BitacoraController extends Controller
      */
     public function index()
     {
+      if(!session()->has('id_usuario')){
+        return redirect()->route('login');
+      }
 
       $usuarios = Usuario::all();
 

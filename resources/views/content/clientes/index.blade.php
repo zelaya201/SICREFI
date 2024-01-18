@@ -122,7 +122,7 @@
                 <div class="col-12 col-md-6">
                   <div class="col-md-6 mb-3">
                     <label for=""></label>
-                      <input type="search" class="form-control"  id="search_bar" placeholder="Buscar..." onkeyup="search()">
+                      <input type="search" class="form-control"  id="search_bar" placeholder="Buscar cliente...">
                   </div>
                 </div>
 

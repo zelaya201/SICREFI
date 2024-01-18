@@ -20,6 +20,9 @@ class UsuarioController extends Controller
    */
   public function index(Request $request)
   {
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
 
     $usuarios = Usuario::query()
       ->orderBy('nick_usuario', 'ASC')
@@ -36,6 +39,9 @@ class UsuarioController extends Controller
    */
   public function create()
   {
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
 
     $roles = Rol::all();
     $usuario = new Usuario();
@@ -143,6 +149,11 @@ class UsuarioController extends Controller
    */
   public function edit($id)
   {
+
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
+
     return response(view('content.usuarios.edit', [
       'usuario' => Usuario::findOrFail($id),
       'roles' => Rol::all()
@@ -196,6 +207,10 @@ class UsuarioController extends Controller
 
   public function cambiarCredenciales(int $id_usuario)
   {
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
+
     return response(view('content.usuarios.cambiarClave', [
       'usuario' => Usuario::findOrFail($id_usuario)
     ]));

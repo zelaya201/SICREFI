@@ -27,6 +27,10 @@ class CreditoController extends Controller
     public function index(Request $request)
     {
 
+      if(!session()->has('id_usuario')){
+        return redirect()->route('login');
+      }
+
       $cuotas_mora = Cuota::query()
         ->where(['estado_cuota' => 'Pendiente'])
         ->where('fecha_pago_cuota', '<', date('Y-m-d'))
@@ -107,6 +111,10 @@ class CreditoController extends Controller
      */
     public function create()
     {
+      if(!session()->has('id_usuario')){
+        return redirect()->route('login');
+      }
+
       $clientes = Cliente::query()
         ->select('dui_cliente','primer_nom_cliente', 'segundo_nom_cliente', 'tercer_nom_cliente', 'primer_ape_cliente', 'segundo_ape_cliente', 'id_cliente', 'estado_cliente')
         ->where(['estado_cliente' => 'Activo'])

@@ -266,6 +266,10 @@ class NegocioController extends Controller
    */
   public function show($id)
   {
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
+
     $negocios = Negocio::where('id_cliente', $id)->get();
     $cliente = Cliente::where('id_cliente', $id)->first();
     return view('content.clientes.negocios.index', ['cliente' => $cliente], compact('negocios'));

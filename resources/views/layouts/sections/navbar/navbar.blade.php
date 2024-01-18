@@ -102,8 +102,8 @@ $navbarDetached = ($navbarDetached ?? '');
                       </div>
                     </div>
                     <div class="flex-grow-1">
-                      <span class="fw-semibold d-block">Dinora Quezada</span>
-                      <small class="text-muted">Admin</small>
+                      <span class="fw-semibold d-block">{{ Session::get('nombre') }} {{ Session::get('apellido') }}</span>
+                      <small class="text-muted">{{ Session::get('rol') }}</small>
                     </div>
                   </div>
                 </a>
@@ -112,9 +112,15 @@ $navbarDetached = ($navbarDetached ?? '');
                 <div class="dropdown-divider"></div>
               </li>
               <li>
-                <a class="dropdown-item" href="javascript:void(0);">
+                <a class="dropdown-item" href="{{ route('usuarios.edit', Session::get('id_usuario')) }}">
                   <i class="bx bx-user me-2"></i>
                   <span class="align-middle">Perfil</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ route('usuarios.cambiarCredenciales', Session::get('id_usuario')) }}">
+                  <i class="bx bx-lock-alt me-2"></i>
+                  <span class="align-middle">Cambiar contraseña</span>
                 </a>
               </li>
               <li>
