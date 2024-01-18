@@ -299,10 +299,12 @@ class CuotaController extends Controller
         $cuota->fecha_pago_cuota = date('Y-m-d', strtotime($cuota->fecha_pago_cuota . ' + 2 day'));
       }
 
+      $fechaFormateada = date('d-m-Y', strtotime($cuota->fecha_pago_cuota));
+
       if($cuota->save()){
         return redirect()
           ->route('cuotas.index', $cuota->id_credito)
-          ->with('success', 'La cuota ha sido pospuesta con éxito a la fecha ' . $cuota->fecha_pago_cuota);
+          ->with('success', 'La cuota ha sido pospuesta con éxito a la fecha ' . $fechaFormateada);
       }
 
       return redirect()
