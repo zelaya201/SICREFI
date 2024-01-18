@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-  <form action="" method="get" autocomplete="off" enctype="multipart/form-data"
+  <form action="{{ route('bitacora.buscar') }}" method="get" autocomplete="off" enctype="multipart/form-data"
         id="form-bitacora">
 
     <div class="d-flex align-items-center justify-content-between py-3">
@@ -61,7 +61,6 @@
         </div>
       </div>
     @endif
-
     <div class="row">
       <div class="col-lg-12 mb-4">
         <div class="card h-100">
@@ -77,12 +76,11 @@
                 <label class="form-label" for="id_tabla">Tabla</label>
                 <select class="form-select" name="id_tabla" id="id_tabla">
                   <option value="">Seleccione una tabla</option>
-                  <option value="1">Clientes</option>
-                  <option value="2">Créditos</option>
-                  <option value="3">Pagos</option>
-                  <option value="4">Usuarios</option>
-                  <option value="5">Configuración</option>
-                  <option value="6">Copias de seguridad</option>
+                  <option value="cliente">Clientes</option>
+                  <option value="credito">Créditos</option>
+                  <option value="cuota">Pagos</option>
+                  <option value="usuario">Usuarios</option>
+                  <option value="cooperativa">Configuración</option>
                 </select>
 
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
@@ -138,7 +136,7 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th scope="col">ID</th>
+          <th scope="col">#</th>
           <th scope="col">Usuario</th>
           <th scope="col">Fecha</th>
           <th scope="col">Tabla</th>
@@ -146,14 +144,38 @@
         </tr>
         </thead>
 
+        @php
+            $contador = 1;
+        @endphp
+
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Usuario 1</td>
-            <td>2021-09-01 12:00:00</td>
-            <td>Clientes</td>
-            <td>Insertar</td>
-          </tr>
+          @if(@isset($resultados))
+            @foreach($resultados as $resultado)
+              <tr>
+                <td>{{$contador}}</td>
+                <td>{{ $resultado->usuario->nom_usuario . ' ' . $resultado->usuario->ape_usuario }}</td>
+                <td>{{ date('d/m/Y', strtotime($resultado->fecha_operacion_bitacora)) }}</td>
+                @if($resultado->tabla_operacion_bitacora == 'cliente')
+                  <td>Clientes</td>
+                @elseif($resultado->tabla_operacion_bitacora == 'credito')
+                  <td>Créditos</td>
+                @elseif($resultado->tabla_operacion_bitacora == 'cuota')
+                  <td>Pagos</td>
+                @elseif($resultado->tabla_operacion_bitacora == 'usuario')
+                  <td>Usuarios</td>
+                @elseif($resultado->tabla_operacion_bitacora == 'cooperativa')
+                  <td>Configuración</td>
+                @endif
+                <td>{{ $resultado->operacion_bitacora }}</td>
+              </tr>
+              @php($contador++)
+            @endforeach
+          @else
+            <tr>
+              <td colspan="5" style="text-align: center;">No se han encontrado registros</td>
+            </tr>
+          @endif
+
         </tbody>
       </table>
     </div>

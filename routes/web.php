@@ -150,4 +150,5 @@ Route::resource('seguridad', SeguridadController::class);
 Route::resource('configuracion', ConfiguracionController::class);
 
 // Bitacora Route
+Route::get('/bitacora/buscar', [BitacoraController::class, 'buscar'])->name('bitacora.buscar');
 Route::resource('bitacora', BitacoraController::class);
