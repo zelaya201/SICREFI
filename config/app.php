@@ -175,12 +175,9 @@ return [
     App\Providers\AuthServiceProvider::class,
     // App\Providers\BroadcastServiceProvider::class,
     App\Providers\EventServiceProvider::class,
-        App\Providers\LaravelBackupPanelServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
     App\Providers\MenuServiceProvider::class,
     Barryvdh\DomPDF\ServiceProvider::class,
-    Spatie\Backup\BackupServiceProvider::class,
-    App\Providers\LaravelBackupPanelServiceProvider::class,
   ],
 
   /*
