@@ -10,6 +10,7 @@ use App\Models\CreditoReferencia;
 use App\Models\Cuota;
 use App\Models\Negocio;
 use App\Models\Referencia;
+use App\Models\Usuario;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,8 +26,6 @@ class CreditoController extends Controller
      */
     public function index(Request $request)
     {
-      Session::forget('estado_filtro');
-      Session::forget('mostrar');
 
       $cuotas_mora = Cuota::query()
         ->where(['estado_cuota' => 'Pendiente'])
@@ -38,6 +37,10 @@ class CreditoController extends Controller
           $cuota_mora->estado_cuota = 'Atrasada';
           $cuota_mora->mora_cuota = 0.05 * $cuota_mora->total_cuota;
           $cuota_mora->save();
+
+          $credito = Credito::query()->where('id_credito', $cuota_mora->id_credito)->first();
+          $credito->estado_credito = 'En mora';
+          $credito->save();
         }
       }
 
@@ -64,8 +67,9 @@ class CreditoController extends Controller
           return $credito;
         });
 
-        $creditosVigentes = count(Credito::query()->where('estado_credito', 'Vigente')->get());
+
         $creditosMora = count(Credito::query()->where('estado_credito', 'En mora')->get());
+        $creditosVigentes = count(Credito::query()->where('estado_credito', 'Vigente')->get()) + $creditosMora;
         $creditosRenovados = count(Credito::query()->where('estado_credito', 'Renovado')->get());
         $creditosRefinanciados = count(Credito::query()->where('estado_credito', 'Refinanciado')->get());
 
@@ -84,9 +88,11 @@ class CreditoController extends Controller
         return $credito;
       });
 
-      $creditosVigentes = count(Credito::query()->where('estado_credito', 'Vigente')->get());
+
 
       $creditosMora = count(Credito::query()->where('estado_credito', 'En mora')->get());
+
+      $creditosVigentes = count(Credito::query()->where('estado_credito', 'Vigente')->get()) + $creditosMora;
 
       $creditosRenovados = count(Credito::query()->where('estado_credito', 'Renovado')->get());
       $creditosRefinanciados = count(Credito::query()->where('estado_credito', 'Refinanciado')->get());
@@ -123,10 +129,17 @@ class CreditoController extends Controller
 
         $credito = Credito::query()
           ->select('id_credito', 'monto_neto_credito', 'tasa_interes_credito', 'n_cuotas_credito', 'frecuencia_credito', 'tipo_credito', 'monto_credito', 'estado_credito', 'id_negocio')
-          ->where(['id_cliente' => $cliente->id_cliente, 'estado_credito' => 'Vigente'])
+          ->Where(['estado_credito' => 'Vigente', 'id_cliente' => $cliente->id_cliente])
           ->first();
 
         $cliente->credito = null;
+
+        if(!$credito){
+          $credito = Credito::query()
+            ->select('id_credito', 'monto_neto_credito', 'tasa_interes_credito', 'n_cuotas_credito', 'frecuencia_credito', 'tipo_credito', 'monto_credito', 'estado_credito', 'id_negocio')
+            ->Where(['estado_credito' => 'En mora', 'id_cliente' => $cliente->id_cliente])
+            ->first();
+        }
 
         if($credito){
           /* CALCULAR DEUDA Y PORCENTAJE PAGADO */
@@ -156,10 +169,12 @@ class CreditoController extends Controller
               $cuota_mora->mora_cuota = $cuota_mora->total_cuota * 0.05;
               $cuota_mora->estado_cuota = 'Atrasada';
               $cuota_mora->save();
+
+              $credito->estado_credito = 'En mora';
+              $credito->save();
             }
 
             $deudaCredito += ($cuotasMora * 0.05);
-            $credito->estado_credito = 'Mora';
           }else{
             $cuotas_mora = Cuota::query()
               ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Atrasada'])->get();
@@ -168,8 +183,6 @@ class CreditoController extends Controller
               foreach ($cuotas_mora as $cuota_mora) {
                 $deudaCredito += $cuota_mora->mora_cuota;
               }
-
-              $credito->estado_credito = 'Mora';
             }
           }
 
@@ -184,7 +197,7 @@ class CreditoController extends Controller
           if($porcentajePagado >= 75){ // Si el cliente ha pagado al menos el 75% del crédito
             $credito->renovacion = true;
 
-            if($credito->estado_credito == 'Mora'){ // Si el crédito está en mora no aplica renovación
+            if($credito->estado_credito == 'En mora'){ // Si el crédito está en mora no aplica renovación
               $credito->renovacion = false;
             }
           }
@@ -269,9 +282,15 @@ class CreditoController extends Controller
 
       /* Si el crédito es renovació o refinanciamiento */
       if($request->input('tipo_credito') != 'Nuevo'){
-        $credito = Credito::query()->where(
-          ['id_cliente' => $request->input('id_cliente'), 'estado_credito' => 'Vigente']
-        )->first();
+        $credito = Credito::query()->where('id_credito', $request->input('id_credito'))
+          ->where('estado_credito', 'Vigente')
+          ->first();
+
+        if(!$credito){
+          $credito = Credito::query()->where('id_credito', $request->input('id_credito'))
+            ->where('estado_credito', 'En mora')
+            ->first();
+        }
 
         if($credito) {
           $credito->estado_credito = 'Renovado';
@@ -291,6 +310,8 @@ class CreditoController extends Controller
           }
         }
       }
+
+      return response(['success' => false]);
 
       /* Registro del nuevo crédito */
       $credito = new Credito();
@@ -346,8 +367,7 @@ class CreditoController extends Controller
           $credito_cuota->save();
         }
 
-        Session::flash('success', '');
-        Session::flash('mensaje', 'Crédito registrado correctamente');
+        Session::flash('success', 'Crédito registrado correctamente');
         return response(['success' => true]);
       }
 
@@ -404,29 +424,22 @@ class CreditoController extends Controller
    * @param int $id_credito
    * @return Response
    */
-  public function asignarIncobrable(int $id_credito)
+  public function cambiarEstado(Request $request)
   {
-    $credito = Credito::query()->where('id_credito', $id_credito)->first();
-    $credito->estado_credito = 'Incobrable';
+    $credito = Credito::query()->where('id_credito', $request->input('id_credito'))->first();
 
-    if($credito->save()){
-      Session::flash('success', '');
-      Session::flash('mensaje', 'Crédito puesto en estado incobrable');
+    if($credito->estado_credito == 'Incobrable'){
+      $credito->estado_credito = 'Vigente';
+    }else{
+      $credito->estado_credito = 'Incobrable';
     }
 
-    return response(['success' => true]);
-  }
-
-  public function reactivarCredito(int $id_credito){
-    $credito = Credito::query()->where('id_credito', $id_credito)->first();
-    $credito->estado_credito = 'Vigente';
-
     if($credito->save()){
-      Session::flash('success', '');
-      Session::flash('mensaje', 'Crédito reactivado');
+      $request->session()->flash('success', 'El estado del crédito se ha actualizado correctamente.');
+      return response(['success' => true]);
     }
 
-    return response(['success' => true]);
+    return response(['success' => false], 500);
   }
 
   /**
@@ -536,7 +549,7 @@ class CreditoController extends Controller
           '<td>' . $contador . '</td>' .
           '<td>' . $credito->cliente->nombre_completo . '</td>' .
           '<td>$ ' . number_format($credito->monto_neto_credito, 2) . '</td>' .
-          '<td>' . number_format($credito->tasa_interes_credito, 2) . ' %</td>' .
+          '<td>' . number_format($credito->tasa_interes_credito, 4) . ' %</td>' .
           '<td>$ ' . number_format($credito->monto_credito, 2) . '</td>' .
           '<td>' . date('d/m/Y', strtotime($credito->fecha_vencimiento_credito)) . '</td>';
 
@@ -569,20 +582,11 @@ class CreditoController extends Controller
                <i class="bx bx-check me-1"></i>Reactivar</a>';
         } else {
           $output .=
-            '<a class="dropdown-item" href="javascript:void(0);">
-                <i class="bx bx-detail me-1"></i> Detalles</a>
-                  <a class="dropdown-item" href="/cuotas/'. $credito->id_credito . '/edit"><i class="bx bx-dollar-circle me-1"></i>
-                    Cuotas</a>
+            ' <a class="dropdown-item" href="/cuotas/'. $credito->id_credito . '/edit"><i class="bx bx-dollar-circle me-1"></i>
+                    Pago de cuotas</a>
                   <a class="dropdown-item" target="_blank" href="/generar-declaracion/'. $credito->id_credito . '">
                     <i class="bx bx-file me-1"></i>
-                    Declaración Jurada</a>
-                  <a class="dropdown-item" target="_blank" href="/generar-pagare/' . $credito->id_credito . '"><i
-                      class="bx bx-credit-card me-1"></i>
-                    Pagaré</a>
-                  <a class="dropdown-item" target="_blank" href="/generar-tarjeta/' . $credito->id_credito . '"><i
-                      class="bx bx-list-ul me-1"></i>Tarjeta de Pagos</a>
-                  <a class="dropdown-item" target="_blank" href="/generar-recibo/' . $credito->id_credito . '"><i
-                      class="bx bx-receipt me-1"></i>Recibo de Crédito</a>
+                    Contrato</a>
 
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item text-danger" onclick="incobrableCredito(' . $credito->id_credito .')"><i

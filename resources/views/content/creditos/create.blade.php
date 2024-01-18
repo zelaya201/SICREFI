@@ -39,7 +39,7 @@
             </li>
             <li class="list-inline-item fw-semibold">
 
-              <button class="nav-link btn btn-primary load" type="button" id="btn_guardar_credito">
+              <button class="nav-link btn btn-primary load" type="button" id="modal_submit">
                 <span class="tf-icons bx bx-save"></span>
                 Realizar crédito
               </button>
@@ -64,8 +64,24 @@
 
     @include('content.creditos.form')
 
-  </form>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header border-bottom">
+            <h4 class="modal-title" id="modal_title"></h4>
+          </div>
+          <div class="modal-body text-center">
+            <p id="modal_body"></p>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn btn-secondary load" data-bs-dismiss="modal">Cancelar</button>
+            <button id="btn_guardar_credito" type="button" class="btn"></button>
+          </div>
+        </div>
+      </div>
+    </div>
 
+  </form>
 @endsection
 
 @section('page-script')
@@ -76,12 +92,18 @@
   <script src="{{ asset('assets/js/credito.js') }}"></script>
 
   <script>
+    const modal = $('#modal');
+    const modal_title = $('#modal_title');
+    const modal_body = $('#modal_body');
+    const modal_submit = $('#modal_submit');
+
     $(document).ready(function () {
       $.ajaxSetup({
         headers: {
           'X-CSRF-TOKEN': "{{ csrf_token() }}"
         }
       });
+
 
       /* ############################################ */
       btn_guardar_credito.on('click', function () {
@@ -94,10 +116,13 @@
           data: form_credito.serialize()
             + '&bienes=' + select_bienes.getValue()
             + '&referencias=' + select_ref.getValue()
-            + '&id_cliente=' + (cliente_selected === null ? '' : cliente_selected.id_cliente),
+            + '&id_cliente=' + (cliente_selected === null ? '' : cliente_selected.id_cliente)
+            + '&id_credito=' + (credito_seleccionado === null ? '' : credito_seleccionado.id_credito),
           success: function (data) {
             if (data.success) {
               window.location.href = '{{ route("creditos.index") }}';
+            }else{
+              modal.modal('hide');
             }
           },
           error: function (xhr) {
@@ -112,13 +137,25 @@
               });
             }
 
-            btn_guardar_credito.removeClass('disabled');
-            btn_guardar_credito.prop('disabled', false);
-            btn_guardar_credito.html('<span class="tf-icons bx bx-save"></span> Realizar crédito');
+            modal.modal('hide');
+
           }
         });
       });
       /* ############################################ */
+
+      modal_submit.on('click', function () {
+        modal_title.html(`<i class="bx bx-info-circle bx-lg text-primary"></i> <b>Confirmar acción</b>`);
+        modal_body.html(`
+            <p>
+                ¿Estás seguro que deseas realizar el crédito?
+            </p>
+      `);
+
+        btn_guardar_credito.text('Si, realizar crédito');
+        btn_guardar_credito.attr('class', 'btn btn-primary');
+        modal.modal('show');
+      });
     });
 
     function calcularPlanPagos() {

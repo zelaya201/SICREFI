@@ -118,11 +118,8 @@ Route::resource('telsReferencia', TelefonoReferenciaController::class);
 Route::get('/creditos/calcularFechasCuotas', [CreditoController::class, 'calcularFechasCuotas'])
   ->name('creditos.calcularFechasCuotas');
 
-Route::get('/creditos/asignarIncobrable/{credito}', [CreditoController::class, 'asignarIncobrable'])
-  ->name('creditos.asignarIncobrable');
-
-Route::get('/creditos/reactivarCredito/{credito}', [CreditoController::class, 'reactivarCredito'])
-  ->name('creditos.reactivarCredito');
+Route::get('/creditos/cambiarEstado/{credito}', [CreditoController::class, 'cambiarEstado'])
+  ->name('creditos.cambiarEstado');
 
 Route::get('/creditos/search', [CreditoController::class, 'buscarCredito'])->name('creditos.search');
 Route::resource('creditos', CreditoController::class);

@@ -123,34 +123,6 @@
                   </tbody>
                 </table>
               </div>
-
-              <div class="row mx-2">
-                <div class="col-sm-12 col-md-6">
-                  <div class="dataTables_info" role="status" aria-live="polite">Showing 1 to
-                    10 of 1 entries
-                  </div>
-                </div>
-                <div class="col-sm-12 col-md-6">
-                  <div class="dataTables_paginate paging_simple_numbers">
-                    <ul class="pagination">
-                      <li class="paginate_button page-item previous disabled"><a
-                          aria-controls="DataTables_Table_0" aria-disabled="true" role="link" data-dt-idx="previous"
-                          tabindex="0" class="page-link">Anterior</a></li>
-                      <li class="paginate_button page-item active"><a href="#" aria-controls="DataTables_Table_0"
-                                                                      role="link" aria-current="page" data-dt-idx="0"
-                                                                      tabindex="0" class="page-link">1</a></li>
-
-                      <li class="paginate_button page-item next" id="DataTables_Table_0_next"><a href="#"
-                                                                                                 aria-controls="DataTables_Table_0"
-                                                                                                 role="link"
-                                                                                                 data-dt-idx="next"
-                                                                                                 tabindex="0"
-                                                                                                 class="page-link">Siguiente</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

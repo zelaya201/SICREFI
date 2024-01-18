@@ -3,10 +3,10 @@
   <!-- ! Hide app brand if navbar-full -->
   <div class="app-brand demo">
     <a href="{{url('/')}}" class="app-brand-link">
-      <span class="app-brand-logo demo">
-        <span class="tf-icons bx bxs-coin-stack"></span>
+      <span class="app-brand-logo demo m-0">
+        <img src="{{ asset('assets/img/logo/logo.png') }}" width="25" alt="Brand Logo" class="img-fluid">
       </span>
-        <span class="app-brand-text text-uppercase demo menu-text fw-bold ms-2">SI<span
+        <span class="app-brand-text text-uppercase demo menu-text fw-bold m-0 text-secondary">SI<span
                     class="text-primary">CREFI</span></span>
     </a>
 

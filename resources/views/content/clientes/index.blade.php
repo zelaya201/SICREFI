@@ -216,7 +216,7 @@
                             @else
                               <a class="dropdown-item" href="javascript:void(0);"
                                  onclick="cambiarEstado('{{ $cliente->id_cliente }}', '{{ $cliente->primer_nom_cliente }} ' + ' {{ $cliente->primer_ape_cliente }}', '{{ $cliente->estado_cliente }}')">
-                                <i class='bx bxs-upvote' ></i> Dar de alta
+                                <i class='bx bx-revision' ></i> Dar de alta
                               </a>
                             @endif
                           </div>
@@ -370,10 +370,10 @@
         modal_submit.text('Dar de baja');
         modal_submit.attr('class', 'btn btn-danger');
       } else {
-        modal_title.html(`<i class="bx bx-info-circle bx-lg text-info"></i> <b>Dar de alta</b>`);
+        modal_title.html(`<i class="bx bx-check-circle bx-lg text-success"></i> <b>Dar de alta</b>`);
         modal_body.html(`<p>¿Estás seguro que deseas dar de alta el cliente <b>${nombre}</b>?</p>`);
         modal_submit.text('Dar de alta');
-        modal_submit.attr('class', 'btn btn-info');
+        modal_submit.attr('class', 'btn btn-success');
       }
 
       estado_cliente = estado;

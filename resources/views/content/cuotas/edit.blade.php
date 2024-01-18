@@ -27,7 +27,7 @@
             <button class="nav-link btn btn-primary" type="button" id="btn_pagar_credito_total"
                     data-bs-toggle="modal"
                     data-bs-target="#modal_pagar_credito">
-              <span class="tf-icons bx bx-wallet-alt me-1"></span> Pagar Crédito Total
+              <span class="tf-icons bx bx-credit-card-front me-1"></span> Pagar crédito
             </button>
           </li>
         @endif

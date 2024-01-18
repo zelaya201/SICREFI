@@ -18,9 +18,9 @@
             <!-- Logo -->
             <div class="app-brand justify-content-center mb-3">
                 <span class="app-brand-logo demo">
-                  <span class="tf-icons bx bxs-coin-stack"></span>
+                  <img src="{{ asset('assets/img/logo/logo.png') }}" width="25" alt="Brand Logo" class="img-fluid">
                 </span>
-              <span class="app-brand-text text-uppercase demo menu-text fw-bold ms-2">
+              <span class="app-brand-text text-uppercase demo menu-text fw-bold m-0">
                   <span class="text-secondary">SI</span><span class="text-primary">CREFI</span>
                 </span>
             </div>

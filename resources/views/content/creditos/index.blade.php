@@ -35,7 +35,7 @@
               class="bx bx-user fs-6"></i></span>
         <div class="d-flex flex-column ps-1">
           <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Mensaje de éxito</h6>
-          <span>{{ Session::get('mensaje') }}</span>
+          <span>{{ Session::get('success') }}</span>
         </div>
       </div>
     @endif
@@ -144,10 +144,10 @@
                 <tr>
                   <th>#</th>
                   <th>Cliente</th>
-                  <th>Monto crédito</th>
+                  <th>Monto</th>
                   <th>Interés</th>
-                  <th>Monto total</th>
-                  <th>Fecha de vencimiento</th>
+                  <th>Total</th>
+                  <th>Vencimiento</th>
                   <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
@@ -168,7 +168,7 @@
                       <td>{{ $contador }}</td>
                       <td>{{ $credito->cliente->nombre_completo }}</td>
                       <td>$ {{ number_format($credito->monto_neto_credito,2) }}</td>
-                      <td>{{ number_format($credito->tasa_interes_credito,2) }} %</td>
+                      <td>{{ number_format($credito->tasa_interes_credito,4) }} %</td>
                       <td>$ {{ number_format($credito->monto_credito,2) }}</td>
                       <td>{{ date('d/m/Y', strtotime($credito->fecha_vencimiento_credito)) }}</td>
 
@@ -194,28 +194,18 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                           </a>
                           <div class="dropdown-menu">
-                            @if($credito->estado_credito != 'Incobrable')
                               <a class="dropdown-item" href="{{ route('cuotas.edit', $credito->id_credito) }}"><i class="bx bx-dollar-circle me-1"></i>
-                                Cuotas</a>
-                              <div class="dropdown-divider"></div>
+                                Pago de cuotas
+                              </a>
+
                               <a class="dropdown-item" target="_blank" href="{{ route('generar-declaracion', $credito->id_credito) }}">
                                 <i class="bx bx-file me-1"></i>
-                                Declaración Jurada</a>
-                              <a class="dropdown-item" target="_blank" href="{{ route('generar-pagare', $credito->id_credito) }}"><i
-                                  class="bx bx-credit-card me-1"></i>
-                                Pagaré</a>
-                              <a class="dropdown-item" target="_blank" href="{{ route('generar-tarjeta', $credito->id_credito) }}"><i
-                                  class="bx bx-list-ul me-1"></i>Tarjeta de Pagos</a>
-                              <a class="dropdown-item" target="_blank" href="{{ route('generar-recibo', $credito->id_credito) }}"><i
-                                  class="bx bx-receipt me-1"></i>Recibo de Crédito</a>
+                                Contrato</a>
 
                               <div class="dropdown-divider"></div>
-                              <a href="javascript:" class="dropdown-item text-danger" onclick="incobrableCredito('{{ $credito->id_credito }}')"><i
+                              <a href="javascript:" class="dropdown-item text-danger" onclick="cambiarEstado('{{ $credito->id_credito }}', '{{ $credito->estado_credito }}')"><i
                                   class="bx bx-trash me-1"></i>Incobrable</a>
-                            @else
-                              <a class="dropdown-item text-success" onclick="reactivarCredito('{{ $credito->id_credito }}')"><i
-                                  class="bx bx-check me-1"></i>Reactivar</a>
-                            @endif
+
                           </div>
                         </div>
                       </td>
@@ -240,34 +230,23 @@
       </div>
     </form>
 
-    <!-- Modal reactivar -->
-    <div class="modal fade" id="modal_credito" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" style="width: 550px;">
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-body mt-2">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-1">
-                    <h1 id="icono">
-
-                    </h1>
-                  </div>
-                  <div class="col-md-10 ms-4 mt-2">
-                    <h4><b><span id="titulo"></span></b></h4>
-                    <h6 class="text-secondary fw-normal mt-3" id="descripcion"></h6>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="modal-header border-bottom">
+            <h4 class="modal-title" id="modal_title"></h4>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button id="btn_accion" type="button" class="btn btn-info">Dar de alta</button>
+          <div class="modal-body text-center">
+            <p id="modal_body"></p>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn btn-secondary load" data-bs-dismiss="modal">Cancelar</button>
+            <button id="modal_submit" type="button" class="btn"></button>
           </div>
         </div>
       </div>
     </div>
+
     @endsection
 
     @section('page-script')
@@ -298,20 +277,18 @@
             });
           })
 
-          btn_accion.on('click', function() {
-            let ruta = '';
-
-            if(accion === 'reactivar') {
-              ruta = '{{ route('creditos.reactivarCredito', ':id_credito') }}'.replace(':id_credito', id_credito_val);
-            } else if(accion === 'incobrable') {
-              ruta = '{{ route('creditos.asignarIncobrable', ':id_credito') }}'.replace(':id_credito', id_credito_val);
-            }
-
+          modal_submit.click(function () {
             $.ajax({
-              type: 'get',
-              url: ruta,
+              type: 'GET',
+              url: '{{ route('creditos.cambiarEstado', ':id') }}' . replace(':id', id_credito),
+              data: {
+                'id_credito': id_credito,
+                'estado_credito': (estado_credito === 'Vigente' ? 'Incobrable' : 'Vigente')
+              },
+
               success: function (data) {
-                if(data.success) {
+                if (data.success === true) {
+                  modal.modal('hide');
                   location.reload();
                 }
               }
@@ -337,32 +314,32 @@
         const descripcion = $('#descripcion');
         const icono = $('#icono');
 
+        const modal = $('#modal');
+        const modal_title = $('#modal_title');
+        const modal_body = $('#modal_body');
+        const modal_submit = $('#modal_submit');
+
+        let id_credito = '';
+        let estado_credito = '';
+
+
         /* Modal reactivar */
-        function reactivarCredito(id_credito) {
-          accion = 'reactivar';
-          titulo.html('<b>Reactivar crédito</b>');
-          descripcion.html('¿Estás seguro que deseas reactivar el crédito?');
-          btn_accion.html('Si, reactivar');
-          btn_accion.removeClass('btn-danger');
-          btn_accion.addClass('btn-info');
-          icono.html('<i class="bx bx-info-circle bx-lg text-info"></i>');
+        function cambiarEstado(id, estado) {
+          if(estado === 'Vigente') {
+            modal_title.html(`<i class="bx bx-error-circle bx-lg text-danger"></i> <b>Dar de baja</b>`);
+            modal_body.html(`<p>¿Estás seguro que deseas marcar como incobrable el credito número: <b>${id}</b>?</p>`);
+            modal_submit.text('Marcar como incobrable');
+            modal_submit.attr('class', 'btn btn-danger');
+          } else {
+            modal_title.html(`<i class="bx bx-check-circle bx-lg text-success"></i> <b>Dar de alta</b>`);
+            modal_body.html(`<p>¿Estás seguro que deseas dar de alta el credito número: <b>${id}</b>?</p>`);
+            modal_submit.text('Dar de alta');
+            modal_submit.attr('class', 'btn btn-success');
+          }
 
-          modal_credito .modal('show');
-          id_credito_val = id_credito;
-        }
-
-        function incobrableCredito(id_credito) {
-          accion = 'incobrable';
-
-          titulo.html('<b>Marcar como incobrable</b>');
-          descripcion.html('¿Estás seguro que deseas marcar como incobrable el crédito?');
-          btn_accion.html('Si, marcar como incobrable');
-          btn_accion.removeClass('btn-info');
-          btn_accion.addClass('btn-danger');
-          icono.html('<i class="bx bx-info-circle bx-lg text-danger"></i>');
-
-          modal_credito.modal('show');
-          id_credito_val = id_credito;
+          estado_credito = estado;
+          id_credito = id;
+          modal.modal('show');
         }
 
       </script>

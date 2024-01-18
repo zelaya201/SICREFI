@@ -26,6 +26,10 @@ class CuotaController extends Controller
           $cuota_mora->estado_cuota = 'Atrasada';
           $cuota_mora->mora_cuota = 0.05 * $cuota_mora->total_cuota;
           $cuota_mora->save();
+
+          $credito = Credito::query()->where('id_credito', $cuota_mora->id_credito)->first();
+          $credito->estado_credito = 'En mora';
+          $credito->save();
         }
       }
 
@@ -139,6 +143,9 @@ class CuotaController extends Controller
             $cuotaAPagar->estado_cuota = 'Atrasada';
             $cuotaAPagar->mora_cuota = 0.05 * $cuotaAPagar->total_cuota;
             $cuotaAPagar->save();
+
+            $credito = Credito::query()->where('id_credito', $cuotaAPagar->id_credito)->first();
+            $credito->estado_credito = 'En mora';
           }
         }else{
           $cuotaAPagar = new Cuota();
@@ -200,6 +207,10 @@ class CuotaController extends Controller
       $cuotas = Cuota::query()->where('id_credito', $cuota->id_credito)
         ->where('estado_cuota', '!=', 'Pagada')
         ->get();
+
+      $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();
+      $credito->estado_credito = 'Vigente';
+      $credito->save();
 
       if(count($cuotas) == 0) {
         $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();

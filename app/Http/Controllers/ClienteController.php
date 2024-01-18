@@ -221,17 +221,19 @@ class ClienteController extends Controller
         ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Pendiente'])
         ->where('fecha_pago_cuota', '<', date('Y-m-d'))->get();
 
-      $credito->cuotas_mora = 0;
-
       if (count($cuotas_mora)> 0) {
-        $credito->estado_credito = 'Mora';
+        $credito->fill(['estado_credito' => 'En mora']);
+        $credito->save();
+
         $credito->cuotas_mora = count($cuotas_mora);
       }else{
         $cuotas_mora = Cuota::query()
           ->where(['id_credito' => $credito->id_credito, 'estado_cuota' => 'Atrasada'])->get();
 
         if (count($cuotas_mora)> 0) {
-          $credito->estado_credito = 'Mora';
+          $credito->fill(['estado_credito' => 'En mora']);
+          $credito->save();
+
           $credito->cuotas_mora = count($cuotas_mora);
         }
       }
