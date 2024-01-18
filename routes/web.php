@@ -13,6 +13,7 @@ use App\Http\Controllers\NegocioController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ReferenciaController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\SeguridadController;
 use App\Http\Controllers\TelefonoClienteController;
 use App\Http\Controllers\TelefonoConyugeController;
 use App\Http\Controllers\TelefonoNegocioController;
@@ -142,8 +143,12 @@ Route::get('/usuarios/darBaja/{usuario}', [UsuarioController::class, 'cambiarEst
 // Rol Route
 Route::resource('roles', RolController::class);
 
+// Seguridad Route
+Route::resource('seguridad', SeguridadController::class);
+
 // Configuracion Route
 Route::resource('configuracion', ConfiguracionController::class);
 
 // Bitacora Route
+Route::get('/bitacora/buscar', [BitacoraController::class, 'buscar'])->name('bitacora.buscar');
 Route::resource('bitacora', BitacoraController::class);

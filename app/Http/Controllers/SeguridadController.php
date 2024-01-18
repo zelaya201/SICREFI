@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Bitacora;
-use App\Models\Usuario;
-use Carbon\Carbon;
+use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
-class BitacoraController extends Controller
+class SeguridadController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,48 +17,39 @@ class BitacoraController extends Controller
      */
     public function index()
     {
-      if(!session()->has('id_usuario')){
-        return redirect()->route('login');
+      /*$disk = Storage::disk(config('laravel-backup.backup.destination.disks')[0]);
+
+      $files = $disk->files(config('laravel-backup.backup.name'));
+      $backups = [];
+      // make an array of backup files, with their filesize and creation date
+      foreach ($files as $k => $f) {
+        // only take the zip files into account
+        if (substr($f, -4) == '.zip' && $disk->exists($f)) {
+          $backups[] = [
+            'file_path' => $f,
+            'file_name' => str_replace(config('laravel-backup.backup.name') . '/', '', $f),
+            'file_size' => $disk->size($f),
+            'last_modified' => $disk->lastModified($f),
+          ];
+        }
       }
+      // reverse the backups, so the newest one would be on top
+      $backups = array_reverse($backups);*/
 
-      $usuarios = Usuario::all();
+      //return response(view('content.seguridad.index', compact('backups')));
+      return response(view('content.seguridad.index'));
 
-      return response(view('content.bitacora.index', compact('usuarios')));
-    }
-
-    public function buscar(Request $request){
-      //$resultados = new Bitacora();
-
-      $usuarios = Usuario::all();
-
-      $fecha_inicio = Carbon::parse($request->fecha_desde);
-      $fecha_fin = Carbon::parse($request->fecha_hasta);
-
-      $resultados = Bitacora::query()
-                              ->whereBetween('fecha_operacion_bitacora', [date($fecha_inicio), date($fecha_fin)])
-                              ->where('tabla_operacion_bitacora', 'LIKE', $request->id_tabla.'%')
-                              ->where('id_usuario', '=', $request->id_usuario)
-                              ->orderBy('fecha_operacion_bitacora', 'asc')
-                              ->get();
-
-
-
-      $resultados->load('usuario');
-
-      //dd($resultados);
-
-      return response(view('content.bitacora.index', compact('resultados', 'usuarios')));
-      //return response(view('content.bitacora.index'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function create()
     {
-        //
+      Artisan::call('backup:run',['--only-db'=>true]);
+      dd(Artisan::output());
     }
 
     /**
