@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Cooperativa;
 use App\Models\Credito;
 use App\Models\Cuota;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Illuminate\Http\Request;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class CuotaController extends Controller
 {
@@ -17,6 +21,10 @@ class CuotaController extends Controller
      */
     public function index()
     {
+      if(!session()->has('id_usuario')){
+        return redirect()->route('login');
+      }
+
       $cuotas_mora = Cuota::query()
         ->where(['estado_cuota' => 'Pendiente'])
         ->where('fecha_pago_cuota', '<', date('Y-m-d'))
@@ -117,6 +125,10 @@ class CuotaController extends Controller
      */
     public function edit($id)
     {
+      if(!session()->has('id_usuario')){
+        return redirect()->route('login');
+      }
+
       $credito = Credito::query()->where('id_credito', $id)->first();
 
       $cliente = Cliente::query()->select(
@@ -197,7 +209,6 @@ class CuotaController extends Controller
      */
     public function update(Request $request, $id)
     {
-
       $cuota = Cuota::query()->where('id_cuota', $id)->first();
 
       $cuota->extra_cuota = $request->input('extra_cuota');
@@ -217,11 +228,66 @@ class CuotaController extends Controller
         $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();
         $credito->estado_credito = 'Finalizado';
         $credito->save();
-
-        return redirect()
-          ->route('cuotas.edit', $credito->id_credito)
-          ->with('success', 'El crédito ha sido pagado con éxito');
       }
+
+      $cuotas = Cuota::query()
+        ->where(['id_credito' => $cuota->id_credito])
+        ->get();
+
+      // Datos
+      foreach ($cuotas as $key => $value) {
+        if ($value->id_cuota == $id) {
+          $cuota->num_cuota = $key + 1;
+        }
+      }
+
+      $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();
+      $cliente = Cliente::query()->where('id_cliente', $credito->id_cliente)->first();
+      $cooperativa = Cooperativa::query()->first();
+
+      $nombre = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente;
+      $apellido = $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
+
+      $cliente->nombre = $nombre;
+      $cliente->apellido = $apellido;
+
+      // Crear PDF y enviarlo por correo
+      $pdf = PDF::loadView('content.pdf.ticket', [
+        'title' => 'COMPROBANTE DE PAGO',
+        'date' => date('m/d/Y'),
+        'cliente' => $cliente,
+        'fecha' => strftime("%d de %B de %Y", strtotime(date('Y-m-d'))),
+        'credito' => $credito,
+        'cuota' => $cuota,
+        'cooperativa' => $cooperativa
+      ]);
+
+      $pdf->setPaper(array(0,0,240,410));
+
+      $headers = $pdf->output();
+
+      $msg = '
+        <html>
+          <head>
+            <title>Comprobante de pago - SICREFI</title>
+          </head>
+          <body>
+            <p>Estimado(a) ' . $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente . ',</p>
+            <p>Se ha realizado el pago de la cuota número ' . $cuota->num_cuota . ' del crédito número ' . $credito->id_credito . '.</p>
+            <p>Adjunto encontrará el comprobante de pago.</p>
+            <p>Gracias por confiar en nosotros.</p>
+            <p>Atentamente,</p>
+            <p>' . $cooperativa->nom_coop . '</p>
+          </body>
+        </html>
+      ';
+
+      $this->smtp_mailer(
+        $cliente->email_cliente,
+        'Comprobante de pago',
+        $msg,
+        $headers
+      );
 
       return redirect()
         ->route('cuotas.edit', $cuota->id_credito)
@@ -267,6 +333,10 @@ class CuotaController extends Controller
       $cuota->estado_cuota = 'Pagada';
       $cuota->save();
 
+      $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();
+      $credito->estado_credito = 'Vigente';
+      $credito->save();
+
       $cuotas = Cuota::query()->where('id_credito', $cuota->id_credito)
         ->where('estado_cuota', '!=', 'Pagada')
         ->get();
@@ -276,6 +346,65 @@ class CuotaController extends Controller
         $credito->estado_credito = 'Finalizado';
         $credito->save();
       }
+
+      $cuotas = Cuota::query()
+        ->where(['id_credito' => $cuota->id_credito])
+        ->get();
+
+      // Datos
+      foreach ($cuotas as $key => $value) {
+        if ($value->id_cuota == $id) {
+          $cuota->num_cuota = $key + 1;
+        }
+      }
+
+      $credito = Credito::query()->where('id_credito', $cuota->id_credito)->first();
+      $cliente = Cliente::query()->where('id_cliente', $credito->id_cliente)->first();
+      $cooperativa = Cooperativa::query()->first();
+
+      $nombre = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente;
+      $apellido = $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
+
+      $cliente->nombre = $nombre;
+      $cliente->apellido = $apellido;
+
+      // Crear PDF y enviarlo por correo
+      $pdf = PDF::loadView('content.pdf.ticket', [
+        'title' => 'COMPROBANTE DE PAGO',
+        'date' => date('m/d/Y'),
+        'cliente' => $cliente,
+        'fecha' => strftime("%d de %B de %Y", strtotime(date('Y-m-d'))),
+        'credito' => $credito,
+        'cuota' => $cuota,
+        'cooperativa' => $cooperativa
+      ]);
+
+      $pdf->setPaper(array(0,0,240,410));
+
+      $headers = $pdf->output();
+
+      $msg = '
+        <html>
+          <head>
+            <title>Comprobante de pago - SICREFI</title>
+          </head>
+          <body>
+            <p>Estimado(a) ' . $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente . ',</p>
+            <p>Se ha realizado el pago de la cuota número ' . $cuota->num_cuota . ' del crédito número ' . $credito->id_credito . '.</p>
+            <p>Adjunto encontrará el comprobante de pago.</p>
+            <p>Gracias por confiar en nosotros.</p>
+            <p>Atentamente,</p>
+            <p>' . $cooperativa->nom_coop . '</p>
+          </body>
+        </html>
+      ';
+
+      $this->smtp_mailer(
+        $cliente->email_cliente,
+        'Comprobante de pago',
+        $msg,
+        $headers
+      );
 
       return redirect()
         ->route('cuotas.index', $cuota->id_credito)
@@ -322,4 +451,40 @@ class CuotaController extends Controller
     {
         //
     }
+
+  function smtp_mailer($to, $subject, $msg, $headers)
+  {
+    $mail = new PHPMailer(true);
+
+    try {
+      //Server settings
+      $mail->SMTPDebug = 0;                      // Enable verbose debug output
+      $mail->isSMTP();                                            // Send using SMTP
+      $mail->Host = env('MAIL_HOST');                    // Set the SMTP server to send through
+      $mail->SMTPSecure = 'TLS';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+      $mail->CharSet = 'UTF-8';
+      $mail->IsHTML(true);
+      $mail->SMTPAuth = true;                                   // Enable SMTP authentication
+      $mail->Username = env('MAIL_USERNAME');                     // SMTP username
+      $mail->Password = env('MAIL_PASSWORD');                               // SMTP password
+      $mail->Port = 587;                                    // TCP port to connect to
+
+      //Recipients
+      $mail->setFrom('support@sicrefisv.tech', 'SICREFI');
+      $mail->addAddress($to);     // Add a recipient
+
+      $mail->addStringAttachment($headers, 'comprobante.pdf');
+
+      // Content
+      $mail->isHTML(true);                                  // Set email format to HTML
+      $mail->Subject = $subject;
+      $mail->Body = $msg;
+
+
+      $mail->send();
+      return 'Sent';
+    } catch (Exception $e) {
+      return "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+  }
 }

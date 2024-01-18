@@ -128,14 +128,17 @@
                             <a class="dropdown-item" href="{{ route('usuarios.edit', $usuario->id_usuario) }}"><i
                                 class="bx bx-edit-alt me-1"></i> Editar</a>
 
+                            @if($usuario->id_usuario != Session::get('id_usuario'))
                             <div class="dropdown-divider"></div>
 
-                            @if($usuario->estado_usuario == 'Activo')
-                              <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="darDeBaja({{ $usuario->id_usuario }}, '{{ $usuario->nom_usuario . ' ' . $usuario->ape_usuario }}', '{{ $usuario->estado_usuario }}')"><i
-                                  class="bx bx-trash me-1"></i> Dar de baja</a>
-                            @elseif($usuario->estado_usuario == 'Inactivo')
-                              <a class="dropdown-item" href="javascript:void(0);" onclick="darDeBaja({{ $usuario->id_usuario }}, '{{ $usuario->nom_usuario . ' ' . $usuario->ape_usuario }}', '{{ $usuario->estado_usuario }}')"><i
-                                  class="bx bx-revision me-1"></i> Dar de alta</a>
+
+                              @if($usuario->estado_usuario == 'Activo')
+                                <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="darDeBaja({{ $usuario->id_usuario }}, '{{ $usuario->nom_usuario . ' ' . $usuario->ape_usuario }}', '{{ $usuario->estado_usuario }}')"><i
+                                    class="bx bx-trash me-1"></i> Dar de baja</a>
+                              @elseif($usuario->estado_usuario == 'Inactivo')
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="darDeBaja({{ $usuario->id_usuario }}, '{{ $usuario->nom_usuario . ' ' . $usuario->ape_usuario }}', '{{ $usuario->estado_usuario }}')"><i
+                                    class="bx bx-revision me-1"></i> Dar de alta</a>
+                              @endif
                             @endif
                           </div>
                         </div>

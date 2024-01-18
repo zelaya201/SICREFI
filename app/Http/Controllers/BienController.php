@@ -171,6 +171,10 @@ class BienController extends Controller
      */
     public function show($id)
     {
+      if(!session()->has('id_usuario')){
+        return redirect()->route('login');
+      }
+      
       $bienes = Bien::where('id_cliente', $id)->get();
       $cliente = Cliente::where('id_cliente', $id)->first();
       return view('content.clientes.bienes.index', ['cliente' => $cliente], compact('bienes'));

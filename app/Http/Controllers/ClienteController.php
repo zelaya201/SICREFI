@@ -27,6 +27,11 @@ class ClienteController extends Controller
    */
   public function index(Request $request)
   {
+
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
+
     Session::forget('estado_filtro');
     Session::forget('mostrar');
 
@@ -113,6 +118,10 @@ class ClienteController extends Controller
    */
   public function create()
   {
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
+
     Session::forget('telefonos_clientes'); // Elimina todos los registros de la sesión de telefonos_clientes
     Session::forget('telefonos_conyuge'); // Elimina todos los registros de la sesión de telefonos_conyuge
 
@@ -203,6 +212,10 @@ class ClienteController extends Controller
    */
   public function show($id)
   {
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
+
     /* Mostrar información del cliente y su historial crediticio */
 
     $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
@@ -280,6 +293,10 @@ class ClienteController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function edit(int $id) {
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
+
     /* Modificar cliente */
     $cliente = Cliente::query()->where(['id_cliente' => $id])->get()->first();
 

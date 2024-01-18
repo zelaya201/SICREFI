@@ -13,6 +13,9 @@ class IndexController extends Controller
 {
   public function index()
   {
+    if(!session()->has('id_usuario')){
+      return redirect()->route('login');
+    }
 
     // Obtener clientes registrados por mes en el año actual
 
