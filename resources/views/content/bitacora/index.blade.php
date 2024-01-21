@@ -155,9 +155,9 @@
                 <td>{{$contador}}</td>
                 <td>{{ $resultado->usuario->nom_usuario . ' ' . $resultado->usuario->ape_usuario }}</td>
                 <td>{{ date('d/m/Y', strtotime($resultado->fecha_operacion_bitacora)) }}</td>
-                @if($resultado->tabla_operacion_bitacora == 'cliente')
+                @if($resultado->tabla_operacion_bitacora == 'Cliente')
                   <td>Clientes</td>
-                @elseif($resultado->tabla_operacion_bitacora == 'credito')
+                @elseif($resultado->tabla_operacion_bitacora == 'Credito')
                   <td>Créditos</td>
                 @elseif($resultado->tabla_operacion_bitacora == 'cuota')
                   <td>Pagos</td>
