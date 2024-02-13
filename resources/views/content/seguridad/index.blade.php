@@ -26,6 +26,11 @@
           <a class="nav-link btn btn-primary load" type="button" href="{{ route('seguridad.create') }}"><span
               class="tf-icons bx bx-plus"></span> <span class="d-none d-sm-inline-block"> Nueva copia</span> </a>
         </li>
+
+        <li class="list-inline-item fw-semibold">
+          <a class="nav-link btn btn-primary load" type="button" href="{{ route('seguridad.restore') }}"><span
+              class="tf-icons bx bx-download"></span> <span class="d-none d-sm-inline-block"> Restaurar</span> </a>
+        </li>
       </ul>
     </div>
 

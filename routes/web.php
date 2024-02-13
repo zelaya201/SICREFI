@@ -144,6 +144,7 @@ Route::get('/usuarios/darBaja/{usuario}', [UsuarioController::class, 'cambiarEst
 Route::resource('roles', RolController::class);
 
 // Seguridad Route
+Route::get('/seguridad/restore', [SeguridadController::class, 'restore'])->name('seguridad.restore');
 Route::resource('seguridad', SeguridadController::class);
 
 // Configuracion Route
