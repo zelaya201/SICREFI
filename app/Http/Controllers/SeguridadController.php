@@ -25,7 +25,7 @@ class SeguridadController extends Controller
      */
     public function create()
     {
-      $this->backDb(
+      $file = $this->backDb(
         env('DB_HOST'),
         env('DB_USERNAME'),
         env('DB_PASSWORD'),
@@ -48,13 +48,19 @@ class SeguridadController extends Controller
         cuota,
         credito_referencia"
       );
-      // Descargar la base de datos
-      $file = 'backup-' . env('DB_DATABASE') . '-' . date('Y-m-d') . '.sql';
-      return response()->download($file);
+
+      // Descargar y eliminar el archivo
+      return response()->download($file)->deleteFileAfterSend(true);
     }
 
-  public function restore()
+  public function restore(Request $request)
   {
+    // Obtener archivo de la base de datos
+    $file = $request->file('file');
+
+    // Guardar el archivo en la carpeta de storage
+    $file->storeAs('public', $file->getClientOriginalName());
+
     // Eliminar relaciones de la base de datos
     $this->dropRel(
       env('DB_HOST'),
@@ -67,7 +73,9 @@ class SeguridadController extends Controller
       env('DB_USERNAME'),
       env('DB_PASSWORD'),
       env('DB_DATABASE'),
-      'backup-u843080859_sicrefi-2024-02-13.sql');
+      storage_path('app/public/' . $file->getClientOriginalName()));
+
+    return redirect()->route('seguridad.index')->with('success', 'Base de datos restaurada exitosamente.');
   }
 
     /**
@@ -281,7 +289,7 @@ class SeguridadController extends Controller
     }
 
     // Save the SQL script to a backup file
-    $fileName = 'backup-' . $dbname . '-' . date('Y-m-d') . '.sql';
+    $fileName = 'backup-' . $dbname . '-' . date('Y-m-d H_i_s') . '.sql';
     $handle = fopen($fileName,'w+');
     fwrite($handle, $return);
     fclose($handle);
