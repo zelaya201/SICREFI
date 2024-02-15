@@ -18,15 +18,81 @@
     <div class="col-lg-12">
       <div class="alert alert-info d-flex" role="alert">
           <span class="badge badge-center rounded-pill bg-info border-label-info p-3 me-2"><i
-              class="bx bx-user fs-6"></i></span>
+              class="bx bx-window-alt fs-6"></i></span>
         <div class="d-flex flex-column ps-1">
-          <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">¡Bienvenido/a {{ Session::get('nombre') }}!</h6>
-          <span>Ya puedes empezar a administrar todos tus créditos financieros</span>
+          <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">¡Bienvenido/a {{ Session::get('nombre') }}
+            !</h6>
+          <span>Ya puedes empezar a administrar todos tus créditos financieros.</span>
         </div>
       </div>
     </div>
 
-    <div class="col-lg-10 mb-4">
+    <div class="col-lg-12 mb-4">
+      <div class="card">
+        <div class="card-widget-separator-wrapper">
+          <div class="card-body card-widget-separator">
+            <div class="row gy-4 gy-sm-1">
+              <div class="col-sm-6 col-lg-3">
+                <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
+                  <div>
+                    <h3 class="mb-1">$0.00</h3>
+                    <p class="mb-0">Cartera de créditos</p>
+                  </div>
+                  <div class="avatar me-sm-4">
+                    <span class="avatar-initial rounded bg-label-secondary">
+                      <i class="bx bx-user bx-sm"></i>
+                    </span>
+                  </div>
+                </div>
+                <hr class="d-none d-sm-block d-lg-none me-4">
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
+                  <div>
+                    <h3 class="mb-1"></h3>
+                    <p class="mb-0">Clientes con Crédito</p>
+                  </div>
+                  <div class="avatar me-lg-4">
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class="bx bx-file bx-sm"></i>
+              </span>
+                  </div>
+                </div>
+                <hr class="d-none d-sm-block d-lg-none">
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
+                  <div>
+                    <h3 class="mb-1"></h3>
+                    <p class="mb-0">Clientes Activos</p>
+                  </div>
+                  <div class="avatar me-sm-4">
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class='bx bx-user-check bx-sm'></i>
+              </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h3 class="mb-1"></h3>
+                    <p class="mb-0">Clientes Inactivos</p>
+                  </div>
+                  <div class="avatar">
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class='bx bx-user-minus bx-sm'></i>
+              </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 mb-4">
       <div class="card table-responsive">
         <div class="row row-bordered g-0">
           <div class="col-md-12">
@@ -36,63 +102,6 @@
         </div>
       </div>
     </div>
-
-    <div class="col-lg-2 mb-4">
-      <div class="col-lg-12 mb-4">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
-              <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                <div class="card-title">
-                  <h5 class="text-nowrap mb-2 text">Monto cartera</h5>
-                </div>
-                <div class="mt-sm-auto">
-                  <h3 class="mb-0 text-primary">${{ number_format($montoCartera, 2) }}</h3>
-                </div>
-              </div>
-              <div id="profileReportChart"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 mb-4">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
-              <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                <div class="card-title">
-                  <h5 class="text-nowrap mb-2 text">Cobros</h5>
-                </div>
-                <div class="mt-sm-auto">
-                  <h3 class="mb-0 text-primary">{{ $cobros }}</h3>
-                </div>
-              </div>
-              <div id="profileReportChart"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 mb-4">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
-              <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                <div class="card-title">
-                  <h5 class="text-nowrap mb-2 text">Usuarios</h5>
-                </div>
-                <div class="mt-sm-auto">
-                  <h3 class="mb-0 text-primary">{{ $usuarios }}</h3>
-                </div>
-              </div>
-              <div id="profileReportChart"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
 @endsection
@@ -103,15 +112,29 @@
     var clientes = <?php echo json_encode($clientes); ?>;
     var datosClientes = []
 
-    for (var i = 0; i < clientes.length; i++) {
-      datosClientes.push(parseInt(clientes[i].total))
+    console.log(clientes);
+
+    for (var i = 0; i < 12; i++) {
+      var contador = 0;
+      for (var j = 0; j < clientes.length; j++) {
+        if (clientes[j].mes === i + 1) {
+          contador = clientes[j].total;
+        }
+      }
+      datosClientes.push(contador)
     }
 
     var creditos = <?php echo json_encode($creditos); ?>;
     var datosCreditos = []
 
-    for (var i = 0; i < creditos.length; i++) {
-      datosCreditos.push(parseInt(creditos[i].total))
+    for (var i = 0; i < 12; i++) {
+      var contador = 0;
+      for (var j = 0; j < creditos.length; j++) {
+        if (creditos[j].mes === i + 1) {
+          contador = creditos[j].total;
+        }
+      }
+      datosCreditos.push(contador)
     }
 
     let cardColor, headingColor, axisColor, shadeColor, borderColor;
@@ -135,16 +158,18 @@
         ],
         chart: {
           width: '100%',
-          height: 330,
+          height: 260,
           stacked: true,
           type: 'bar',
-          toolbar: {show: false}
+          toolbar: {
+            show: true
+          }
         },
         plotOptions: {
           bar: {
-            horizontal: false,
+            horizontal: screen.width <= 787,
             columnWidth: '33%',
-            borderRadius: 12,
+            borderRadius: 20,
             startingShape: 'rounded',
             endingShape: 'rounded'
           }
@@ -215,7 +240,7 @@
               plotOptions: {
                 bar: {
                   borderRadius: 10,
-                  columnWidth: '32%'
+                  columnWidth: '35%'
                 }
               }
             }

@@ -28,6 +28,12 @@
       "slug": "cuotas.index"
     },
     {
+      "url": "/caja",
+      "name": "Caja",
+      "icon": "menu-icon tf-icons bx bx-wallet",
+      "slug": "caja.index"
+    },
+    {
       "menuHeader": "Seguridad"
     },
     {

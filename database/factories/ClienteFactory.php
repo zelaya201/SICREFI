@@ -16,6 +16,10 @@ class ClienteFactory extends Factory
      */
     public function definition()
     {
+
+      $enero = date('Y-m-d', strtotime('first day of january'));
+      $marzo = date('Y-m-d', strtotime('first day of march'));
+
         return [
           'dui_cliente' => $this->faker->unique()->regexify('^\d{9}$'),
           'primer_nom_cliente' => $this->faker->firstNameMale(),
@@ -35,7 +39,7 @@ class ClienteFactory extends Factory
           'gasto_vivienda_cliente' => $this->faker->numberBetween(1,100),
           'gasto_otro_cliente' => $this->faker->numberBetween(1,100),
           'estado_cliente' => 'Activo',
-          'created_at' => $this->faker->dateTime(),
+          'created_at' =>  $marzo, // El mes pasado
           'updated_at' => $this->faker->dateTime(),
         ];
     }

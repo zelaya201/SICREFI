@@ -18,7 +18,6 @@ class IndexController extends Controller
     }
 
     // Obtener clientes registrados por mes en el año actual
-
     $clientes = Cliente::selectRaw('count(*) as total, MONTH(created_at) as mes')
       ->whereYear('created_at', date('Y'))
       ->groupBy('mes')
