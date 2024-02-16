@@ -50,10 +50,10 @@
               <label for="email_usuario" class="form-label">Correo electrónico</label>
               <input type="text" class="form-control" id="email_usuario" name="email_usuario" placeholder="ejemplo@ejemplo.com" autofocus>
             </div>
-            <button type="submit" class="btn btn-primary d-grid w-100">Enviar correo electrónico</button>
+            <button type="submit" class="btn btn-primary d-grid w-100 load">Enviar correo electrónico</button>
           </form>
           <div class="text-center">
-            <a href="{{ route('login') }}" class="d-flex align-items-center justify-content-center">
+            <a href="{{ route('login') }}" class="d-flex align-items-center justify-content-center load">
               <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
               Regresar a inicio de sesión
             </a>

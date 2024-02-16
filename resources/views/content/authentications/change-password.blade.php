@@ -53,11 +53,11 @@
                   <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                 </div>
               </div>
-              <button class="btn btn-primary d-grid w-100" disabled>Cambiar contraseña</button>
+              <button class="btn btn-primary d-grid w-100 load" disabled>Cambiar contraseña</button>
             </form>
             <div class="text-center">
               <a href="{{ route('login') }}" class="d-flex align-items-center justify-content-center">
-                <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm load"></i>
                 Regresar a inicio de sesión
               </a>
             </div>

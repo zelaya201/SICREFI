@@ -20,8 +20,7 @@
           <span class="badge badge-center rounded-pill bg-info border-label-info p-3 me-2"><i
               class="bx bx-window-alt fs-6"></i></span>
         <div class="d-flex flex-column ps-1">
-          <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">¡Bienvenido/a {{ Session::get('nombre') }}
-            !</h6>
+          <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">¡Bienvenido/a {{ Session::get('nombre') }}!</h6>
           <span>Ya puedes empezar a administrar todos tus créditos financieros.</span>
         </div>
       </div>
@@ -35,12 +34,12 @@
               <div class="col-sm-6 col-lg-3">
                 <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
                   <div>
-                    <h3 class="mb-1">$0.00</h3>
+                    <h3 class="mb-1">${{ number_format($montoCartera, 2) }}</h3>
                     <p class="mb-0">Cartera de créditos</p>
                   </div>
                   <div class="avatar me-sm-4">
-                    <span class="avatar-initial rounded bg-label-secondary">
-                      <i class="bx bx-user bx-sm"></i>
+                    <span class="avatar-initial rounded bg-label-warning">
+                      <i class="bx bx-wallet bx-sm text-warning"></i>
                     </span>
                   </div>
                 </div>
@@ -49,12 +48,12 @@
               <div class="col-sm-6 col-lg-3">
                 <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
                   <div>
-                    <h3 class="mb-1"></h3>
-                    <p class="mb-0">Clientes con Crédito</p>
+                    <h3 class="mb-1">$0.00</h3>
+                    <p class="mb-0">Total de entradas</p>
                   </div>
                   <div class="avatar me-lg-4">
-              <span class="avatar-initial rounded bg-label-secondary">
-                <i class="bx bx-file bx-sm"></i>
+              <span class="avatar-initial rounded bg-label-primary">
+                <i class="bx bx-trending-up text-primary bx-sm"></i>
               </span>
                   </div>
                 </div>
@@ -63,12 +62,12 @@
               <div class="col-sm-6 col-lg-3">
                 <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
                   <div>
-                    <h3 class="mb-1"></h3>
-                    <p class="mb-0">Clientes Activos</p>
+                    <h3 class="mb-1">$0.00</h3>
+                    <p class="mb-0">Total de salidas</p>
                   </div>
                   <div class="avatar me-sm-4">
-              <span class="avatar-initial rounded bg-label-secondary">
-                <i class='bx bx-user-check bx-sm'></i>
+              <span class="avatar-initial rounded bg-label-danger">
+                <i class='bx bx-trending-down text-danger bx-sm'></i>
               </span>
                   </div>
                 </div>
@@ -76,12 +75,12 @@
               <div class="col-sm-6 col-lg-3">
                 <div class="d-flex justify-content-between align-items-start">
                   <div>
-                    <h3 class="mb-1"></h3>
-                    <p class="mb-0">Clientes Inactivos</p>
+                    <h3 class="mb-1">{{ $cobros }}</h3>
+                    <p class="mb-0">Cobros del dia</p>
                   </div>
                   <div class="avatar">
-              <span class="avatar-initial rounded bg-label-secondary">
-                <i class='bx bx-user-minus bx-sm'></i>
+              <span class="avatar-initial rounded bg-label-success">
+                <i class='bx bx-coin bx-sm text-success'></i>
               </span>
                   </div>
                 </div>
@@ -109,10 +108,13 @@
 @section('page-script')
   <script>
 
-    var clientes = <?php echo json_encode($clientes); ?>;
-    var datosClientes = []
+    var borderEnd = $('.border-end');
+    if(screen.width <= 573){
+      borderEnd.removeClass('border-end');
+    }
 
-    console.log(clientes);
+    var clientes = <?php echo json_encode($clientes); ?>;
+    var datosClientes = [];
 
     for (var i = 0; i < 12; i++) {
       var contador = 0;
@@ -158,7 +160,7 @@
         ],
         chart: {
           width: '100%',
-          height: 260,
+          height: (screen.width <= 787) ? 400 : 250,
           stacked: true,
           type: 'bar',
           toolbar: {

@@ -87,7 +87,7 @@ $navbarDetached = ($navbarDetached ?? '');
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
 
               <div class="avatar avatar-online">
-                <img src="{{ asset('assets/img/avatars/6.png') }}" alt class="w-px-40 h-auto rounded-circle">
+                <img src="{{ asset('assets/img/avatars/silueta.jpg') }}" alt class="w-px-40 h-auto rounded-circle">
 
               </div>
             </a>
@@ -98,7 +98,7 @@ $navbarDetached = ($navbarDetached ?? '');
                   <div class="d-flex">
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar avatar-online">
-                        <img src="{{ asset('assets/img/avatars/6.png') }}" alt class="w-px-40 h-auto rounded-circle">
+                        <img src="{{ asset('assets/img/avatars/silueta.jpg') }}" alt class="w-px-40 h-auto rounded-circle">
                       </div>
                     </div>
                     <div class="flex-grow-1">
@@ -112,28 +112,28 @@ $navbarDetached = ($navbarDetached ?? '');
                 <div class="dropdown-divider"></div>
               </li>
               <li>
-                <a class="dropdown-item" href="{{ route('usuarios.edit', Session::get('id_usuario')) }}">
+                <a class="dropdown-item load" href="{{ route('usuarios.edit', Session::get('id_usuario')) }}">
                   <i class="bx bx-user me-2"></i>
                   <span class="align-middle">Perfil</span>
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="{{ route('usuarios.cambiarCredenciales', Session::get('id_usuario')) }}">
+                <a class="dropdown-item load" href="{{ route('usuarios.cambiarCredenciales', Session::get('id_usuario')) }}">
                   <i class="bx bx-lock-alt me-2"></i>
                   <span class="align-middle">Cambiar contraseña</span>
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="/configuracion">
+                <a class="dropdown-item load" href="/configuracion">
                   <i class='bx bx-cog me-2'></i>
-                  <span class="align-middle">Ajustes</span>
+                  <span class="align-middle load">Ajustes</span>
                 </a>
               </li>
               <li>
                 <div class="dropdown-divider"></div>
               </li>
               <li>
-                <a class="dropdown-item" href="{{ route('logout') }}">
+                <a class="dropdown-item load" href="{{ route('logout') }}">
                   <i class='bx bx-power-off me-2'></i>
                   <span class="align-middle">Salir</span>
                 </a>
