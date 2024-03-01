@@ -43,7 +43,9 @@
 </head>
 
 <body>
-
+<div class="background-loader">
+  <div class="spinner-border spinner-border-lg text-primary loader"></div>
+</div>
 
 
 
@@ -53,9 +55,7 @@
 
 {{-- Background transparente --}}
 
-  <div class="background-loader">
-    <div class="spinner-border spinner-border-lg text-primary loader"></div>
-  </div>
+
 
   <!-- Include Scripts -->
   @include('layouts/sections/scripts')

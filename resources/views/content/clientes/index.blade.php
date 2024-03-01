@@ -121,26 +121,36 @@
               <div class="row">
                 <div class="col-12 col-md-6">
                   <div class="col-md-6 mb-3">
+                    <div class="input-group">
                     <label for=""></label>
-                      <input type="search" class="form-control"  id="search_bar" placeholder="Buscar cliente...">
+                      <input type="search" class="form-control" id="search_bar" placeholder="Buscar cliente..." name="q" value="{{ Request::get('q') }}">
+                      <button class="btn btn-outline-primary load" type="submit">
+                        <i class="bx bx-search"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 <div class="col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-3">
                   <div class="invoice_status mb-3 mb-md-0">
                     <select id="estado" name="estado" class="form-select">
-                      <option value="Activo" {{ session('estado_filtro') === 'Activo' ? 'selected' : '' }} class="text-capitalize">Activos</option>
-                      <option value="Inactivo" {{ session('estado_filtro') === 'Inactivo' ? 'selected' : '' }} class="text-capitalize">Inactivos</option>
-                      <option value="Todos" {{ session('estado_filtro') === 'Todos' ? 'selected' : '' }}>Todos</option>
+                      <option value="">Estado</option>
+                      <option value="Activo" @if(Request::get('estado') == 'Activo') selected @endif class="text-capitalize">Activos</option>
+                      <option value="Inactivo" @if(Request::get('estado') == 'Inactivo') selected @endif  class="text-capitalize">Inactivos</option>
+                      <option value="Todos" @if(Request::get('estado') == 'Todos') selected @endif >Todos</option>
                     </select>
                   </div>
-                  <div class="dataTables_length" ><label>
+                  <div class="dataTables_length">
+                    <label>
                       <select id="mostrar" name="mostrar" class="form-select">
                         <option value="">Mostrar</option>
-                        <option value="10" {{ session('mostrar') == 10 ? 'selected' : '' }}>10</option>
-                        <option value="25" {{ session('mostrar') == 25 ? 'selected' : '' }}>25</option>
-                        <option value="50" {{ session('mostrar') == 50 ? 'selected' : '' }}>50</option>
-                      </select></label></div>
+                        <option value="5" @if(Request::get('mostrar') == '5') selected @endif >5</option>
+                        <option value="10" @if(Request::get('mostrar') == '10') selected @endif >10</option>
+                        <option value="25" @if(Request::get('mostrar') == '25') selected @endif >25</option>
+                        <option value="50" @if(Request::get('mostrar') == '50') selected @endif >50</option>
+                      </select>
+                    </label>
+                  </div>
                 </div>
               </div>
 
@@ -157,18 +167,10 @@
                   </tr>
                   </thead>
                   <tbody id="clientes_tbody">
-                  @php
-                    $registrosPerPage = 10;
-
-                  @endphp
-
-                  <span class="d-none">
-                    {{ $contador = ($clientes->currentPage()-1) * $registrosPerPage + 1 }}
-                  </span>
 
                   @foreach($clientes as $cliente)
                     <tr>
-                      <td>{{$contador}}</td>
+                      <td>{{ $loop->iteration }}</td>
                       <td>{{$cliente->dui_cliente}}</td>
                       <!--Filtro para Nombre-->
                       <td>{{$cliente->nom_completo}}</td>
@@ -223,9 +225,7 @@
                       </td>
                     </tr>
 
-                    @php $contador++; @endphp
                   @endforeach
-
 
                   @if(sizeof($clientes) < 1)
                     <tr>
@@ -235,12 +235,6 @@
                   </tbody>
                 </table>
 
-                <div class="row">
-                  <div class="col-sm-12 col-md-6"></div>
-                  <div class="col-sm-12 col-md-6 d-flex justify-content-end">
-                    {{ $clientes->appends(['estado' => session('estado_filtro'), 'mostrar' => session('mostrar')])->links() }}
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -268,6 +262,12 @@
 
 @section('page-script')
   <script>
+
+    var borderEnd = $('.border-end');
+    if(screen.width <= 573){
+      borderEnd.removeClass('border-end');
+    }
+
     const modal = $('#modal');
     const modal_title = $('#modal_title');
     const modal_body = $('#modal_body');
@@ -275,55 +275,6 @@
 
     let estado_cliente = '';
     let id_cliente = '';
-
-    function search() {
-      const tableReg = document.getElementById('clientes_table');
-      const searchText = document.getElementById('search_bar').value.toLowerCase();
-      let total = 0;
-      // Recorremos todas las filas con contenido de la tabla
-
-      for (let i = 1; i < tableReg.rows.length; i++) {
-        // Si el td tiene la clase "noSearch" no se busca en su contenido
-        if (tableReg.rows[i].classList.contains("noSearch")) {
-          continue;
-        }
-
-        let found = false;
-        const cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
-
-        // Recorremos todas las celdas
-        for (let j = 0; j < cellsOfRow.length-1 && !found; j++) {
-          const compareWith = cellsOfRow[j].innerHTML.toLowerCase();
-
-          // Buscamos el texto en el contenido de la celda
-          if (searchText.length === 0 || compareWith.indexOf(searchText) > -1) {
-            found = true;
-            total++;
-          }
-        }
-
-        if (found) {
-          tableReg.rows[i].style.display = '';
-        } else {
-          //si no ha encontrado ninguna coincidencia, esconde la fila de la tabla
-          tableReg.rows[i].style.display = 'none';
-        }
-      }
-
-      // mostramos las coincidencias
-      const lastTR = tableReg.rows[tableReg.rows.length - 1];
-      const td = lastTR.querySelector("td");
-
-      lastTR.style.display = ''
-
-      if (searchText === "") {
-        lastTR.style.display = 'none'
-      }else if (total) {
-        td.innerHTML="Se ha" + ((total>1)?"n ":" ") + "encontrado "+total+" coincidencia"+((total>1)?"s":"");
-      }else {
-        td.innerHTML="No se han encontrado coincidencias";
-      }
-    }
 
     /* Filtro por estado*/
     $(document).ready(function() {

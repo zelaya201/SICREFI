@@ -38,8 +38,8 @@
                     <p class="mb-0">Cartera de créditos</p>
                   </div>
                   <div class="avatar me-sm-4">
-                    <span class="avatar-initial rounded bg-label-warning">
-                      <i class="bx bx-wallet bx-sm text-warning"></i>
+                    <span class="avatar-initial rounded bg-label-secondary">
+                      <i class="bx bx-wallet bx-sm"></i>
                     </span>
                   </div>
                 </div>
@@ -52,8 +52,8 @@
                     <p class="mb-0">Total de entradas</p>
                   </div>
                   <div class="avatar me-lg-4">
-              <span class="avatar-initial rounded bg-label-primary">
-                <i class="bx bx-trending-up text-primary bx-sm"></i>
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class="bx bx-trending-up bx-sm"></i>
               </span>
                   </div>
                 </div>
@@ -66,8 +66,8 @@
                     <p class="mb-0">Total de salidas</p>
                   </div>
                   <div class="avatar me-sm-4">
-              <span class="avatar-initial rounded bg-label-danger">
-                <i class='bx bx-trending-down text-danger bx-sm'></i>
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class='bx bx-trending-down  bx-sm'></i>
               </span>
                   </div>
                 </div>
@@ -79,8 +79,8 @@
                     <p class="mb-0">Cobros del dia</p>
                   </div>
                   <div class="avatar">
-              <span class="avatar-initial rounded bg-label-success">
-                <i class='bx bx-coin bx-sm text-success'></i>
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class='bx bx-coin bx-sm'></i>
               </span>
                   </div>
                 </div>

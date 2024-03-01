@@ -35,72 +35,65 @@ class ClienteController extends Controller
       return redirect()->route('login');
     }
 
-    Session::forget('estado_filtro');
-    Session::forget('mostrar');
+    $mostrar = $request->mostrar;
+    $estado = $request->estado;
+    $buscar = $request->q;
 
-    $query = Cliente::query();
-
-    if ($request->input('estado') || $request->input('mostrar')) {
-      $estado = $request->input('estado');
-      $mostrar = $request->input('mostrar', 10);
-
-      session(['estado_filtro' => $estado, 'mostrar' => $mostrar]);
-
-      if ($estado == 'Todos') {
-        $clientes = $query->orderBy('estado_cliente','ASC')->orderBy('primer_nom_cliente','ASC')->paginate($mostrar);
-      }else {
-        $clientes = $query->where(['estado_cliente' => $estado])->orderBy('primer_nom_cliente','ASC')->paginate($mostrar);
-      }
-
-      $clientes->map(function ($cliente) {
-        $cliente->conyuge = false;
-
-        $cliente->nom_completo = $cliente->primer_nom_cliente . ' '
-          . $cliente->segundo_nom_cliente . ' '
-          . $cliente->tercer_nom_cliente . ' '
-          . $cliente->primer_ape_cliente . ' '
-          . $cliente->segundo_ape_cliente;
-
-        if($cliente->estado_civil_cliente == 'Casado') {
-          $cliente->conyuge = true;
-        }
-
-        return $cliente;
-      });
-
-      $contar = count(Cliente::all());
-      $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
-      $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
-      $clientes_creditos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
-
-      return response()->view(
-        'content.clientes.index',
-        [
-          'clientes' => $clientes,
-          'contar' => $contar,
-          'activos' => $activos,
-          'inactivos' => $inactivos,
-          'clientes_creditos' => $clientes_creditos
-        ]
-      );
+    if ($mostrar == '') {
+      $mostrar = Cliente::query()->count();
     }
 
-    $clientes = $query->where(['estado_cliente' => 'Activo'])->orderBy('primer_nom_cliente','ASC')->paginate(10);
-    $contar = count(Cliente::all());
-    $activos = count(Cliente::query()->where(['estado_cliente' => 'Activo'])->get());
-    $inactivos = count(Cliente::query()->where(['estado_cliente' => 'Inactivo'])->get());
-    $clientes_creditos = count(Credito::query()->where(['estado_credito' => 'Vigente'])->get());
+    if($estado == ''){
+      $estado = '';
+    }else if ($estado == 'Todos') {
+      $estado = '';
+    }
 
-    $clientes->map(function ($cliente) {
-      $cliente->nom_completo = $cliente->primer_nom_cliente . ' ' . $cliente->segundo_nom_cliente . ' ' . $cliente->tercer_nom_cliente . ' ' . $cliente->primer_ape_cliente . ' ' . $cliente->segundo_ape_cliente;
-      $cliente->conyuge = false;
+    if ($buscar != '') {
+      $clientes = Cliente::query()
+        ->where('primer_nom_cliente', 'like', '%' . $buscar . '%')
+        ->orWhere('segundo_nom_cliente', 'like', '%' . $buscar . '%')
+        ->orWhere('tercer_nom_cliente', 'like', '%' . $buscar . '%')
+        ->orWhere('primer_ape_cliente', 'like', '%' . $buscar . '%')
+        ->orWhere('segundo_ape_cliente', 'like', '%' . $buscar . '%')
+        ->orWhere('dui_cliente', 'like', '%' . $buscar . '%')
+        ->orderBy('id_cliente', 'DESC');
 
-      if($cliente->estado_civil_cliente == 'Casado') {
-        $cliente->conyuge = true;
-      }
+      $clientes = $clientes->paginate($clientes->count());
 
+    }else{
+      $clientes = Cliente::query()
+        ->where(['estado_cliente' => $estado])
+        ->orderBy('id_cliente', 'DESC')
+        ->paginate($mostrar);
+    }
+
+    $clientes = $clientes->map(function ($cliente){
+      $nombre_completo = $cliente->primer_nom_cliente . ' '
+        . $cliente->segundo_nom_cliente . ' '
+        . $cliente->tercer_nom_cliente . ' '
+        . $cliente->primer_ape_cliente . ' '
+        . $cliente->segundo_ape_cliente;
+      $cliente->nom_completo = $nombre_completo;
       return $cliente;
     });
+
+    // Contar clientes activos
+    $activos = Cliente::query()->where(['estado_cliente' => 'Activo'])->count();
+
+    // Contar clientes inactivos
+    $inactivos = Cliente::query()->where(['estado_cliente' => 'Inactivo'])->count();
+
+    // Contar clientes
+    $contar = Cliente::query()->count();
+
+    // Contar clientes con créditos vigentes
+    $clientes_creditos = Credito::query()->select('id_cliente')
+      ->where(['estado_credito' => 'Vigente'])
+      ->orWhere(['estado_credito' => 'Refinanciado'])
+      ->orWhere(['estado_credito' => 'Renovado'])
+      ->orWhere(['estado_credito' => 'En mora'])
+      ->distinct()->get()->count();
 
     return response()->view(
       'content.clientes.index',

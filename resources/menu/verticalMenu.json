@@ -10,7 +10,7 @@
       "menuHeader": "Administración"
     },
     {
-      "url": "/clientes",
+      "url": "/clientes?mostrar=5",
       "name": "Clientes",
       "icon": "menu-icon tf-icons bx bx-group",
       "slug": "clientes.index"
